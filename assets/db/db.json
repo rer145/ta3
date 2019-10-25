@@ -1,6 +1,7 @@
 [
   {
     "name": "Cranium",
+    "abbreviation": "cranium",
     "order_no": "1",
     "columns": [
       {
@@ -508,6 +509,7 @@
   },
   {
     "name": "Vertebrae",
+    "abbreviation": "vertebrae",
     "order_no": "2",
     "columns": [
       {
@@ -2515,6 +2517,7 @@
   },
   {
     "name": "Sternum & Ribs",
+    "abbreviation": "sternumribs",
     "order_no": "3",
     "columns": [
       {
@@ -3286,6 +3289,7 @@
   },
   {
     "name": "Upper Limb",
+    "abbreviation": "upperlimb",
     "order_no": "4",
     "columns": [
       {
@@ -4228,6 +4232,7 @@
   },
   {
     "name": "Humerus",
+    "abbreviation": "humerus",
     "order_no": "5",
     "columns": [
       {
@@ -4983,6 +4988,7 @@
   },
   {
     "name": "Radius, Ulna, & Trapezium",
+    "abbreviation": "radiusulnatrapezium",
     "order_no": "6",
     "columns": [
       {
@@ -5383,6 +5389,7 @@
   },
   {
     "name": "Lower Limb",
+    "abbreviation": "lowerlimb",
     "order_no": "7",
     "columns": [
       {
@@ -6115,6 +6122,7 @@
   },
   {
     "name": "Tibia, Fibia, & Calcaneus",
+    "abbreviation": "tibiafibiacalcaneus",
     "order_no": "8",
     "columns": [
       {
@@ -6311,6 +6319,7 @@
   },
   {
     "name": "Innominate, Sacroiliac Joint, & Acetabulum",
+    "abbreviation": "innominate",
     "order_no": "9",
     "columns": [
       {
@@ -7820,6 +7829,7 @@
   },
   {
     "name": "Auricular Surface",
+    "abbreviation": "auricular",
     "order_no": "10",
     "columns": [
       {
@@ -8402,6 +8412,7 @@
   },
   {
     "name": "Pubic Symphysis",
+    "abbreviation": "pubic",
     "order_no": "11",
     "columns": [
       {

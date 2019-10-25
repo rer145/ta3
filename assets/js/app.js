@@ -31,6 +31,9 @@ var current_trait_idx = -1;
 var current_section_idx = -1;
 var selections = [];
 
+var current_trait_text = -1;
+var current_section_text = -1;
+
 $(document).ready(function() {
 	app_init();
 });
@@ -144,6 +147,8 @@ function wire_event_handlers() {
 	$("#trait-pager").on("click", ".previous", function() {
 		if (!$(this).hasClass("disabled")) {
 			current_trait_idx--;
+			var temp = data_get_trait(current_section_idx, current_trait_idx);
+			current_trait_text = temp.db_name;
 			update_pager_buttons();
 			populate_trait_prompt(current_traits[current_trait_idx]);
 		}
@@ -152,6 +157,8 @@ function wire_event_handlers() {
 	$("#trait-pager").on("click", ".next", function() {
 		if (!$(this).hasClass("disabled")) {
 			current_trait_idx++;
+			var temp = data_get_trait(current_section_idx, current_trait_idx);
+			current_trait_text = temp.db_name;
 			update_pager_buttons();
 			populate_trait_prompt(current_traits[current_trait_idx]);
 		}
@@ -163,10 +170,15 @@ function wire_event_handlers() {
 	});
 	
 	$("body").on("click", ".adv-radio", function() {
-		toggle_score_selection(
-			$(this).attr("data-section-idx"),
-			$(this).attr("data-trait-idx"),
-			$(this).attr("data-score-idx")
+		// toggle_score_selection(
+		// 	$(this).attr("data-section-idx"),
+		// 	$(this).attr("data-trait-idx"),
+		// 	$(this).attr("data-score-idx")
+		// );
+		toggle_score_selection_text(
+			$(this).attr("data-section-text"),
+			$(this).attr("data-trait-text"),
+			$(this).attr("data-score-text")
 		);
 	});
 
@@ -177,14 +189,21 @@ function wire_event_handlers() {
 	});
 	
 	$("body").on("click", ".trait-score-button", function() {
-		var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
-	
+		// var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
+
+		var identifier = String($(this).attr("data-section-text")) + "-" + String($(this).attr("data-trait-text")) + "-" + String($(this).attr("data-score-text"));
+
 		var btn = $(this);
 		
-		toggle_score_selection(
-			$(this).attr("data-section-idx"),
-			$(this).attr("data-trait-idx"),
-			$(this).attr("data-score-idx")
+		// toggle_score_selection(
+		// 	$(this).attr("data-section-idx"),
+		// 	$(this).attr("data-trait-idx"),
+		// 	$(this).attr("data-score-idx")
+		// );
+		toggle_score_selection_text(
+			$(this).attr("data-section-text"),
+			$(this).attr("data-trait-text"),
+			$(this).attr("data-score-text")
 		);
 	
 		//toggle_trait_score_selection(identifier, $(this));
@@ -225,7 +244,7 @@ function wire_event_handlers() {
 	
 		if ($(e.target).attr("aria-controls") === "selections") {
 			$("#section-menu .list-group-item").removeClass("active");
-			show_current_selections();
+			show_current_selections_text();
 		}
 	
 		if ($(e.target).attr("aria-controls") === "results") {
@@ -338,10 +357,13 @@ function populate_section_menu() {
 function select_section(obj) {
 	var section_idx = $(obj).data("section-id");
 	var section = data_get_section(section_idx);
+	var section_text = section.abbreviation;
 
 	current_traits = section.traits;
 	current_trait_idx = 0;
+	current_trait_text = "";
 	current_section_idx = section_idx;
+	current_section_text = section_text;
 
 	$("#section-menu .list-group-item").removeClass("active");
 	$(obj).addClass("active");
@@ -366,12 +388,14 @@ function populate_entry_mode() {
 
 	if (mode === "advanced") {
 		hide_pager_buttons();
-		populate_advanced_mode(current_section_idx);
+		//populate_advanced_mode(current_section_idx);
+		populate_advanced_mode(current_section_text);
 	}
 
 	if (mode === "expert") {
 		hide_pager_buttons();
-		populate_expert_mode(current_section_idx);
+		// populate_expert_mode(current_section_idx);
+		populate_expert_mode(current_section_text);
 	}
 }
 
@@ -394,10 +418,14 @@ function populate_advanced_mode(section) {
 				input.attr("name", "adv-trait-" + i.toString());
 				input.attr("value", current_traits[i].scores[j].value);
 				input.attr("data-section-idx", current_section_idx);
+				input.attr("data-section-text", current_section_text);
 				input.attr("data-trait-idx", i);
+				input.attr("data-trait-text", current_traits[i].db_name);
 				input.attr("data-score-idx", j);
+				input.attr("data-score-text", current_traits[i].scores[j].value);
 
-				var idx = find_item_in_selections(current_section_idx, i, j);
+				//var idx = find_item_in_selections(current_section_idx, i, j);
+				var idx = find_item_in_selections_text(current_section_text, current_traits[i].db_name, current_traits[i].scores[j].value);
 				var is_selected = (idx > -1);
 				if (is_selected) {
 					input.attr("checked", "checked");
@@ -476,18 +504,24 @@ function populate_trait_prompt(trait) {
 				.addClass("text-center");
 
 			//check if item was already selected or not
-			var idx = find_item_in_selections(current_section_idx, current_trait_idx, i);
+			// var idx = find_item_in_selections(current_section_idx, current_trait_idx, i);
+			var idx = find_item_in_selections_text(current_section_text, current_trait_text, trait.scores[i].value);
 			var is_selected = (idx > -1);
 			if (is_selected) {
 				col.addClass("selected");
 			}
 
 			var scoreNode = $("#trait-score-template").clone();
+			// scoreNode.removeAttr("id")
+			// 		.removeAttr("style")
+			// 		.removeClass("template")
+			// 		.addClass("trait-score")
+			// 		.data("identifier", String(current_section_idx) + "-" + String(current_trait_idx) + "-" + String(i));
 			scoreNode.removeAttr("id")
 					.removeAttr("style")
 					.removeClass("template")
 					.addClass("trait-score")
-					.data("identifier", String(current_section_idx) + "-" + String(current_trait_idx) + "-" + String(i));
+					.data("identifier", String(current_section_text) + "-" + String(trait.db_name) + "-" + String(i));
 
 			/**** TITLE, DESCRIPTION, and IMAGES ****/
 			scoreNode.find('.trait-score-title').html
@@ -499,6 +533,9 @@ function populate_trait_prompt(trait) {
 			btn.attr("data-section-idx", current_section_idx);
 			btn.attr("data-trait-idx", current_trait_idx);
 			btn.attr("data-score-idx", i);
+			btn.attr("data-section-text", current_section_text);
+			btn.attr("data-trait-text", trait.db_name);
+			btn.attr("data-score-text", trait.scores[i].value);
 			if (is_selected) {
 				btn.removeClass("btn-success")
 					.addClass("btn-warning")
@@ -604,8 +641,33 @@ function toggle_score_selection(section_idx, trait_idx, score_idx) {
 	}
 
 	window.is_dirty = true;
-	$("#current_file_status").text("*");
+	update_file_status();
 	
+	//console.log(selections);
+}
+
+function toggle_score_selection_text(section, trait, score) {
+	var selection = {
+		"section": section,
+		"trait": trait,
+		"score": score
+	};
+
+	var idx = find_item_in_selections_text(section, trait, score);
+	if (idx > -1) {
+		selections.splice(idx, 1);
+	} else {
+		for (var i = 0; i < selections.length; i++) {
+			if (selections[i].section === section && 
+				selections[i].trait === trait) {
+					selections.splice(i, 1);
+				}
+		}
+		selections.push(selection);
+	}
+
+	window.is_dirty = true;
+	update_file_status();
 	//console.log(selections);
 }
 
@@ -614,6 +676,17 @@ function find_item_in_selections(section_idx, trait_idx, score_idx) {
 		if (String(selections[i].section) === String(section_idx) && 
 			String(selections[i].trait) === String(trait_idx) && 
 			String(selections[i].score) === String(score_idx)) {
+				return i;
+			}
+	}
+	return -1;
+}
+
+function find_item_in_selections_text(section, trait, score) {
+	for (var i = 0; i < selections.length; i++) {
+		if (selections[i].section === section && 
+			selections[i].trait === trait && 
+			selections[i].score === score) {
 				return i;
 			}
 	}
@@ -657,6 +730,42 @@ function show_current_selections() {
 	console.log(selections);
 }
 
+function show_current_selections_text() {
+	$("#current-selections").empty();
+
+	if (selections.length > 0) {
+		$("#selections button").removeAttr("disabled");
+
+		selections.sort(function(a, b) {
+			return ('' + a.section).localeCompare(b.section);
+		});
+
+		var table = $("#selections-template").clone();
+		table.removeAttr("id")
+			.removeClass("template")
+			.removeAttr("style");
+		var table_body = table.find("tbody");
+		table_body.empty();
+
+		var current_s = -1;
+		for(var i = 0; i < selections.length; i++) {
+			var s = data_get_section_text(selections[i].section);
+			var t = data_get_trait_text(selections[i].section, selections[i].trait);
+			var sc = data_get_trait_score_text(selections[i].section, selections[i].trait, selections[i].score);
+
+			var row = $("<tr></tr>");
+			row.append($("<td></td>").html(s.name));
+			row.append($("<td></td>").html(t.title));
+			row.append($("<td></td>").html(sc.title));
+			table_body.append(row);
+		}
+
+		$("#current-selections").append(table);
+	} else {
+		$("#selections button").attr("disabled", "disabled");
+	}
+	//console.log(selections);
+}
 
 
 
@@ -678,7 +787,8 @@ function generate_csv_file() {
 			var trait_entered_idx = -1;
 			var scores = traits[j].scores;
 			for (var k = 0; k < scores.length; k++) {
-				var idx = find_item_in_selections(i, j, k);
+				//var idx = find_item_in_selections(i, j, k);
+				var idx = find_item_in_selections_text(sections[i].abbreviation, traits[j].db_name, scores[k].value);
 				if (idx > -1) {
 					is_trait_entered = true;
 					trait_entered_idx = k;
@@ -790,7 +900,7 @@ function run_analysis() {
 				//TODO: read from userdata_dir/output.txt and display
 
 				//display output images in Charts tab
-				console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
+				//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
 				
 				show_output_image(path.join(temp_dir, "output1.png"), imageDiv);
 				resultStatus.empty();
@@ -867,6 +977,8 @@ function new_case() {
 	current_traits = null;
 	current_trait_idx = -1;
 	current_section_idx = -1;
+	current_section_text = "";
+	current_trait_text = "";
 	selections = [];
 
 	init_case_screen();
@@ -1100,6 +1212,12 @@ function data_get_section(section_idx) {
 	return window.appdb[section_idx];
 }
 
+function data_get_section_text(section) {
+	return window.appdb.filter(
+		function (data) { return data.abbreviation == section; }
+	)[0];
+}
+
 function data_get_traits(section_idx) {
 	return window.appdb[section_idx].traits;
 }
@@ -1108,12 +1226,28 @@ function data_get_trait(section_idx, trait_idx) {
 	return window.appdb[section_idx].traits[trait_idx];
 }
 
+function data_get_trait_text(section, trait) {
+	var d = data_get_section_text(section);
+	return d['traits'].filter(
+		function (data) { return data.db_name == trait; }
+	)[0];
+}
+
 function data_get_trait_scores(section_idx, trait_idx) {
 	return window.appdb[section_idx].traits[trait_idx].scores;
 }
 
 function data_get_trait_score(section_idx, trait_idx, score_idx) {
 	return window.appdb[section_idx].traits[trait_idx].scores[score_idx];
+}
+
+function data_get_trait_score_text(section, trait, score) {
+	var d = data_get_trait_text(section, trait);
+	// console.log(d, section, trait, score);
+	// console.log(d[0]['scores']);
+	return d['scores'].filter(
+		function (data) { return data.value == score; }
+	)[0];
 }
 
 function data_get_indexes_by_trait_db_name(trait, value) {
