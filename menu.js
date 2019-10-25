@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path');
 const {app, Menu, shell} = require('electron');
+const win = require('electron').BrowserWindow;
 const {
 	is,
 	appMenu,
@@ -9,20 +10,41 @@ const {
 	openNewGitHubIssue,
 	debugInfo
 } = require('electron-util');
-const config = require('./config');
+const Store = require('electron-store');
+const store = new Store();
 
 const showPreferences = () => {
-	// Show the app's preferences here
+	win.getFocusedWindow().webContents.send('settings');
+};
+
+const showCaseInfo = () => {
+	win.getFocusedWindow().webContents.send('show-case-info');
+};
+
+const showSelections = () => {
+	win.getFocusedWindow().webContents.send('show-selections');
+};
+
+const runAnalysis = () => {
+	win.getFocusedWindow().webContents.send('run-analysis');
+};
+
+const showResults = () => {
+	win.getFocusedWindow().webContents.send('show-results');
+};
+
+const showRSettings = () => {
+	win.getFocusedWindow().webContents.send('verify-r-settings');
 };
 
 const helpSubmenu = [
 	openUrlMenuItem({
 		label: 'Website',
-		url: 'https://github.com/sindresorhus/electron-boilerplate'
+		url: 'https://github.com/rer145/ta3-refactor'
 	}),
 	openUrlMenuItem({
 		label: 'Source Code',
-		url: 'https://github.com/sindresorhus/electron-boilerplate'
+		url: 'https://github.com/rer145/ta3-refactor'
 	}),
 	{
 		label: 'Report an Issue…',
@@ -36,8 +58,8 @@ const helpSubmenu = [
 ${debugInfo()}`;
 
 			openNewGitHubIssue({
-				user: 'sindresorhus',
-				repo: 'electron-boilerplate',
+				user: 'rer145',
+				repo: 'ta3-refactor',
 				body
 			});
 		}
@@ -50,19 +72,72 @@ if (!is.macos) {
 			type: 'separator'
 		},
 		aboutMenuItem({
-			icon: path.join(__dirname, 'static', 'icon.png'),
-			text: 'Created by Your Name'
+			icon: path.join(__dirname, 'assets', 'img', 'icons', 'icon.png'),
+			text: 'Created by Dr. Stephen Ousley and Ron Richardson'
 		})
 	);
 }
 
-const debugSubmenu = [
+const analysisMenu = [
 	{
-		label: 'Show Settings',
+		label: 'View Case Info',
 		click() {
-			config.openInEditor();
+			showCaseInfo();
 		}
 	},
+	{
+		label: 'View Selections',
+		click() {
+			showSelections();
+		}
+	},
+	{
+		label: 'Run Analysis',
+		click() {
+			runAnalysis();
+		}
+	},
+	{
+		label: 'View Results',
+		click() {
+			showResults();
+		}
+	},
+	{ type: 'separator' },
+	{
+		label: 'Use Basic Mode',
+		type: 'radio',
+		checked: store.get('config.entry_mode') == 'basic',
+		click() {
+			store.set('config.entry_mode', 'basic');
+		}
+	},
+	{
+		label: 'Use Advanced Mode (text)',
+		type: 'radio',
+		checked: store.get('config.entry_mode') == 'advanced',
+		click() {
+			store.set('config.entry_mode', 'advanced');
+		}
+	},
+	// {
+	// 	label: 'Use Expert Mode (numerical)',
+	// 	type: 'radio',
+	// 	checked: store.get('config.entry_mode') == 'expert',
+	// 	click() {
+	// 		store.set('config.entry_mode', 'expert');
+	// 	}
+	// }
+	{ type: 'separator' },
+	{
+		label: 'Verify R Settings',
+		click() {
+			showRSettings();
+		}
+	}
+];
+
+const debugSubmenu = [
 	{
 		label: 'Show App Data',
 		click() {
@@ -70,20 +145,26 @@ const debugSubmenu = [
 		}
 	},
 	{
-		type: 'separator'
-	},
-	{
-		label: 'Delete Settings',
+		label: 'Delete App Data',
 		click() {
-			config.clear();
+			shell.moveItemToTrash(app.getPath('userData'));
 			app.relaunch();
 			app.quit();
 		}
 	},
 	{
-		label: 'Delete App Data',
+		type: 'separator'
+	},
+	// {
+	// 	label: 'Show Settings',
+	// 	click() {
+	// 		config.openInEditor();
+	// 	}
+	// },
+	{
+		label: 'Delete Settings',
 		click() {
-			shell.moveItemToTrash(app.getPath('userData'));
+			store.clear();
 			app.relaunch();
 			app.quit();
 		}
@@ -115,10 +196,30 @@ const macosTemplate = [
 		]
 	},
 	{
-		role: 'editMenu'
+		label: 'Edit',
+		submenu: [
+			{ role: 'copy' },
+			{ role: 'paste' },
+			{ role: 'pasteAndMatchStyle' },
+			{ role: 'selectAll' }
+		]
 	},
 	{
-		role: 'viewMenu'
+		label: 'TA3 Analysis',
+		submenu: analysisMenu
+	},
+	{
+		label: 'View',
+		submenu: [
+			{ role: 'reload' },
+			{ role: 'forcereload' },
+			{ type: 'separator' },
+			{ role: 'resetzoom' },
+			{ role: 'zoomin' },
+			{ role: 'zoomout' },
+			{ type: 'separator' },
+			{ role: 'togglefullscreen' }
+		]
 	},
 	{
 		role: 'windowMenu'
@@ -135,7 +236,22 @@ const otherTemplate = [
 		role: 'fileMenu',
 		submenu: [
 			{
-				label: 'Custom'
+				label: 'New',
+				click() {
+					win.getFocusedWindow().webContents.send('new-case');
+				}
+			},
+			{
+				label: 'Open',
+				click() {
+					win.getFocusedWindow().webContents.send('open-case');
+				}
+			},
+			{
+				label: 'Save',
+				click() {
+					win.getFocusedWindow().webContents.send('save-case');
+				}
 			},
 			{
 				type: 'separator'
@@ -156,10 +272,32 @@ const otherTemplate = [
 		]
 	},
 	{
-		role: 'editMenu'
+		label: 'Edit',
+		submenu: [
+			{ role: 'copy' },
+			{ role: 'paste' },
+			{ role: 'selectAll' }
+		]
 	},
 	{
-		role: 'viewMenu'
+		label: 'TA3 Analysis',
+		submenu: analysisMenu
+	},
+	{
+		label: 'View',
+		submenu: [
+			{ role: 'reload' },
+			{ role: 'forcereload' },
+			{ type: 'separator' },
+			{ role: 'resetzoom' },
+			{ role: 'zoomin' },
+			{ role: 'zoomout' },
+			{ type: 'separator' },
+			{ role: 'togglefullscreen' }
+		]
+	},
+	{
+		role: 'windowMenu'
 	},
 	{
 		role: 'help',

@@ -1,18 +1,356 @@
 <!doctype html>
 <html>
-	<head>
+	<head profile="http://www.w3.org/2005/10/profile">
 		<meta charset="utf-8">
-		<title>Electron boilerplate</title>
-		<link rel="stylesheet" href="index.css">
+		<title>TA3 Age Estimation</title>
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/index.css">
 	</head>
 	<body>
-		<div class="container">
-			<header>
-				<h1>Electron boilerplate</h1>
-				<p></p>
-			</header>
-			<section class="main"></section>
-			<footer></footer>
+		
+
+		<div id="welcome-screen" class="screen" style="display:none;">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h1>Transition Analysis 3<br />(TA3)</h1>
+						<h4>Version: <span id="current-version"></span></h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-3 text-center">
+						<img src="assets/img/psu.jpg" alt="The Pennsylvania State University" class="img-responsive" />
+					</div>
+					<div class="col-xs-3 text-center">
+						<img src="assets/img/nij.jpg" alt="National Institute of Justice" class="img-responsive" />
+					</div>
+					<div class="col-xs-3 text-center">
+						<img src="assets/img/usd.jpg" alt="University of Southern Denmark" class="img-responsive" />
+					</div>
+					<div class="col-xs-3 text-center">
+						<img src="assets/img/mu.jpg" alt="Mercyhurst University" class="img-responsive" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4 text-center">
+						<h4>George R. Milner</h4>
+						<h4>Sara M. Getz</h4>
+					</div>
+					<div class="col-xs-4 text-center">
+						<h4>Stephen D. Ousley</h4>
+						<h4>Svenja Weise</h4>
+					</div>
+					<div class="col-xs-4 text-center">
+						<h4>Jesper L. Boldsen</h4>
+						<h4>Peter Tarp</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6 text-center">
+						<p>
+							<a id="welcome-new-case" class="btn btn-lg btn-primary">Start New Case</a>
+						</p>
+					</div>
+					<div class="col-xs-6 text-center">
+						<p>
+							<a id="welcome-load-case" class="btn btn-lg btn-primary">Load Analysis</a>
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
+
+
+
+		<div id="case-screen" class="screen" style="display:none;">
+			<div class="container-fluid">
+				<div id="config-error-message" class="row" style="display:none;">
+					<div class="col-xs-12">
+						<div class="alert alert-danger" role="alert">
+							Configuration settings are invalid or missing. <a data-toggle="modal" href="#settings-modal">Click here</a> to update your settings.
+						</div>
+					</div>
+				</div>
+				<div id="offline-error-message" class="row" style="display:none;">
+					<div class="col-xs-12">
+						<div class="alert alert-warning" role="alert">
+							You are currently working offline. 
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="col-menu" class="col-xs-3">
+						<div id="section-menu" class="panel-group" role="tablist" aria-multiselectable="true"></div>
+						<p class="text-center center-block">
+							<button id="analysis-button" class="btn btn-primary">Run Analysis</button>
+						</p>
+						<p class="text-center center-block">
+							<button id="reset-button" class="reset-button btn btn-danger">Reset</button>
+						</p>
+						<p class="text-center center-block">
+							<button id="settings-button" class="settings-button btn btn-success" data-toggle="modal" data-target="#settings-modal">Settings</button>
+						</p>
+						<p class="text-center center-block">
+							<a id="load-case" class="btn btn-primary">Load Analysis</a>
+						</p>
+						<p class="text-center center-block">
+							<button id="save-button" class="save-button btn btn-info" data-toggle="modal" data-target="#save-modal">Save Analysis</button>
+						</p>
+					</div>
+	
+					<div id="col-content" class="col-xs-9">
+						<ul id="main-tabs" class="nav nav-tabs" role="tablist">
+							<li role="presentation">
+								<a href="#caseinfo" aria-controls="caseinfo" role="tab" data-toggle="tab">Case Info <span id="current_file_name"></span><span id="current_file_status"></span></a>
+							</li>
+							<li role="presentation" class="active">
+								<a href="#evaluation" aria-controls="evaluation" role="tab" data-toggle="tab">Evaluation</a>
+							</li>
+							<li role="presentation">
+								<a href="#selections" aria-controls="selections" role="tab" data-toggle="tab">Selections</a>
+							</li>
+							<li role="presentation">
+								<a href="#results" aria-controls="results" role="tab" data-toggle="tab">Results</a>
+							</li>
+							<li role="presentation">
+								<a href="#charts" aria-controls="charts" role="tab" data-toggle="tab">Plots</a>
+							</li>
+						</ul>
+	
+						<div class="tab-content">
+							
+							<div role="tabpanel" class="tab-pane" id="caseinfo">
+								<fieldset>
+									<div class="form-group">
+										<label for="case_number_input">Case #</label>
+										<input type="textbox" id="case_number_input" class="form-control dirtyable" />
+									</div>
+									<div class="form-group">
+										<label for="designation_input">Individual Designation</label>
+										<input type="textbox" id="designation_input" class="form-control dirtyable" />
+									</div>
+									<div class="form-group">
+										<label for="recorder_input">Recorder</label>
+										<input type="textbox" id="recorder_input"  class="form-control dirtyable" />
+									</div>
+									<div class="form-group">
+										<label for="date_input">Observation Date</label>
+										<input type="textbox" id="date_input" class="form-control dirtyable" />
+									</div>
+									<div class="form-group">
+										<label for="notes_input">Notes</label>
+										<textarea id="notes_input" rows="8" cols="50" class="form-control dirtyable"></textarea>
+									</div>
+								</fieldset>
+								<!-- <p>
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<button id="save-analysis-button" type="button" class="btn btn-primary" data-dismiss="modal">Save Analysis</button>
+								</p> -->
+							</div>
+	
+							<div role="tabpanel" class="tab-pane active" id="evaluation">
+								<div id="evaluation-content-empty" style="display:none;">
+									<h3>Select a section from the left to access the trait scoring.</h3>
+								</div>
+								<div id="evaluation-content" style="display:none;">
+									<nav id="trait-pager" aria-label="Section Traits">
+										<ul class="pager">
+											<li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Previous</a></li>
+											<li class="next"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
+										</ul>
+									</nav>
+	
+									<div id="trait-content">
+	
+										<div id="trait-score-basic" class="entry-mode">
+											<div class="container-fluid">
+												<div class="row trait-header">
+													<div class="col-xs-8">
+														<h4 id="trait-title"></h4>
+														<h6 id="trait-description"></h6>
+													</div>
+													<div class="col-xs-4" class="text-right">
+														<div id="trait-images"></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<p id="trait-location"></p>
+														<p id="trait-notes"></p>
+													</div>
+												</div>
+												<div class="row">
+													<div id="trait-scores"></div>
+												</div>
+											</div>
+										</div>
+	
+										<div id="trait-score-advanced"  class="entry-mode">
+											<div class="container-fluid">
+												<div id="advanced-mode-list"></div>
+												<div id="advanced-mode-template" class="template">
+													<div class="row adv-row">
+														<div class="col-xs-4">
+															<strong><span class="adv-trait-name"></span></strong>
+														</div>
+														<div class="adv-col-0 col-xs-2">
+															<input type="radio" class="adv-radio adv-radio-0" /> <label class="adv-label-0"></label>
+														</div>
+														<div class="adv-col-1 col-xs-2">
+															<input type="radio" class="adv-radio adv-radio-1" /> <label class="adv-label-1"></label>
+														</div>
+														<div class="adv-col-2 col-xs-2">
+															<input type="radio" class="adv-radio adv-radio-2" /> <label class="adv-label-2"></label>
+														</div>
+														<div class="adv-col-3 col-xs-2">
+															<input type="radio" class="adv-radio adv-radio-3" /> <label class="adv-label-3"></label>
+														</div>
+														<!-- <div class="adv-col-4 col-xs-2">
+															<input type="radio" class="adv-radio-4" /> <label class="adv-label-4"></label>
+														</div> -->
+													</div>
+												</div>
+											</div>
+										</div>
+	
+										<!-- <div id="trait-score-expert" class="entry-mode">
+											Expert mode
+										</div> -->
+									</div>
+								</div>
+							</div>
+	
+							<div role="tabpanel" class="tab-pane" id="selections">
+								<h2>Current Case Selections</h2>
+								<div id="current-selections"></div>
+								
+								<hr />
+	
+								<div class="text-center center-block">
+									<button id="analysis-review-button" class="btn btn-lg btn-primary analysis-button">Run Analysis</button> 
+									<button id="reset-button" class="reset-button btn btn-lg btn-danger">Reset</button>
+								</div>
+							</div>
+	
+							<div role="tabpanel" class="tab-pane" id="results">
+								<div id="result-status"></div>
+								<div id="result-loading">
+									<p class="text-center center-block">
+										<img src="assets/img/loading.gif" class="img-responsive center-block" width="50" height="50" />
+									</p>
+								</div>
+								<div id="result-debug"></div>
+								<div id="result-output"></div>
+							</div>
+	
+							<div role="tabpanel" class="tab-pane" id="charts">
+								<div id="result-images"></div>
+							</div>
+	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div id="settings-modal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">User Settings</h4>
+					</div>
+					<div class="modal-body">
+						<form id="settings-form">
+							<div class="form-group">
+								<label for="rscript_file_input">Rscript.exe Executable Path</label>
+								<input type="file" id="rscript_file_input">
+								<p class="help-block">
+									Choose the path to the Rscript.exe file<br />
+									<strong>Currently:</strong> <span id="settings-rscript-path"></span>
+								</p>
+								<p class="help-block">
+									Suggested locations on your computer:<br />
+									<span id="settings-found-rscript"></span>
+								</p>
+							</div>
+							<div class="form-group">
+								<label for="settings_entry_mode">Trait Scoring Entry Mode</label>
+								<div class="radio">
+									<label>
+										<input type="radio" id="entry_mode_basic" name="settings_entry_mode" value="basic" />
+										Basic Scoring Mode (full pictures and descriptions)
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="entry_mode_advanced" name="settings_entry_mode" value="advanced" />
+										Advanced Scoring Mode (text only selections)
+									</label>
+								</div>
+								<!-- <div class="radio">
+									<label>
+										<input type="radio" id="entry_mode_expert" name="settings_entry_mode" value="expert" />
+										Expert Scoring Mode (numerical entry)
+									</label>
+								</div> -->
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button id="save-setting-button" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div id="trait-score-template" class="template" style="display:none;">
+			<h3>
+				<span class="trait-score-title"></span> 
+				<!-- <span class="trait-score-description glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" title=""></span> -->
+			</h3>
+			<p class="center-block text-center">
+				<button class="trait-score-button btn btn-lg btn-success" data-section-idx="" data-trait-idx="" data-score-idx="">Select</button>
+			</p>
+			<div id="trait-score-carousel" class="carousel slide center-block" data-interval="false" data-ride="carousel">
+				<div class="carousel-inner" role="listbox"></div>
+				<a class="left carousel-control" href="#trait-score-carousel" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#trait-score-carousel" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
+		</div>
+	
+		<div id="selections-template" class="template" style="display:none;">
+			<div class="table-responsive table-hover table-striped">
+				<table class="table table-condensed">
+					<colgroup>
+						<col width="33%" />
+						<col width="33%" />
+						<col width="33%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th>Section</th>
+							<th>Trait</th>
+							<th>Score</th>
+						</tr>		
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+
+		<script src="assets/js/app.js"></script>
 	</body>
 </html>

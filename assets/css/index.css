@@ -1,0 +1,70 @@
+body {
+	padding-top: 15px;
+}
+
+#evaluation-content {
+	display: none;
+}
+
+.col-xs-25 {
+	width: 20%;
+}
+
+.answer-col {
+	min-height: 300px;
+	border: 1px solid #eee;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #fff;
+}
+
+.tab-pane {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.carousel-control.left,
+.carousel-control.right {
+	background-image: none !important;
+}
+
+.answer-col.selected {
+	border: 1px solid green !important;
+	background-color: lightgreen !important;
+}
+
+img.trait-thumbnail {
+	display: inline;
+	padding: 4px;
+}
+
+.trait-header {
+	margin-bottom: 10px;
+}
+
+.rscript-settings-link,
+.collection-link,
+.analysis-file-link {
+	cursor: pointer;
+}
+
+.analysis-file-link-indent {
+	margin-left: 10px;
+}
+
+/* .entry-mode {
+	display: none;
+} */
+
+.template {
+	display: none; 
+}
+
+.adv-row {
+	border-bottom: 1px solid #ddd;
+	padding: 5px 0;
+}
+
+.adv-row label {
+	font-weight: normal;
+}

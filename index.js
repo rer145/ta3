@@ -6,15 +6,20 @@ const {is} = require('electron-util');
 const unhandled = require('electron-unhandled');
 const debug = require('electron-debug');
 const contextMenu = require('electron-context-menu');
-const config = require('./config');
+const windowStateKeeper = require('electron-window-state');
+//const config = require('./config');
 const menu = require('./menu');
+const fs = require('fs');
+
+const Store = require('electron-store');
+const store = new Store();
 
 unhandled();
 debug();
 contextMenu();
 
 // Note: Must match `build.appId` in package.json
-app.setAppUserModelId('com.company.AppName');
+app.setAppUserModelId('edu.psu.TA3');
 
 // Uncomment this before publishing your first version.
 // It's commented out as it throws an error if there are no published versions.
@@ -31,15 +36,37 @@ app.setAppUserModelId('com.company.AppName');
 let mainWindow;
 
 const createMainWindow = async () => {
+	let mainWindowState = windowStateKeeper({
+		defaultWidth: 1024,
+		defaultHeight: 768
+	  });
+
 	const win = new BrowserWindow({
 		title: app.getName(),
 		show: false,
-		width: 600,
-		height: 400
+		// width: 1024,
+		// height: 768,
+		x: mainWindowState.x,
+		y: mainWindowState.y,
+		width: mainWindowState.width,
+		height: mainWindowState.height,
+		backgroundColor: '#ffffff',
+		transparent: false,
+		icon: path.join(__dirname, 'assets/img/icons/icon.png'),
+		webPreferences: {
+			nodeIntegration: true,
+			defaultEncoding: 'UTF-8'
+		}
 	});
+
+	mainWindowState.manage(win);
 
 	win.on('ready-to-show', () => {
 		win.show();
+	});
+
+	win.webContents.on('did-finish-load', () => {
+		win.webContents.setZoomFactor(1);
 	});
 
 	win.on('closed', () => {
@@ -81,10 +108,97 @@ app.on('activate', async () => {
 });
 
 (async () => {
+	prep_files_and_settings();
+
 	await app.whenReady();
 	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
-
-	const favoriteAnimal = config.get('favoriteAnimal');
-	mainWindow.webContents.executeJavaScript(`document.querySelector('header p').textContent = 'Your favorite animal is ${favoriteAnimal}'`);
 })();
+
+
+
+function prep_files_and_settings() {
+	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
+	store.set("version", appVersion);
+
+	if (!store.has("config.entry_mode")) {
+		store.set("config.entry_mode", "basic");
+	}
+
+	if (!store.has("config.r_executable_path")) {
+		store.set("config.r_executable_path", "");
+	}
+
+	var userDataPath = app.getPath("userData");
+	store.set("config.userdata_path", userDataPath);
+
+	var user_packages_path = path.join(userDataPath, "packages");
+	make_directory(user_packages_path);
+	store.set("config.packages_path", user_packages_path);
+
+	var user_analysis_path = path.join(userDataPath, "analysis");
+	make_directory(user_analysis_path);
+	store.set("config.analysis_path", user_analysis_path);
+
+	var user_r_path = path.join(userDataPath, "r");
+	make_directory(user_r_path);
+	store.set("config.r_path", user_r_path);
+
+	var r_path = path.join(__dirname, "assets/r");
+	copy_file(
+        path.join(r_path, "ta3.R"), 
+        path.join(user_r_path, "ta3.R"), 
+		true);
+	copy_file(
+		path.join(r_path, "TA3.Rda"), 
+		path.join(user_r_path, "TA3.Rda"), 
+		true);
+	copy_file(
+		path.join(r_path, "TA3BUM.Rda"), 
+		path.join(user_r_path, "TA3BUM.Rda"), 
+		true);
+	copy_file(
+		path.join(r_path, "TA3OUM.Rda"), 
+		path.join(user_r_path, "TA3OUM.Rda"), 
+		true);
+	copy_file(
+		path.join(r_path, "TA3_Case_Scores.Rda"), 
+		path.join(user_r_path, "TA3_Case_Scores.Rda"), 
+		true);
+	copy_file(
+		path.join(r_path, "install_package.R"), 
+		path.join(user_r_path, "install_package.R"), 
+		true);
+	copy_file(
+		path.join(r_path, "verify_package.R"), 
+		path.join(user_r_path, "verify_package.R"), 
+		true);
+}
+
+function make_directory(dir) {
+	if (!fs.existsSync(dir)){ 
+		try {
+			fs.mkdirSync(dir);
+		} catch (err) {
+			console.log("Unable to create directory: " + err);
+		}
+	}
+};
+
+function copy_file(src, dest, replace) {
+	var do_replace = replace;
+	if (!replace) {
+		do_replace = !fs.existsSync(dest);
+	}
+
+	if (do_replace) {
+		fs.copyFile(src, dest, (err) => {
+			if (err) {
+                console.error("Error copying over " + src + " to " + dest);
+                console.error(err);
+            } else {
+                console.log(src + " was copied to " + dest);
+            }
+		});
+	}
+};
