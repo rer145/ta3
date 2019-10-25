@@ -178,7 +178,8 @@ const macosTemplate = [
 			accelerator: 'Command+,',
 			click() {
 				showPreferences();
-			}
+			},
+			accelerator: 'CmdOrCtrl+Shift+S'
 		}
 	]),
 	{
@@ -239,19 +240,22 @@ const otherTemplate = [
 				label: 'New',
 				click() {
 					win.getFocusedWindow().webContents.send('new-case');
-				}
+				},
+				accelerator: 'CmdOrCtrl+N'
 			},
 			{
 				label: 'Open',
 				click() {
 					win.getFocusedWindow().webContents.send('open-case');
-				}
+				},
+				accelerator: 'CmdOrCtrl+O'
 			},
 			{
 				label: 'Save',
 				click() {
 					win.getFocusedWindow().webContents.send('save-case');
-				}
+				},
+				accelerator: 'CmdOrCtrl+S'
 			},
 			{
 				type: 'separator'
@@ -261,7 +265,8 @@ const otherTemplate = [
 				accelerator: 'Control+,',
 				click() {
 					showPreferences();
-				}
+				},
+				accelerator: 'CmdOrCtrl+Shift+S'
 			},
 			{
 				type: 'separator'

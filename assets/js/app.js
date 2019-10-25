@@ -32,8 +32,6 @@ var current_section_idx = -1;
 var selections = [];
 
 $(document).ready(function() {
-	console.log("Working!");
-
 	app_init();
 });
 
@@ -306,7 +304,6 @@ function show_case_screen() {
 	$("#evaluation-content").hide();
 }
 
-
 function display_entry_mode(mode) {
 	if (mode === "" || mode === undefined) {
 		mode = store.get('config.entry_mode');
@@ -407,7 +404,7 @@ function populate_advanced_mode(section) {
 				}
 
 				label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString());
-				label.html(current_traits[i].scores[j].title);
+				label.html(current_traits[i].scores[j].abbreviation);
 			} else {
 				row.find(".adv-col-" + j.toString()).remove();
 			}
