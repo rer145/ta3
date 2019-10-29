@@ -50,7 +50,8 @@
 	},
 	"np": {
 		"publish": false,
-		"releaseDraft": false
+		"releaseDraft": false,
+		"tests": false
 	},
 	"build": {
 		"appId": "edu.psu.TA3",
