@@ -618,7 +618,7 @@ function populate_trait_prompt(trait) {
 
 			//check if item was already selected or not
 			// var idx = find_item_in_selections(current_section_idx, current_trait_idx, i);
-			var idx = find_item_in_selections_text(current_section_text, current_trait_text, trait.scores[i].value);
+			var idx = find_item_in_selections_text(current_section_text, trait.db_name, trait.scores[i].value);
 			var is_selected = (idx > -1);
 			if (is_selected) {
 				col.addClass("selected");
