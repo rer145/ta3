@@ -6,11 +6,21 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L & M & All"
+        "text": "L & M & All",
+        "traits": [
+          "parietal_depressionL",
+          "spheno_occipital",
+          "occipital_condyleL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "parietal_depressionR",
+          null,
+          "occipital_condyleR"
+        ]
       }
     ],
     "traits": [
@@ -18,6 +28,7 @@
         "trait_no": 1,
         "order_no": "1",
         "title": "Parietal depression (left)",
+        "generic_title": "Parietal depression",
         "description": "",
         "location": "The parietal bone between the superior temporal line and the sagittal surface.",
         "abbreviation": "PD",
@@ -125,6 +136,7 @@
         "trait_no": 3,
         "order_no": "2",
         "title": "Occipital condyle lipping (left)",
+        "generic_title": "Occipital condyle lipping",
         "description": "",
         "location": "The edges of the articulation surfaces of the occipital condyles.",
         "abbreviation": "OC1",
@@ -233,6 +245,7 @@
         "trait_no": 1,
         "order_no": "3",
         "title": "Parietal depression (right)",
+        "generic_title": "Parietal depression",
         "description": "",
         "location": "The parietal bone between the superior temporal line and the sagittal surface.",
         "abbreviation": "PD",
@@ -340,6 +353,7 @@
         "trait_no": 3,
         "order_no": "4",
         "title": "Occipital condyle lipping (right)",
+        "generic_title": "Occipital condyle lipping",
         "description": "",
         "location": "The edges of the articulation surfaces of the occipital condyles.",
         "abbreviation": "OC1",
@@ -448,6 +462,7 @@
         "trait_no": 2,
         "order_no": "5",
         "title": "Spheno-occipital synchondrosis",
+        "generic_title": "Spheno-occipital synchondrosis",
         "description": "",
         "location": "The region where the basilar portion of the occipital bone and the sphenoid meet.",
         "abbreviation": "SO",
@@ -514,7 +529,51 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "Midline"
+        "text": "Midline",
+        "traits": [
+          "C1_lipping",
+          "C1_eburnation",
+          "L1_spinous_process",
+          "L1_sup_epiph",
+          "L1_inf_epiph",
+          "L5_sup_margin",
+          "L5_inf_margin",
+          "L5_sup_epiph",
+          "L5_inf_epiph",
+          "S1_margin",
+          "S12_fusion",
+          "sacral_elbow",
+          "cerv_lipping",
+          "thoracic_lipping",
+          "lumbar_lipping",
+          "DISH_C",
+          "DISH_T",
+          "DISH_L"
+        ]
+      },
+      {
+        "order_no": 2,
+        "text": "Midline",
+        "traits": [
+          null,
+          null,
+          null,
+          "L1_sup_surf",
+          "L1_inf_surf",
+          null,
+          null,
+          "L5_sup_surf",
+          "L5_inf_surf",
+          null,
+          null,
+          null,
+          "cerv_candlewax",
+          "thoracic_candlewax",
+          "lumbar_candlewax",
+          null,
+          null,
+          null
+        ]
       }
     ],
     "traits": [
@@ -522,6 +581,7 @@
         "trait_no": 4,
         "order_no": "1",
         "title": "C1 lipping",
+        "generic_title": "C1 lipping",
         "description": "1st cervical vertebra dens articulation surface lipping",
         "location": "The edges of the articulation surface for the dens (odontoid process) on the posterior surface of the anterior arch of the first cervical vertebra (atlas)",
         "abbreviation": "C1L",
@@ -602,6 +662,7 @@
         "trait_no": 5,
         "order_no": "2",
         "title": "C1 eburnation",
+        "generic_title": "C1 eburnation",
         "description": "C1 dens articulation surface eburnation",
         "location": "The articulation surface for the dens on the anterior arch of the first cervical vertebra.",
         "abbreviation": "C1E",
@@ -668,6 +729,7 @@
         "trait_no": 6,
         "order_no": "3",
         "title": "L1 spinous process flattening",
+        "generic_title": "L1 spinous process",
         "description": "",
         "location": "Dorsal end of the spinous process of the first lumbar vertebra is examined.",
         "abbreviation": "L1",
@@ -771,6 +833,7 @@
         "trait_no": 7,
         "order_no": "4",
         "title": "L1 superior epiphyseal ring fusion",
+        "generic_title": "L1 sup body surface",
         "description": "L1 superior body surface - epiphyseal ring fusion",
         "location": "Superior (cranial) surface of the first lumbar vertebrae.",
         "abbreviation": "L1SEF",
@@ -852,6 +915,7 @@
         "trait_no": 8,
         "order_no": "5",
         "title": "L1 superior surface morphology",
+        "generic_title": "L1 sup body surface 2",
         "description": "L1 superior body surface - surface morphology",
         "location": "The anterior portion of the inferior surface, 1cm interior to he vertebral border, including the epiphyseal ring.<br/><br/>The anterior half is the portion anterior to the widest portion of the vertebral body, excluding the central portion of the face.",
         "abbreviation": "L1SSM",
@@ -956,6 +1020,7 @@
         "trait_no": 9,
         "order_no": "6",
         "title": "L1 inferior epiphyseal ring fusion",
+        "generic_title": "L1 inf body surface",
         "description": "L1 inferior body surface - epiphyseal ring fusion",
         "location": "Inferior (caudal) surface of the first lumbar vertebrae.",
         "abbreviation": "L1IEF",
@@ -1037,6 +1102,7 @@
         "trait_no": 10,
         "order_no": "7",
         "title": "L1 inferior surface morphology",
+        "generic_title": "L1 inf body surface 2",
         "description": "L1 inferior body surface - surface morphology",
         "location": "The anterior portion of the inferior surface, 1cm interior to he vertebral border, including the epiphyseal ring.<br/><br/>The anterior half is the portion anterior to the widest portion of the vertebral body, excluding the central portion of the face.",
         "abbreviation": "L1ISM",
@@ -1141,6 +1207,7 @@
         "trait_no": 11,
         "order_no": "8",
         "title": "L5 superior epiphyseal ring fusion",
+        "generic_title": "L5 sup body surface",
         "description": "L5 superior body surface - epiphyseal ring fusion",
         "location": "Superior (cranial) surface of the fifth lumbar vertebrae.",
         "abbreviation": "L5SEF",
@@ -1222,6 +1289,7 @@
         "trait_no": 12,
         "order_no": "9",
         "title": "L5 superior surface morphology",
+        "generic_title": "L5 sup body surface 2",
         "description": "L5 superior body surface - surface morphology",
         "location": "The anterior portion of the inferior surface, 1cm interior to he vertebral border, including the epiphyseal ring.<br/><br/>The anterior half is the portion anterior to the widest portion of the vertebral body, excluding the central portion of the face.",
         "abbreviation": "L5SSM",
@@ -1326,6 +1394,7 @@
         "trait_no": 13,
         "order_no": "10",
         "title": "L5 inferior epiphyseal ring fusion",
+        "generic_title": "L5 inf body surface",
         "description": "L5 inferior body surface - epiphyseal ring fusion",
         "location": "Inferior (caudal) surface of the fifth lumbar vertebrae.",
         "abbreviation": "L5IEF",
@@ -1407,6 +1476,7 @@
         "trait_no": 14,
         "order_no": "11",
         "title": "L5 inferior surface morphology",
+        "generic_title": "L5 inf body surface 2",
         "description": "L5 inferior body surface - surface morphology",
         "location": "The anterior portion of the inferior surface, 1cm interior to he vertebral border, including the epiphyseal ring.<br/><br/>The anterior half is the portion anterior to the widest portion of the vertebral body, excluding the central portion of the face.",
         "abbreviation": "L5ISM",
@@ -1511,6 +1581,7 @@
         "trait_no": 15,
         "order_no": "12",
         "title": "L5 superior margin shape",
+        "generic_title": "L5 superior margin",
         "description": "",
         "location": "The anterior 20mm (10mm either side of the midline) of the superior margins of the fifth lumbar vertebra.",
         "abbreviation": "L5SMS",
@@ -1600,6 +1671,7 @@
         "trait_no": 16,
         "order_no": "13",
         "title": "L5 inferior margin shape",
+        "generic_title": "L5 inferior margin",
         "description": "",
         "location": "The anterior 20mm (10mm either side of the midline) of the inferior margins of the fifth lumbar vertebra.",
         "abbreviation": "L5IMS",
@@ -1689,6 +1761,7 @@
         "trait_no": 17,
         "order_no": "14",
         "title": "S1 margin shape",
+        "generic_title": "S1 margin",
         "description": "1st sacral vertebra superior anterior border",
         "location": "Middle 20mm of the anterior (ventral) superior edge of the first sacral body (S1)",
         "abbreviation": "S1MS",
@@ -1778,6 +1851,7 @@
         "trait_no": 18,
         "order_no": "15",
         "title": "S1-S2 fusion",
+        "generic_title": "S1-2 fusion",
         "description": "1-2 sacral body fusion",
         "location": "The anterior surface of the sacrum where the first two sacral bodies meet.",
         "abbreviation": "S12F",
@@ -1856,6 +1930,7 @@
         "trait_no": 19,
         "order_no": "16",
         "title": "Sacral \"Elbow\"",
+        "generic_title": "Sacral elbow",
         "description": "",
         "location": "The anterior (ventral) surface of the sacrum -- the angle of interest is located between S2 and S4, including the joints between them.",
         "abbreviation": "SE",
@@ -1932,6 +2007,7 @@
         "trait_no": 20,
         "order_no": "17",
         "title": "Cervical vertebral lipping",
+        "generic_title": "Cervical lipping/candlewax",
         "description": "",
         "location": "The anterior portions of the superior and inferior edges of cervical vertebrae three through seven, and in all thoracic and lumbar vertebrae.",
         "abbreviation": "CVL",
@@ -2002,6 +2078,7 @@
         "trait_no": 21,
         "order_no": "18",
         "title": "Thoracic vertebral lipping",
+        "generic_title": "Thoracic lipping/candlewax",
         "description": "",
         "location": "The anterior portions of the superior and inferior edges of cervical vertebrae three through seven, and in all thoracic and lumbar vertebrae.",
         "abbreviation": "TVL",
@@ -2072,6 +2149,7 @@
         "trait_no": 22,
         "order_no": "19",
         "title": "Lumbar vertebral lipping",
+        "generic_title": "Lumbar lipping/candlewax",
         "description": "",
         "location": "The anterior portions of the superior and inferior edges of cervical vertebrae three through seven, and in all thoracic and lumbar vertebrae.",
         "abbreviation": "LVL",
@@ -2142,6 +2220,7 @@
         "trait_no": 23,
         "order_no": "20",
         "title": "Cervical vertebral candlewax",
+        "generic_title": "Cervical lipping/candlewax",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of the vertebral bodies of cervical three through seven, and all thoracic and lumbar vertebra.",
         "abbreviation": "CCW",
@@ -2210,6 +2289,7 @@
         "trait_no": 24,
         "order_no": "21",
         "title": "Thoracic vertebral candlewax",
+        "generic_title": "Thoracic lipping/candlewax",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of the vertebral bodies of cervical three through seven, and all thoracic and lumbar vertebra.",
         "abbreviation": "TCW",
@@ -2278,6 +2358,7 @@
         "trait_no": 25,
         "order_no": "22",
         "title": "Lumbar vertebral candlewax",
+        "generic_title": "Lumbar lipping/candlewax",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of the vertebral bodies of cervical three through seven, and all thoracic and lumbar vertebra.",
         "abbreviation": "LCW",
@@ -2346,6 +2427,7 @@
         "trait_no": 26,
         "order_no": "23",
         "title": "Cervical Vertebral DISH",
+        "generic_title": "Cervical DISH",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of vertebral bodies.",
         "abbreviation": "CDISH",
@@ -2403,6 +2485,7 @@
         "trait_no": 27,
         "order_no": "24",
         "title": "Thoracic Vertebral DISH",
+        "generic_title": "Thoracic DISH",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of vertebral bodies.",
         "abbreviation": "TDISH",
@@ -2460,6 +2543,7 @@
         "trait_no": 28,
         "order_no": "25",
         "title": "Lumbar Vertebral DISH",
+        "generic_title": "Lumbar DISH",
         "description": "",
         "location": "Superior edges, inferior edges and anterior surfaces of vertebral bodies.",
         "abbreviation": "LDISH",
@@ -2522,11 +2606,27 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L & All"
+        "text": "L & All",
+        "traits": [
+          "R1_FusionL",
+          "sternum_dorsal_ridge",
+          "R2_rim_profile",
+          "R310_rim_profile",
+          "R2_shingle",
+          "R310_shingle"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R & All"
+        "text": "R & All",
+        "traits": [
+          "R1_FusionR",
+          null,
+          "R2_ossification",
+          "R310_ossification",
+          null,
+          null
+        ]
       }
     ],
     "traits": [
@@ -2534,6 +2634,7 @@
         "trait_no": 29,
         "order_no": "1",
         "title": "Rib 1 fusion (left)",
+        "generic_title": "R1 fusion",
         "description": "1st rib - manubrium fusion",
         "location": "The manubrium, first rib, and costal space between them.",
         "abbreviation": "R1FL",
@@ -2593,6 +2694,7 @@
         "trait_no": 29,
         "order_no": "2",
         "title": "Rib 1 fusion (right)",
+        "generic_title": "R1 fusion",
         "description": "1st rib - manubrium fusion",
         "location": "The manubrium, first rib, and costal space between them.",
         "abbreviation": "R1FR",
@@ -2652,6 +2754,7 @@
         "trait_no": 30,
         "order_no": "3",
         "title": "Sternum central dorsal ridge",
+        "generic_title": "Sternum central dorsal ridge",
         "description": "",
         "location": "The dorsal (posterior) surface of the completely fused adult sternal body, excluding the manubrium and xiphoid process.",
         "abbreviation": "SDR",
@@ -2747,6 +2850,7 @@
         "trait_no": 31,
         "order_no": "4",
         "title": "Rib 2 sternal end rim profiles",
+        "generic_title": "R2 rim profile",
         "description": "",
         "location": "The sternal end of rib two (R2), specifically the oval margin of each rib end where bone meets costal cartilage.",
         "abbreviation": "R2RP",
@@ -2835,6 +2939,7 @@
         "trait_no": 32,
         "order_no": "5",
         "title": "Rib 3-10 sternal end rim profiles",
+        "generic_title": "R3-10 rim profile",
         "description": "",
         "location": "The sternal end of ribs three through ten (R3-10), specifically the oval margin of each rib end where bone meets costal cartilage.",
         "abbreviation": "R310RP",
@@ -2923,6 +3028,7 @@
         "trait_no": 33,
         "order_no": "6",
         "title": "Rib 2 ossification pattern",
+        "generic_title": "R2 rim profile",
         "description": "",
         "location": "The sternal end of rib two (R2), specifically the oval margin of each rib end where the bone meets costal cartilage.",
         "abbreviation": "R2O",
@@ -3027,6 +3133,7 @@
         "trait_no": 34,
         "order_no": "7",
         "title": "Rib 3-10 ossification pattern",
+        "generic_title": "R3-10 rim profile",
         "description": "",
         "location": "The sternal end of ribs three through ten (R3-10), specifically the oval margin of each rib end where the bone meets costal cartilage.",
         "abbreviation": "R310O",
@@ -3131,6 +3238,7 @@
         "trait_no": 35,
         "order_no": "8",
         "title": "Rib 2 shingle ribs",
+        "generic_title": "R2 shingle rib",
         "description": "rib body thickness",
         "location": "The ventral third of the second rib (R2).",
         "abbreviation": "R2SR",
@@ -3210,6 +3318,7 @@
         "trait_no": 36,
         "order_no": "9",
         "title": "Ribs 3-10 shingle ribs",
+        "generic_title": "R3-10 shingle ribs",
         "description": "rib body thickness",
         "location": "The ventral third of ribs three through ten (R3-10).",
         "abbreviation": "R310SR",
@@ -3294,11 +3403,25 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L"
+        "text": "L",
+        "traits": [
+          "clav_med_epiphL",
+          "clav_med_gravelL",
+          "clav_med_macroL",
+          "clav_lat_macroL",
+          "glenoid_lippingL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "clav_med_epiphR",
+          "clav_med_gravelR",
+          "clav_med_macroR",
+          "clav_lat_macroR",
+          "glenoid_lippingR"
+        ]
       }
     ],
     "traits": [
@@ -3306,6 +3429,7 @@
         "trait_no": 37,
         "order_no": "1",
         "title": "Clavicle medial epiphysis fusion (left)",
+        "generic_title": "Clav med epiphysis fusion",
         "description": "",
         "location": "Edges and surface of the medial end of the clavicle.",
         "abbreviation": "CEFL",
@@ -3408,6 +3532,7 @@
         "trait_no": 38,
         "order_no": "2",
         "title": "Clavicle medial epiphysis gravel (left)",
+        "generic_title": "Clav med epiphysis gravel",
         "description": "",
         "location": "Surface of the medical end of the clavicle",
         "abbreviation": "CMEGL",
@@ -3507,6 +3632,7 @@
         "trait_no": 39,
         "order_no": "3",
         "title": "Clavicle medial macroporosity (left)",
+        "generic_title": "Clav med macroporosity",
         "description": "",
         "location": "Surface of the medical end of the clavicle",
         "abbreviation": "CMEML",
@@ -3606,6 +3732,7 @@
         "trait_no": 40,
         "order_no": "4",
         "title": "Clavicle lateral macroporosity (left)",
+        "generic_title": "Clav lateral macroporosity",
         "description": "acromial articulation",
         "location": "The lateral articulation surface where the clavicle meets the acromion process of the scapula.",
         "abbreviation": "CLML",
@@ -3679,6 +3806,7 @@
         "trait_no": 42,
         "order_no": "5",
         "title": "Scapula glenoid foss lipping (left)",
+        "generic_title": "Scap glen fossa elevated shp & lip",
         "description": "",
         "location": "The margins of the articulation surface of the glenoid foss.",
         "abbreviation": "SGFLL",
@@ -3769,6 +3897,7 @@
         "trait_no": 37,
         "order_no": "6",
         "title": "Clavicle medial epiphysis fusion (right)",
+        "generic_title": "Clav med epiphysis fusion",
         "description": "",
         "location": "Edges and surface of the medial end of the clavicle.",
         "abbreviation": "CEFR",
@@ -3871,6 +4000,7 @@
         "trait_no": 38,
         "order_no": "7",
         "title": "Clavicle medial epiphysis gravel (right)",
+        "generic_title": "Clav med epiphysis gravel",
         "description": "",
         "location": "Surface of the medical end of the clavicle",
         "abbreviation": "CMEGR",
@@ -3970,6 +4100,7 @@
         "trait_no": 39,
         "order_no": "8",
         "title": "Clavicle medial macroporosity (right)",
+        "generic_title": "Clav med macroporosity",
         "description": "",
         "location": "Surface of the medical end of the clavicle",
         "abbreviation": "CMEMR",
@@ -4069,6 +4200,7 @@
         "trait_no": 40,
         "order_no": "9",
         "title": "Clavicle lateral macroporosity (right)",
+        "generic_title": "Clav lateral macroporosity",
         "description": "acromial articulation",
         "location": "The lateral articulation surface where the clavicle meets the acromion process of the scapula.",
         "abbreviation": "CLMR",
@@ -4142,6 +4274,7 @@
         "trait_no": 42,
         "order_no": "10",
         "title": "Scapula glenoid foss lipping (right)",
+        "generic_title": "scap glen fossa elevated shp & lat",
         "description": "",
         "location": "The margins of the articulation surface of the glenoid foss.",
         "abbreviation": "SGFLR",
@@ -4237,11 +4370,27 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L & All"
+        "text": "L & All",
+        "traits": [
+          "Hum_LW",
+          "lesser_tubercle_bumpsL",
+          "lesser_tubercle_marginL",
+          "humerus_greater_tubercleL",
+          "med_epicondyleL",
+          "lat_epicondyleL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          null,
+          "lesser_tubercle_bumpsR",
+          "lesser_tubercle_marginR",
+          "humerus_greater_tubercleR",
+          "med_epicondyleR",
+          "lat_epicondyleR"
+        ]
       }
     ],
     "traits": [
@@ -4249,6 +4398,7 @@
         "trait_no": 43,
         "order_no": "1",
         "title": "Humerus weight",
+        "generic_title": "Humerus weight",
         "description": "",
         "location": "The entire humerus",
         "abbreviation": "",
@@ -4286,6 +4436,7 @@
         "trait_no": 44,
         "order_no": "2",
         "title": "Humerus lesser tubercle bumps (left)",
+        "generic_title": "Lesser tubercle ant surface bumps",
         "description": "anterior surface",
         "location": "Anterior surface of the lesser tubercle of the humerus.",
         "abbreviation": "HLTSL",
@@ -4371,6 +4522,7 @@
         "trait_no": 45,
         "order_no": "3",
         "title": "Humerus lesser tubercle margin shape (left)",
+        "generic_title": "Lesser tubercle margin",
         "description": "",
         "location": "Lateral margin of the lesser tubercle of the humerus.",
         "abbreviation": "HLTML",
@@ -4452,6 +4604,7 @@
         "trait_no": 46,
         "order_no": "4",
         "title": "Humerus greater tubercle pits (left)",
+        "generic_title": "Greater tubercle pits",
         "description": "",
         "location": "Superior surface of the greater tubercle of the humerus.",
         "abbreviation": "HGTL",
@@ -4521,6 +4674,7 @@
         "trait_no": 47,
         "order_no": "5",
         "title": "Humerus medial epicondyle texture (left)",
+        "generic_title": "Medial epicondyle",
         "description": "",
         "location": "Anterior surface and posterior edge of the medial epicondyle of the humerus.",
         "abbreviation": "HMEL",
@@ -4579,6 +4733,7 @@
         "trait_no": 48,
         "order_no": "6",
         "title": "Humerus lateral epicondyle texture (left)",
+        "generic_title": "Lateral epicondyle",
         "description": "",
         "location": "Anterior surface and posterior edge of the lateral epicondyle of the humerus.",
         "abbreviation": "HLEL",
@@ -4637,6 +4792,7 @@
         "trait_no": 44,
         "order_no": "7",
         "title": "Humerus lesser tubercle bumps (right)",
+        "generic_title": "Lesser tubercle ant surface bumps",
         "description": "anterior surface",
         "location": "Anterior surface of the lesser tubercle of the humerus.",
         "abbreviation": "HLTSR",
@@ -4722,6 +4878,7 @@
         "trait_no": 45,
         "order_no": "8",
         "title": "Humerus lesser tubercle margin shape (right)",
+        "generic_title": "Lesser tubercle margin",
         "description": "",
         "location": "Lateral margin of the lesser tubercle of the humerus.",
         "abbreviation": "HLTMR",
@@ -4803,6 +4960,7 @@
         "trait_no": 46,
         "order_no": "9",
         "title": "Humerus greater tubercle pits (right)",
+        "generic_title": "Greater tubercle pits",
         "description": "",
         "location": "Superior surface of the greater tubercle of the humerus.",
         "abbreviation": "HGTR",
@@ -4872,6 +5030,7 @@
         "trait_no": 47,
         "order_no": "10",
         "title": "Humerus medial epicondyle texture (right)",
+        "generic_title": "Medial epicondyle",
         "description": "",
         "location": "Anterior surface and posterior edge of the medial epicondyle of the humerus.",
         "abbreviation": "HMER",
@@ -4930,6 +5089,7 @@
         "trait_no": 48,
         "order_no": "11",
         "title": "Humerus lateral epicondyle texture (right)",
+        "generic_title": "Lateral epicondyle",
         "description": "",
         "location": "Anterior surface and posterior edge of the lateral epicondyle of the humerus.",
         "abbreviation": "HLER",
@@ -4993,11 +5153,21 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L"
+        "text": "L",
+        "traits": [
+          "radius_tuberosity_ridgeL",
+          "ulna_exostosesL",
+          "trapezium_lippingL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "radius_tuberosity_ridgeR",
+          "ulna_exostosesR",
+          "trapezium_lippingR"
+        ]
       }
     ],
     "traits": [
@@ -5005,6 +5175,7 @@
         "trait_no": 49,
         "order_no": "1",
         "title": "Radius tuberosity medial crest (left)",
+        "generic_title": "Radius tuberosity crest",
         "description": "",
         "location": "Medial aspect of the radial tuberosity where the tendon of biceps brachii inserts.",
         "abbreviation": "RTMCL",
@@ -5066,6 +5237,7 @@
         "trait_no": 50,
         "order_no": "2",
         "title": "Ulna olecranon spur (left)",
+        "generic_title": "Ulna olecranon spur",
         "description": "",
         "location": "Posterior-proximal margin of the olecranon process where the triceps tendon inserts.",
         "abbreviation": "UEPSL",
@@ -5144,6 +5316,7 @@
         "trait_no": 51,
         "order_no": "3",
         "title": "Trapezium lipping (left)",
+        "generic_title": "Trapezium lipping",
         "description": "",
         "location": "The circumference of the saddle-shaped articulation surface for the first metacarpal.",
         "abbreviation": "TLL",
@@ -5202,6 +5375,7 @@
         "trait_no": 49,
         "order_no": "4",
         "title": "Radius tuberosity medial crest (right)",
+        "generic_title": "Radius tuberosity crest",
         "description": "",
         "location": "Medial aspect of the radial tuberosity where the tendon of biceps brachii inserts.",
         "abbreviation": "RTMCR",
@@ -5258,6 +5432,7 @@
         "trait_no": 50,
         "order_no": "5",
         "title": "Ulna olecranon spur (right)",
+        "generic_title": "Ulna olecranon spur",
         "description": "",
         "location": "Posterior-proximal margin of the olecranon process where the triceps tendon inserts.",
         "abbreviation": "UEPSR",
@@ -5336,6 +5511,7 @@
         "trait_no": 51,
         "order_no": "6",
         "title": "Trapezium lipping (right)",
+        "generic_title": "Trapezium lipping",
         "description": "",
         "location": "The circumference of the saddle-shaped articulation surface for the first metacarpal.",
         "abbreviation": "TLR",
@@ -5394,11 +5570,25 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L"
+        "text": "L",
+        "traits": [
+          "fovea_marginL",
+          "fem_head_surfL",
+          "troch_lat_surfL",
+          "troch_fossa_exostL",
+          "troch_med_surf_exostL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "fovea_marginR",
+          "fem_head_surfR",
+          "troch_lat_surfR",
+          "troch_fossa_exostR",
+          "troch_med_surf_exostR"
+        ]
       }
     ],
     "traits": [
@@ -5406,6 +5596,7 @@
         "trait_no": 52,
         "order_no": "1",
         "title": "Femur fovea margin lipping (left)",
+        "generic_title": "Fovea margin lipping",
         "description": "",
         "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
         "abbreviation": "FFMLL",
@@ -5480,6 +5671,7 @@
         "trait_no": 53,
         "order_no": "2",
         "title": "Femur head surface extra bone (left)",
+        "generic_title": "Head surface",
         "description": "",
         "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
         "abbreviation": "FHEBL",
@@ -5558,6 +5750,7 @@
         "trait_no": 54,
         "order_no": "3",
         "title": "Femur greater trochanter roughening (left)",
+        "generic_title": "Troch lat surf roughening",
         "description": "lateral surface",
         "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
         "abbreviation": "FGTRL",
@@ -5629,6 +5822,7 @@
         "trait_no": 55,
         "order_no": "4",
         "title": "Femur trochanteric fossa exostoses (left)",
+        "generic_title": "Troch fossa exos",
         "description": "",
         "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
         "abbreviation": "FTFEL",
@@ -5689,6 +5883,7 @@
         "trait_no": 56,
         "order_no": "5",
         "title": "Femur trochanteric medial exostoses (left)",
+        "generic_title": "Troch med surf exos",
         "description": "",
         "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
         "abbreviation": "FTFML",
@@ -5764,6 +5959,7 @@
         "trait_no": 52,
         "order_no": "6",
         "title": "Femur fovea margin lipping (right)",
+        "generic_title": "Fovea margin lipping",
         "description": "",
         "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
         "abbreviation": "FFMLR",
@@ -5838,6 +6034,7 @@
         "trait_no": 53,
         "order_no": "7",
         "title": "Femur head surface extra bone (right)",
+        "generic_title": "Head surface",
         "description": "",
         "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
         "abbreviation": "FHEBR",
@@ -5916,6 +6113,7 @@
         "trait_no": 54,
         "order_no": "8",
         "title": "Femur greater trochanter roughening (right)",
+        "generic_title": "Troch lat surf roughening",
         "description": "lateral surface",
         "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
         "abbreviation": "FGTRR",
@@ -5987,6 +6185,7 @@
         "trait_no": 55,
         "order_no": "9",
         "title": "Femur trochanteric fossa exostoses (right)",
+        "generic_title": "Troch fossa exos",
         "description": "",
         "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
         "abbreviation": "FTFER",
@@ -6047,6 +6246,7 @@
         "trait_no": 56,
         "order_no": "10",
         "title": "Femur trochanteric medial exostoses (right)",
+        "generic_title": "Troch med surf exos",
         "description": "",
         "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
         "abbreviation": "FTFMR",
@@ -6127,11 +6327,21 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L & All"
+        "text": "L & All",
+        "traits": [
+          "Tib_LW",
+          "fibula_mercury_wingsL",
+          "Calc_LW"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          null,
+          "fibula_mercury_wingsR",
+          null
+        ]
       }
     ],
     "traits": [
@@ -6139,6 +6349,7 @@
         "trait_no": 58,
         "order_no": "1",
         "title": "Fibula wings (left)",
+        "generic_title": "Fibula wings",
         "description": "",
         "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
         "abbreviation": "FWL",
@@ -6197,6 +6408,7 @@
         "trait_no": 59,
         "order_no": "2",
         "title": "Fibula wings (right)",
+        "generic_title": "Fibula wings",
         "description": "",
         "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
         "abbreviation": "FWR",
@@ -6229,7 +6441,7 @@
             "title": "present",
             "description": "There is a projection of bone >= 1mm beyond the anterior margin of the fibula for >= 3mm in length (i.e. at least a 1x3mm rectangle). The anterior margin of the projection is typically irregular and its surface has multiple striations paralleling the long axis of the feature. This extension of bone, which continues onto the lateral surface of the fibula, has a smooth, sclerotic appearance.",
             "value": "1",
-            "abbreviation": "abs",
+            "abbreviation": "pres",
             "images": [
               {
                 "path": "assets/img/traits/FW-2R.jpg",
@@ -6245,6 +6457,7 @@
         "trait_no": 57,
         "order_no": "3",
         "title": "Tibia light weight",
+        "generic_title": "Tibia weight",
         "description": "",
         "location": "The entire tibia",
         "abbreviation": "",
@@ -6282,6 +6495,7 @@
         "trait_no": 59,
         "order_no": "4",
         "title": "Calcaneus light weight",
+        "generic_title": "Calcaneus weight",
         "description": "",
         "location": "The entire calcaneus",
         "abbreviation": "",
@@ -6324,11 +6538,37 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L & All"
+        "text": "L & All",
+        "traits": [
+          "Inno_LW",
+          "SI_fusionL",
+          "iliac_crest_fusionL",
+          "ilium_tuberculumL",
+          "ant_inf_spine_exosL",
+          "acet_post_marginL",
+          "acet_post_surfL",
+          "acet_end_lippingL",
+          "ischium_tub_margin_spurL",
+          "Ischium_medial_spurL",
+          "ischium_tub_bumpsL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "Inno_LW",
+          "SI_fusionR",
+          "iliac_crest_fusionR",
+          "ilium_tuberculumR",
+          "ant_inf_spine_exosR",
+          "acet_post_marginR",
+          "acet_post_surfR",
+          "acet_end_lippingR",
+          "ischium_tub_margin_spurR",
+          "Ischium_medial_spurR",
+          "ischium_tub_bumpsR"
+        ]
       }
     ],
     "traits": [
@@ -6336,6 +6576,7 @@
         "trait_no": 61,
         "order_no": "2",
         "title": "Sacroiliac joint fusion (left)",
+        "generic_title": "SI joint fusion",
         "description": "",
         "location": "The sacroiliac joint.",
         "abbreviation": "SAFL",
@@ -6391,7 +6632,7 @@
             "title": "superior-anterior (SA)",
             "description": "The sacrum and ilium are fused via a bony connection in the region where the anterior sacroiliac ligament exists.",
             "value": "2",
-            "abbreviation": "aSA",
+            "abbreviation": "SA",
             "images": [
               {
                 "path": "assets/img/traits/SAF-1.jpg",
@@ -6422,6 +6663,7 @@
         "trait_no": 62,
         "order_no": "4",
         "title": "Iliac crest fusion (left)",
+        "generic_title": "Iliac crest fusion",
         "description": "",
         "location": "The most superior part of the iliac blade anterior to, and including, the iliac tubercle.",
         "abbreviation": "ICFL",
@@ -6505,6 +6747,7 @@
         "trait_no": 63,
         "order_no": "6",
         "title": "Iliac crest tuberculum ossification (left)",
+        "generic_title": "Ilium tuberculum ossif",
         "description": "",
         "location": "The area of the iliac crest from the tuberculum (iliac tubercle) -- a rounded prominence on the ege of the iliac crest posterior to the anterior superior iliac spine -- to halfway to the anterior superior iliac spine.",
         "abbreviation": "ITOL",
@@ -6585,6 +6828,7 @@
         "trait_no": 64,
         "order_no": "8",
         "title": "Iliac AIIS exostoses (left)",
+        "generic_title": "Ant inf iliac spine exos",
         "description": "anterior inferior iliac spine exostoses)",
         "location": "Surface of the anterior inferior iliac spine.",
         "abbreviation": "AIISL",
@@ -6643,6 +6887,7 @@
         "trait_no": 65,
         "order_no": "10",
         "title": "Acetabulum posterior margin lipping (left)",
+        "generic_title": "Acetabulum post margin",
         "description": "",
         "location": "The 30mm forming the posterior portion of the acetabulum's outer margin.",
         "abbreviation": "APMLL",
@@ -6701,6 +6946,7 @@
         "trait_no": 66,
         "order_no": "12",
         "title": "Acetabulum posterior articular surface roughening (left)",
+        "generic_title": "Acetabulum post surface",
         "description": "",
         "location": "The lateral posterior portion of the articular (joint) surface of the acetabulum, just inside the joint margin. The joint surface in the same region as the posterior acetabular margin described above.",
         "abbreviation": "AASEBL",
@@ -6769,6 +7015,7 @@
         "trait_no": 67,
         "order_no": "14",
         "title": "Acetabulum inferior joint lipping (left)",
+        "generic_title": "Acetab inf end lipping",
         "description": "",
         "location": "Margin of the inferior end of the acetabular articulation surface.",
         "abbreviation": "AIJLL",
@@ -6825,6 +7072,7 @@
         "trait_no": 68,
         "order_no": "16",
         "title": "Ischial tuberosity superior margin spur (left)",
+        "generic_title": "Ischium tub margin spur",
         "description": "",
         "location": "The superior margin of the ischial tuberosity where fascia for the semimembranosus attaches.",
         "abbreviation": "ITSMSL",
@@ -6903,6 +7151,7 @@
         "trait_no": 69,
         "order_no": "18",
         "title": "Ischial tuberosity superior medial spur (left)",
+        "generic_title": "Ischium medial spur",
         "description": "sacrotuberous ligament spur",
         "location": "Inferior third of the medial border of the ischial tuberosity where the sacrotuberous ligament attaches to the tuberosity's margin.",
         "abbreviation": "ITMSL",
@@ -6984,6 +7233,7 @@
         "trait_no": 70,
         "order_no": "20",
         "title": "Ischial tuberosity bumps (left)",
+        "generic_title": "Ischium tub bumps",
         "description": "",
         "location": "Upper portion of the ischial tuberosity; this area is superior to a low ridge that separates the attachments for the semitendinosus and semimembranosus superiorly, and the long head of the biceps femoris inferiorly.",
         "abbreviation": "ITBL",
@@ -7064,6 +7314,7 @@
         "trait_no": 61,
         "order_no": "3",
         "title": "Sacroiliac joint fusion (right)",
+        "generic_title": "SI joint fusion",
         "description": "",
         "location": "The sacroiliac joint.",
         "abbreviation": "SAFR",
@@ -7150,6 +7401,7 @@
         "trait_no": 62,
         "order_no": "5",
         "title": "Iliac crest fusion (right)",
+        "generic_title": "Iliac crest fusion",
         "description": "",
         "location": "The most superior part of the iliac blade anterior to, and including, the iliac tubercle.",
         "abbreviation": "ICFR",
@@ -7233,6 +7485,7 @@
         "trait_no": 63,
         "order_no": "7",
         "title": "Iliac crest tuberculum ossification (right)",
+        "generic_title": "Ilium tuberculum ossif",
         "description": "",
         "location": "The area of the iliac crest from the tuberculum (iliac tubercle) -- a rounded prominence on the ege of the iliac crest posterior to the anterior superior iliac spine -- to halfway to the anterior superior iliac spine.",
         "abbreviation": "ITOR",
@@ -7313,6 +7566,7 @@
         "trait_no": 64,
         "order_no": "9",
         "title": "Iliac AIIS exostoses (right)",
+        "generic_title": "Ant inf iliac spine exos",
         "description": "anterior inferior iliac spine exostoses)",
         "location": "Surface of the anterior inferior iliac spine.",
         "abbreviation": "AIISR",
@@ -7371,6 +7625,7 @@
         "trait_no": 65,
         "order_no": "11",
         "title": "Acetabulum posterior margin lipping (right)",
+        "generic_title": "Acetabulum post margin",
         "description": "",
         "location": "The 30mm forming the posterior portion of the acetabulum's outer margin.",
         "abbreviation": "APMLR",
@@ -7429,6 +7684,7 @@
         "trait_no": 66,
         "order_no": "13",
         "title": "Acetabulum posterior articular surface roughening (right)",
+        "generic_title": "Acetabulum post surface",
         "description": "",
         "location": "The lateral posterior portion of the articular (joint) surface of the acetabulum, just inside the joint margin. The joint surface in the same region as the posterior acetabular margin described above.",
         "abbreviation": "AASEBR",
@@ -7497,6 +7753,7 @@
         "trait_no": 67,
         "order_no": "15",
         "title": "Acetabulum inferior joint lipping (right)",
+        "generic_title": "Aceta inf end lipping",
         "description": "",
         "location": "Margin of the inferior end of the acetabular articulation surface.",
         "abbreviation": "AIJLR",
@@ -7553,6 +7810,7 @@
         "trait_no": 68,
         "order_no": "17",
         "title": "Ischial tuberosity superior margin spur (right)",
+        "generic_title": "Ischium tub margin spur",
         "description": "",
         "location": "The superior margin of the ischial tuberosity where fascia for the semimembranosus attaches.",
         "abbreviation": "ITSMSR",
@@ -7631,6 +7889,7 @@
         "trait_no": 69,
         "order_no": "19",
         "title": "Ischial tuberosity superior medial spur (right)",
+        "generic_title": "Ischium medial spur",
         "description": "sacrotuberous ligament spur",
         "location": "Inferior third of the medial border of the ischial tuberosity where the sacrotuberous ligament attaches to the tuberosity's margin.",
         "abbreviation": "ITMSR",
@@ -7712,6 +7971,7 @@
         "trait_no": 70,
         "order_no": "21",
         "title": "Ischial tuberosity bumps (right)",
+        "generic_title": "Ischium tub bumps",
         "description": "",
         "location": "Upper portion of the ischial tuberosity; this area is superior to a low ridge that separates the attachments for the semitendinosus and semimembranosus superiorly, and the long head of the biceps femoris inferiorly.",
         "abbreviation": "ITBR",
@@ -7792,6 +8052,7 @@
         "trait_no": 60,
         "order_no": "1",
         "title": "Innominate light weight",
+        "generic_title": "Innominate weight",
         "description": "",
         "location": "The entire innominate",
         "abbreviation": "",
@@ -7834,11 +8095,23 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L"
+        "text": "L",
+        "traits": [
+          "inferior_surf_porosityL",
+          "sup_post_iliac_exosL",
+          "inf_post_iliac_exosL",
+          "post_exost_completeL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "inferior_surf_porosityR",
+          "sup_post_iliac_exosR",
+          "inf_post_iliac_exosR",
+          "post_exost_completeR"
+        ]
       }
     ],
     "traits": [
@@ -7846,6 +8119,7 @@
         "trait_no": 71,
         "order_no": "1",
         "title": "Inferior surface porosity (left)",
+        "generic_title": "Inf surface porosity",
         "description": "",
         "location": "Most inferior 10m (in a superior to inferior direction) of the inferior demiface -- do not include any marginal lipping that extends beyond the original margin of the joint surface.",
         "abbreviation": "ASIPL",
@@ -7908,6 +8182,7 @@
         "trait_no": 72,
         "order_no": "3",
         "title": "Superior posterior iliac exostoses (left)",
+        "generic_title": "Sup post iliac exosto",
         "description": "",
         "location": "Medial surface of the posterior ilium where the ventral sacroiliac ligament attaches; in some individuals the bone is distinctly raised in this area.",
         "abbreviation": "ASSIEL",
@@ -7978,6 +8253,7 @@
         "trait_no": 73,
         "order_no": "5",
         "title": "Inferior posterior iliac exostoses (left)",
+        "generic_title": "Inf post iliac exosto",
         "description": "",
         "location": "Medial surface of the posterior ilium where the interosseous sacroiliac ligament attaches; in some individuals, the bone is distinctly raised in this area.",
         "abbreviation": "ASPIEL",
@@ -8041,6 +8317,7 @@
         "trait_no": 74,
         "order_no": "7",
         "title": "Posterior exostoses (left)",
+        "generic_title": "Post exostoses",
         "description": "",
         "location": "The posterior iliac area lies between the superior and inferior posterior iliac exostoses (as defined above)<br/><ul><li>The area where the exostoses occur is on the medial side of the ilium bordered posteriorly by the iliac crest, anteriorly by the sacroiliac joint surface, superiorly by a slightly raised area often surmounted by bony exostoses (superior posterior iliac exostoses), and inferiorly by a similar area (interior posterior iliac exostoses).</li><li>Excluded is a 5-10mm wide area of bone immediately posterior to the auricular surface where no exostoses ever form).</li></ul>",
         "abbreviation": "ASPEL",
@@ -8129,6 +8406,7 @@
         "trait_no": 71,
         "order_no": "2",
         "title": "Inferior surface porosity (right)",
+        "generic_title": "Inf surface porosity",
         "description": "",
         "location": "Most inferior 10m (in a superior to inferior direction) of the inferior demiface -- do not include any marginal lipping that extends beyond the original margin of the joint surface.",
         "abbreviation": "ASIPR",
@@ -8191,6 +8469,7 @@
         "trait_no": 72,
         "order_no": "4",
         "title": "Superior posterior iliac exostoses (right)",
+        "generic_title": "Sup post iliac exosto",
         "description": "",
         "location": "Medial surface of the posterior ilium where the ventral sacroiliac ligament attaches; in some individuals the bone is distinctly raised in this area.",
         "abbreviation": "ASSIER",
@@ -8261,6 +8540,7 @@
         "trait_no": 73,
         "order_no": "6",
         "title": "Inferior posterior iliac exostoses (right)",
+        "generic_title": "Inf post iliac exosto",
         "description": "",
         "location": "Medial surface of the posterior ilium where the interosseous sacroiliac ligament attaches; in some individuals, the bone is distinctly raised in this area.",
         "abbreviation": "ASPIER",
@@ -8324,6 +8604,7 @@
         "trait_no": 74,
         "order_no": "8",
         "title": "Posterior exostoses (right)",
+        "generic_title": "Post exostoses",
         "description": "",
         "location": "The posterior iliac area lies between the superior and inferior posterior iliac exostoses (as defined above)<br/><ul><li>The area where the exostoses occur is on the medial side of the ilium bordered posteriorly by the iliac crest, anteriorly by the sacroiliac joint surface, superiorly by a slightly raised area often surmounted by bony exostoses (superior posterior iliac exostoses), and inferiorly by a similar area (interior posterior iliac exostoses).</li><li>Excluded is a 5-10mm wide area of bone immediately posterior to the auricular surface where no exostoses ever form).</li></ul>",
         "abbreviation": "ASPER",
@@ -8417,11 +8698,25 @@
     "columns": [
       {
         "order_no": 1,
-        "text": "L"
+        "text": "L",
+        "traits": [
+          "pubic_collarL",
+          "symph_reliefL",
+          "sup_apexL",
+          "ventral_marginL",
+          "dorsal_marginL"
+        ]
       },
       {
         "order_no": 2,
-        "text": "R"
+        "text": "R",
+        "traits": [
+          "pubic_collarR",
+          "symph_reliefR",
+          "sup_apexR",
+          "ventral_marginR",
+          "dorsal_marginR"
+        ]
       }
     ],
     "traits": [
@@ -8429,6 +8724,7 @@
         "trait_no": 75,
         "order_no": "1",
         "title": "Pubic symphyseal collar (left)",
+        "generic_title": "Pubic symphyseal collar",
         "description": "",
         "location": "Immediately anterior to the ventral margin of the pubic symphysis",
         "abbreviation": "PSSCL",
@@ -8498,6 +8794,7 @@
         "trait_no": 76,
         "order_no": "3",
         "title": "Symphyseal relief (left)",
+        "generic_title": "Symphyseal relief",
         "description": "",
         "location": "The entire symphyseal face.",
         "abbreviation": "PSRL",
@@ -8614,6 +8911,7 @@
         "trait_no": 77,
         "order_no": "5",
         "title": "Superior protuberance (left)",
+        "generic_title": "Superior apex",
         "description": "",
         "location": "The superior part of the symphyseal face.",
         "abbreviation": "SPL",
@@ -8725,6 +9023,7 @@
         "trait_no": 78,
         "order_no": "7",
         "title": "Ventral symphyseal margin (left)",
+        "generic_title": "Ventral margin",
         "description": "",
         "location": "Ventral margin of the pubic symphysis.",
         "abbreviation": "PSVML",
@@ -8823,6 +9122,7 @@
         "trait_no": 79,
         "order_no": "9",
         "title": "Dorsal symphyseal margin (left)",
+        "generic_title": "Dorsal margin",
         "description": "",
         "location": "Ventral margin of the pubic symphysis.",
         "abbreviation": "PSDML",
@@ -8916,6 +9216,7 @@
         "trait_no": 75,
         "order_no": "2",
         "title": "Pubic symphyseal collar (right)",
+        "generic_title": "Pubic symphyseal collar",
         "description": "",
         "location": "Immediately anterior to the ventral margin of the pubic symphysis",
         "abbreviation": "PSSCR",
@@ -8985,6 +9286,7 @@
         "trait_no": 76,
         "order_no": "4",
         "title": "Symphyseal relief (right)",
+        "generic_title": "Symphyseal relief",
         "description": "",
         "location": "The entire symphyseal face.",
         "abbreviation": "PSRR",
@@ -9101,6 +9403,7 @@
         "trait_no": 77,
         "order_no": "6",
         "title": "Superior protuberance (right)",
+        "generic_title": "Superior apex",
         "description": "",
         "location": "The superior part of the symphyseal face.",
         "abbreviation": "SPR",
@@ -9212,6 +9515,7 @@
         "trait_no": 78,
         "order_no": "8",
         "title": "Ventral symphyseal margin (right)",
+        "generic_title": "Ventral margin",
         "description": "",
         "location": "Ventral margin of the pubic symphysis.",
         "abbreviation": "PSVMR",
@@ -9310,6 +9614,7 @@
         "trait_no": 79,
         "order_no": "10",
         "title": "Dorsal symphyseal margin (right)",
+        "generic_title": "Dorsal margin",
         "description": "",
         "location": "Ventral margin of the pubic symphysis.",
         "abbreviation": "PSDMR",

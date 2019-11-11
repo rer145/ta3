@@ -170,16 +170,28 @@ function wire_event_handlers() {
 	});
 	
 	$("body").on("click", ".adv-radio", function() {
-		// toggle_score_selection(
-		// 	$(this).attr("data-section-idx"),
-		// 	$(this).attr("data-trait-idx"),
-		// 	$(this).attr("data-score-idx")
-		// );
+		var btn = $(this);
+		var identifier = String(btn.attr("data-section-text")) + "-" + String(btn.attr("data-trait-text")) + "-" + String(btn.attr("data-score-text"));
+
+
 		toggle_score_selection_text(
-			$(this).attr("data-section-text"),
-			$(this).attr("data-trait-text"),
-			$(this).attr("data-score-text")
+			btn.attr("data-section-text"),
+			btn.attr("data-trait-text"),
+			btn.attr("data-score-text")
 		);
+
+		var group = $("body").find("div.btn-group[data-trait-text=" + String(btn.attr("data-trait-text")) + "]");
+		$.each($(".adv-radio", group), function(k,v) {
+			if ($(this).data("identifier") !== identifier) {
+				$(this).removeClass("active");
+			} else {
+				if ($(this).hasClass("active")) {
+					$(this).removeClass("active");
+				} else {
+					$(this).addClass("active");
+				}
+			}
+		});
 	});
 
 	$("body").on('change', '.dirtyable', function() {
@@ -404,43 +416,144 @@ function populate_expert_mode(section) {}
 function populate_advanced_mode(section) {
 	$("#advanced-mode-list").empty();
 
-	for (var i = 0; i < current_traits.length; i++) {
-		var row = $("#advanced-mode-template").clone();
-		row.removeAttr("id");
-		row.find(".adv-trait-name").html(current_traits[i].title);
+	var data = data_get_section_text(section);
 
-		for (var j = 0; j < 4; j++) {
-			if (current_traits[i].scores[j] !== undefined) {
-				var input = row.find(".adv-radio-" + j.toString());
-				var label = row.find(".adv-label-" + j.toString());
+	var cols = data["columns"];
+	var num_cols = cols.length;
+	
+	// HEADER ROW
+	var header_row = $("<div></div>");
+	header_row.addClass("row").addClass("adv-row").addClass("adv-row-header");
+	var width = num_cols == 2 ? 4 : 6;
+	var col_width = "col-xs-" + width;
+	
+	header_row.append($("<div></div>").addClass(col_width).text(data["name"]));
 
-				input.attr("id", "adv-trait-" + i.toString() + "-" + j.toString());
-				input.attr("name", "adv-trait-" + i.toString());
-				input.attr("value", current_traits[i].scores[j].value);
-				input.attr("data-section-idx", current_section_idx);
-				input.attr("data-section-text", current_section_text);
-				input.attr("data-trait-idx", i);
-				input.attr("data-trait-text", current_traits[i].db_name);
-				input.attr("data-score-idx", j);
-				input.attr("data-score-text", current_traits[i].scores[j].value);
-
-				//var idx = find_item_in_selections(current_section_idx, i, j);
-				var idx = find_item_in_selections_text(current_section_text, current_traits[i].db_name, current_traits[i].scores[j].value);
-				var is_selected = (idx > -1);
-				if (is_selected) {
-					input.attr("checked", "checked");
-				}
-
-				label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString());
-				label.html(current_traits[i].scores[j].abbreviation);
-			} else {
-				row.find(".adv-col-" + j.toString()).remove();
-			}
-		}
-
-		row.removeClass("template");
-		$("#advanced-mode-list").append(row);
+	for (var i = 0; i < cols.length; i++) {
+		header_row.append($("<div></div>").addClass("col-xs-" + width).text(cols[i]["text"]));
 	}
+	$("#advanced-mode-list").append(header_row);
+
+
+	// TRAIT ROWS
+	if (cols != undefined && cols.length > 0) {
+		var num_rows = cols[0].traits.length;
+		for (var i = 0; i < num_rows; i++) {
+			var row = $("<div></div>");
+			row.addClass("row").addClass("adv-row");
+
+			var col_name = current_traits.filter(function(d) {
+				return d.db_name === cols[0].traits[i];
+			})[0].generic_title;
+
+			row.append($("<div></div>").addClass(col_width).text(col_name));
+
+			for (var j = 0; j < num_cols; j++) {
+				//console.log("searching for: ", i, j, cols[j].traits[i]);
+				if (cols[j].traits[i] != null) {
+					var trait = current_traits.filter(function(d) {
+						return d.db_name === cols[j].traits[i];
+					})[0];
+					//console.log(trait);
+
+					if (trait != undefined) {
+						var trait_col = $("<div></div>").addClass(col_width);
+// 						<div class="btn-group" role="group" aria-label="...">
+//   <button type="button" class="btn btn-default">Left</button>
+//   <button type="button" class="btn btn-default">Middle</button>
+//   <button type="button" class="btn btn-default">Right</button>
+// </div>
+						var group = $("<div></div>");
+						group.addClass("btn-group")
+							.attr("role", "group")
+							.attr("aria-label", "Trait scores for " + trait.title)
+							.attr("data-trait-text", trait.db_name);
+
+						for (var k = 0; k < trait.scores.length; k++) {
+							var btn = $("<button></button>");
+							btn.attr("type", "button")
+								.addClass("btn")
+								.addClass("btn-default")
+								.addClass("adv-radio")
+								.text(trait.scores[k].abbreviation)
+								.attr("data-section-text", current_section_text)
+								.attr("data-trait-text", trait.db_name)
+								.attr("data-score-text", trait.scores[k].value)
+								.data("identifier", String(current_section_text) + "-" + String(trait.db_name) + "-" + String(trait.scores[k].value));
+
+							// var input = $("<input></input");
+							// input.attr("type", "radio")
+							// 	.addClass("adv-radio")
+							// 	.attr("id", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
+							// 	.attr("name", "adv-trait-" + i.toString() + "-" + j.toString())
+							// 	.attr("value", trait.scores[k].value)
+							// 	.attr("data-section-text", current_section_text)
+							// 	.attr("data-trait-text", trait.db_name)
+							// 	.attr("data-score-text", trait.scores[k].value);
+
+							var idx = find_item_in_selections_text(current_section_text, trait.db_name, trait.scores[k].value);
+							var is_selected = (idx > -1);
+							if (is_selected) {
+								//input.attr("checked", "checked");
+								btn.addClass("active");
+							}
+							
+							// var label = $("<label></label>");
+							// label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
+							// 	.html(trait.scores[k].abbreviation);
+
+							// trait_col.append(input).append(" ").append(label);
+							group.append(btn);
+						}
+						trait_col.append(group);
+						row.append(trait_col);
+					}
+				} else {
+					row.append($("<div></div>").addClass(col_width).text(""));
+				}
+			}
+
+			$("#advanced-mode-list").append(row);
+		}
+	}
+
+	// for (var i = 0; i < current_traits.length; i++) {
+	// 	var row = $("#advanced-mode-template").clone();
+	// 	row.removeAttr("id");
+	// 	row.find(".adv-trait-name").html(current_traits[i].title);
+
+	// 	for (var j = 0; j < 4; j++) {
+	// 		if (current_traits[i].scores[j] !== undefined) {
+	// 			var input = row.find(".adv-radio-" + j.toString());
+	// 			var label = row.find(".adv-label-" + j.toString());
+
+	// 			input.attr("id", "adv-trait-" + i.toString() + "-" + j.toString());
+	// 			input.attr("name", "adv-trait-" + i.toString());
+	// 			input.attr("value", current_traits[i].scores[j].value);
+	// 			input.attr("data-section-idx", current_section_idx);
+	// 			input.attr("data-section-text", current_section_text);
+	// 			input.attr("data-trait-idx", i);
+	// 			input.attr("data-trait-text", current_traits[i].db_name);
+	// 			input.attr("data-score-idx", j);
+	// 			input.attr("data-score-text", current_traits[i].scores[j].value);
+
+	// 			//var idx = find_item_in_selections(current_section_idx, i, j);
+	// 			var idx = find_item_in_selections_text(current_section_text, current_traits[i].db_name, current_traits[i].scores[j].value);
+	// 			var is_selected = (idx > -1);
+	// 			if (is_selected) {
+	// 				input.attr("checked", "checked");
+	// 			}
+
+	// 			label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString());
+	// 			label.html(current_traits[i].scores[j].abbreviation);
+	// 		} else {
+	// 			row.find(".adv-col-" + j.toString()).remove();
+	// 		}
+	// 	}
+
+	// 	row.removeClass("template");
+	// 	$("#advanced-mode-list").append(row);
+	// }
 }
 
 function populate_trait_prompt(trait) {

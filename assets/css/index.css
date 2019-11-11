@@ -28,6 +28,7 @@ body {
 	background-image: none !important;
 }
 
+.adv-radio.active,
 .answer-col.selected {
 	border: 1px solid green !important;
 	background-color: lightgreen !important;
@@ -67,4 +68,12 @@ img.trait-thumbnail {
 
 .adv-row label {
 	font-weight: normal;
+}
+
+.adv-row-header {
+	font-weight: bold;
+}
+
+.adv-row label {
+	padding-right: 15px;
 }

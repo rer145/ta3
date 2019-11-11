@@ -51,7 +51,8 @@
 	"np": {
 		"publish": false,
 		"releaseDraft": false,
-		"tests": false
+		"tests": false,
+		"contents": "dist"
 	},
 	"build": {
 		"appId": "edu.psu.TA3",
