@@ -4,7 +4,7 @@
 	"version": "0.5.2",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
-	"repository": "rer145/ta3-refactor",
+	"repository": "rer145/ta3",
 	"author": {
 		"name": "Ron Richardson",
 		"email": "ron.richardson@gmail.com"

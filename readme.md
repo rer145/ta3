@@ -1,87 +1,43 @@
-# electron-boilerplate
+# Transition Analysis 3 (TA3)
+> Age Estimation 
 
-> Boilerplate to kickstart creating an app with [Electron](https://github.com/electron/electron)
+## Grant Funding
+National Institute of Justice (NIJ) Award # 2014-DN-BX-K007: Adult Age Estimated From New Skeletal Traits And Enhanced Computer-Based Transition Analysis. Co-PIs: GR Milner, JL Boldsen, SD Ousley.
 
-See [awesome-electron](https://github.com/sindresorhus/awesome-electron) for more useful Electron resources.
+National Science Foundation (NSF) Award # 1455810: Doctoral Dissertation Research: Improved Skeletal Age-at-Deth Estimation and Its Impact on Archaeological Analyses. Co-PIs: SM Getz and GR Milner.
 
-See [Caprine](https://github.com/sindresorhus/caprine) for a production app based on this boilerplate.
+The Velux Foundation - 'Ophelia - People Through 1000 Years Project'
 
+## Research Collections
 
-## Features
+The research team would like to thank the following individuals and institutions that provided access to skeletal collections. 1 Locations of NIJ and NSF-funded research that directly contributed to this manual. 2 Locations of essential pilot studies and other contributing research conducted by the research team over many years.
 
-- [`electron-builder`](https://www.electron.build) fully set up to create cross-platform builds
-- [Builds the app on Travis](https://www.electron.build/multi-platform-build.html)
-- [Silent auto-updates](https://www.electron.build/auto-update.html)
-- App menu that adheres to the system user interface guidelines
-- [Config handling](https://github.com/sindresorhus/electron-store)
-- [Context menu](https://github.com/sindresorhus/electron-context-menu)
-- [User-friendly handling of unhandled errors](https://github.com/sindresorhus/electron-unhandled)
-- Easily publish new versions to GitHub Releases
-- And much more!
+- Lee Jantz and Dawnie Steadman, Dept. of Anthropology, University of Tennessee
+- Erika L'Abbé and Marius Loots – Dept. of Anatomy, The University of Pretoria
+- Pasuk Mahakkanukrauh – Forensic Osteology Research Center, University of Chiang Mai
+- Heather Edgar – Maxwell Museum, University of New Mexico
+- Efstratios Valakos and Panagiota Papazafiri – Dept. of Biology – University of Athens
+- Jelena Bekvalac – Centre for Human Bioarchaeology, Museum of London
+- St. Bride’s Church (London, UK)
+- Joshua Barkey – Dept. of Anthropology, University of Toronto
+- Shirley Schermer – Iowa Office of the State Archaeologist
+- The Department of Anthropology (ADBOU), Institute of Forensic Medicine, University of Southern Denmark
+- Dennis Dirkmaat and Steven Symes – Dept. of Applied Forensic Sciences, Mercyhurst University
+- David Hunt – National Museum of Natural History, Smithsonian Institution
+- Michael D. Wiant and Terrance Martin, Illinois State Museum, Norris Farms Skeletal Collection
+- Ana Luísa Santos – University of Coimbra
 
-
-## Getting started
-
-**Click the "Use this template" button.**
-
-Alternatively, create a new directory and then run:
-
-```
-$ curl -fsSL https://github.com/sindresorhus/electron-boilerplate/archive/master.tar.gz | tar -xz --strip-components 1
-```
-
-There's also a [Yeoman generator](https://github.com/sindresorhus/generator-electron).
-
+A special thanks to David Anderson (University of Tennessee) who provided housing to George Milner while collecting the 2009-2010 preliminary data used as a pilot study for the NIJ grant.
+The research team would also like to thank the staff and students who facilitated day-to-day operations at these collections. Without their help and good humor, this work would not have been possible.
 
 ---
 
-**Remove everything from here and above**
-
----
-
-
-# App Name
-
-> The best app ever
-
-
-## Install
-
-*macOS 10.10+, Linux, and Windows 7+ are supported (64-bit only).*
+## Downloads
 
 **macOS**
 
-[**Download**](https://github.com/user/repo/releases/latest) the `.dmg` file.
-
-**Linux**
-
-[**Download**](https://github.com/user/repo/releases/latest) the `.AppImage` or `.deb` file.
-
-*The AppImage needs to be [made executable](http://discourse.appimage.org/t/how-to-make-an-appimage-executable/80) after download.*
+[**Download**](https://github.com/rer145/ta3/releases/latest) the `.dmg` file.
 
 **Windows**
 
-[**Download**](https://github.com/user/repo/releases/latest) the `.exe` file.
-
-
----
-
-
-## Dev
-
-Built with [Electron](https://electronjs.org).
-
-### Run
-
-```
-$ npm install
-$ npm start
-```
-
-### Publish
-
-```
-$ npm run release
-```
-
-After Travis finishes building your app, open the release draft it created and click "Publish".
+[**Download**](https://github.com/rer145/ta3/releases/latest) the `.exe` file.
