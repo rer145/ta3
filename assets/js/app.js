@@ -49,7 +49,7 @@ function app_init() {
 }
 
 function load_database() {
-	var db = JSON.parse(fs.readFileSync(path.join(__dirname, "/assets/db/db.min.json")).toString());
+	var db = JSON.parse(fs.readFileSync(path.join(__dirname, "/assets/db/db.json")).toString());
 	return db;
 }
 
