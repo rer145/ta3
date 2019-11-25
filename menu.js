@@ -13,6 +13,8 @@ const {
 const Store = require('electron-store');
 const store = new Store();
 
+const updater = require('./assets/js/updater');
+
 const showPreferences = () => {
 	win.getFocusedWindow().webContents.send('settings');
 };
@@ -59,9 +61,16 @@ ${debugInfo()}`;
 
 			openNewGitHubIssue({
 				user: 'rer145',
-				repo: 'ta3-refactor',
+				repo: 'ta3',
 				body
 			});
+		}
+	},
+	{ type: 'separator' },
+	{
+		label: 'Check for Updates',
+		click(menuItem, focusedWindow, event) {
+			updater.checkForUpdates(menuItem, focusedWindow, event);
 		}
 	}
 ];

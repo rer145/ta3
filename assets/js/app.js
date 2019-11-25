@@ -1308,6 +1308,46 @@ ipcRenderer.on('run-analysis', (event, arg) => {
 	$('#main-tabs a[href="#results"]').show();
 	run_analysis();
 });
+ipcRenderer.on('message', (event, arg) => {
+	console.log(arg);
+});
+ipcRenderer.on('update-error', (event, arg) => {
+	console.error(arg);
+});
+ipcRenderer.on('update-checking', (event, arg) => {
+	console.log("checking for update");
+	$.toast({
+		heading: 'Checking for update',
+		text: 'Checking remote servers for available updates...',
+		icon: 'info',
+		hideAfter: 3000,
+		position: 'top-center'
+	});
+});
+ipcRenderer.on('update-available', (event, arg) => {
+	console.log("update available!");
+	console.log(arg);
+	// show toast that does not disappear (hideAfter: false)
+	//  add two buttons in toast, if possible?
+});
+ipcRenderer.on('update-progress', (event, arg) => {
+	console.log("download progress", arg);
+});
+ipcRenderer.on('update-not-available', (event, arg) => {
+	console.log("no update available");
+	console.log(arg);
+	$.toast({
+		heading: 'No Update Available',
+		text: `You are currently running version ${arg.version}, which is the most up to date version that is available. <button id="test">Testing</button>`,
+		icon: 'info',
+		hideAfter: 6000,
+		position: 'top-center'
+	});
+});
+ipcRenderer.on('update-downloaded', (event, arg) => {
+	console.log("update downloaded");
+	console.log(arg);
+});
 
 
 
