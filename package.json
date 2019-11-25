@@ -15,9 +15,9 @@
 		"test": "npm run lint",
 		"start": "electron .",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder --macos --linux --windows",
+		"dist": "electron-builder --macos --windows -p always",
 		"dist-win": "electron-builder --windows",
-		"dist-mac": "electron-buidler --macos",
+		"dist-mac": "electron-builder --macos",
 		"release": "np"
 	},
 	"dependencies": {
@@ -49,16 +49,24 @@
 		]
 	},
 	"np": {
-		"publish": false,
-		"releaseDraft": false,
-		"tests": false,
-		"contents": "dist"
+		"publish": true,
+		"releaseDraft": true
 	},
 	"build": {
 		"appId": "edu.psu.TA3",
+		"publish": [
+			{
+				"provider": "github",
+				"owner": "rer145",
+				"repo": "ta3"
+			}
+		],
+		"win": {
+			"icon": "assets/icons/mamd.png"
+		},
 		"mac": {
 			"category": "public.app-category.education",
-			"darkModeSupport": true,
+			"darkModeSupport": false,
 			"icon": "assets/img/icons/icon.png"
 		},
 		"dmg": {
@@ -75,13 +83,6 @@
 					"path": "/Applications"
 				}
 			]
-		},
-		"linux": {
-			"target": [
-				"AppImage",
-				"deb"
-			],
-			"category": "Network;Chat"
 		}
 	}
 }
