@@ -40,13 +40,29 @@ const showRSettings = () => {
 };
 
 const helpSubmenu = [
+	{
+		label: 'Trait Manual',
+		click(menuItem, focusedWindow, event) {
+			const PDFWindow = require('electron-pdf-window');
+			const pdfWin = new PDFWindow({
+				width: 800,
+				height: 600,
+				title: app.getName() + " - Trait Manual",
+				backgroundColor: '#ffffff',
+				transparent: false,
+				icon: path.join(__dirname, "/assets/img/icons/icon.png")
+			  });
+			  pdfWin.loadURL(path.join(__dirname, "/assets/trait-manual.pdf"));
+		}
+	},
+	{ type: 'separator' },
 	openUrlMenuItem({
 		label: 'Website',
-		url: 'https://github.com/rer145/ta3-refactor'
+		url: 'https://github.com/rer145/ta3'
 	}),
 	openUrlMenuItem({
 		label: 'Source Code',
-		url: 'https://github.com/rer145/ta3-refactor'
+		url: 'https://github.com/rer145/ta3'
 	}),
 	{
 		label: 'Report an Issue…',
