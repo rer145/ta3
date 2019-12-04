@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="assets/css/index.css">
 		<link rel="stylesheet" href="assets/css/jquery.toast.min.css" />
+		<!-- <link rel="stylesheet" href="assets/css/bootstrap-toc.min.css" /> -->
 	</head>
 	<body>
 		
@@ -83,10 +84,10 @@
 					<div id="col-menu" class="col-xs-3">
 						<div id="section-menu" class="panel-group" role="tablist" aria-multiselectable="true"></div>
 						<p class="text-center center-block">
-							<button id="analysis-button" class="btn btn-primary">Run Analysis</button>
+							<button id="analysis-button" class="btn btn-primary">Check Analysis</button>
 						</p>
 						<p class="text-center center-block">
-							<button id="reset-button" class="reset-button btn btn-danger">Reset</button>
+							<button id="reset-button" class="reset-button btn btn-danger">New Analysis</button>
 						</p>
 						<p class="text-center center-block">
 							<button id="settings-button" class="settings-button btn btn-success" data-toggle="modal" data-target="#settings-modal">Settings</button>
@@ -253,6 +254,77 @@
 
 
 
+		<div id="user-guide-modal" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" data-toc-skip>User Guide</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row toc" id="toc-top">
+							<div class="col-xs-3" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+								<h4 data-toc-skip>Table of Contents</h4>
+								<nav id="toc">
+									<ul>
+										<li><a href="#toc-requirements">Requirements</a></li>
+										<li>
+											<a href="#toc-usage">Usage</a>
+											<ul>
+												<li><a href="#toc-basic-mode">Basic Mode</a></li>
+												<li><a href="#toc-advanced-mode">Advanced Mode</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+							</div>
+							<div class="col-xs-9">
+								<article>
+									<h4 id="toc-requirements">Requirements</h4>
+									<p>
+										A computer running Microsoft Windows 7 or higher, or Mac OSX.
+									</p>
+									<p>
+										R must be installed to utilize the features of TA3. To download R, visit the <a id="toc-r-download-link">R download page</a> and install the "base" version. <span id="toc-mac-warning"></span>Please note that in order to use the latest version of R on a Mac, you must be running version 10.6 or higher. Your version of MacOS is: <span id="toc-mac-version"></span>.</span>
+									</p>
+									<p>
+										Once R is installed, restart TA3 and configure the application settings.
+									</p>
+									<a href="#toc-top" class="small pull-right">Back to Top</a>
+								</article>
+
+								<article>
+									<h4 id="toc-usage">Usage</h4>
+
+									<h5 id="toc-basic-mode">Basic Entry Mode</h5>
+									<p>In Basic Mode, you will open on the "Evaluation" tab and see " Select a section from the left to access the trait scoring". Each area of the skeleton for scoring is displayed on the left.</p>
+
+									<h5 id="toc-advanced-mode">Advanced Entry Mode</h5>
+									<p></p>
+
+									<h5 id="toc-analysis">Analyzing Data</h5>
+									<p>
+										Click on the "Check Analysis" button on the left. You will be presented with "Current Case Selections", showing all the traits you scored and their scores. Click "Run Analysis" to start the Analysis.
+									</p>
+									<p>
+										After the analysis is finished you will see a text summary on the Results tab, including the traits scored, sample size, the point estimate and lower and upper bounds on the 95% prediction interval.
+									</p>
+
+									<a href="#toc-top" class="small pull-right">Back to Top</a>
+								</article>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
 		<div id="settings-modal" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -352,5 +424,6 @@
 
 		<script src="assets/js/app.js"></script>
 		<script src="assets/js/jquery.toast.min.js"></script>
+		<!-- <script src="assets/js/bootstrap-toc.min.js"></script> -->
 	</body>
 </html>

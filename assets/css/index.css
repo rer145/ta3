@@ -77,3 +77,12 @@ img.trait-thumbnail {
 .adv-row label {
 	padding-right: 15px;
 }
+
+.toc h4 {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.toc article {
+	margin-bottom: 20px;
+}

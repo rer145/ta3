@@ -41,6 +41,12 @@ const showRSettings = () => {
 
 const helpSubmenu = [
 	{
+		label: 'User Guide',
+		click(menuItem, focusedWindow, event) {
+			win.getFocusedWindow().webContents.send('user-guide');
+		}
+	},
+	{
 		label: 'Trait Manual',
 		click(menuItem, focusedWindow, event) {
 			const PDFWindow = require('electron-pdf-window');
@@ -163,6 +169,9 @@ const analysisMenu = [
 ];
 
 const debugSubmenu = [
+	{ role: 'reload' },
+	{ role: 'forcereload' },
+	{ type: 'separator' },
 	{
 		label: 'Show App Data',
 		click() {
@@ -237,9 +246,6 @@ const macosTemplate = [
 	{
 		label: 'View',
 		submenu: [
-			{ role: 'reload' },
-			{ role: 'forcereload' },
-			{ type: 'separator' },
 			{ role: 'resetzoom' },
 			{ role: 'zoomin' },
 			{ role: 'zoomout' },
@@ -316,9 +322,6 @@ const otherTemplate = [
 	{
 		label: 'View',
 		submenu: [
-			{ role: 'reload' },
-			{ role: 'forcereload' },
-			{ type: 'separator' },
 			{ role: 'resetzoom' },
 			{ role: 'zoomin' },
 			{ role: 'zoomout' },

@@ -9,7 +9,8 @@ const find = require('find');
 const path = require('path');
 const {ipcRenderer, shell} = require('electron');
 const {dialog} = require('electron').remote;
-const { is } = require('electron-util');
+const {is} = require('electron-util');
+const os = require('os');
 
 const Store = require('electron-store');
 const store = new Store();
@@ -47,6 +48,7 @@ function app_init() {
 	populate_settings();
 	wire_event_handlers();
 	show_welcome_screen();
+	//configure_user_guide();
 }
 
 function load_database() {
@@ -69,6 +71,10 @@ function populate_settings() {
 function wire_event_handlers() {
 	$("#r-download-link").click(function(e) {
 		e.preventDefault();
+
+		// check for macos release version. 10.6 and above only for R 3.6.1+
+		// must download archived versions of R for older macs
+		//console.log(os.release());
 
 		var url = "https://cran.r-project.org/bin/windows/base/";
 		if (is.macos) {
@@ -279,6 +285,22 @@ function wire_event_handlers() {
 		}
 	});
 }
+
+// function configure_user_guide() {
+// 	Toc.init({
+// 		$nav: $("#toc"),
+// 		$scope: $("#user-guide-modal")
+// 	});
+// 	$('#user-guide-modal').scrollspy({
+// 		target: "#toc"
+// 	});
+// 	$('#toc').affix({
+// 		offset: {
+// 			top: 100,
+// 			bottom: 200
+// 		}
+// 	});
+// }
 
 function check_offline(is_online) {
 	if (is_online)
@@ -1285,7 +1307,16 @@ function install_package(pkg, template) {
 
 
 
-
+ipcRenderer.on('user-guide', (event, arg) => {
+	if (is.macos) {
+		$("#toc-mac-warning").show();
+		$("#toc-mac-version").text(os.release());
+	} else {
+		$("#toc-mac-warning").hide();
+	}
+	
+	$("#user-guide-modal").modal('show');
+});
 ipcRenderer.on('new-case', (event, arg) => {
 	new_case();
 });
@@ -1349,7 +1380,7 @@ ipcRenderer.on('update-not-available', (event, arg) => {
 	console.log(arg);
 	$.toast({
 		heading: 'No Update Available',
-		text: `You are currently running version ${arg.version}, which is the most up to date version that is available. <button id="test">Testing</button>`,
+		text: `You are currently running version ${arg.version}, which is the most up to date version that is available.`,
 		icon: 'info',
 		hideAfter: 6000,
 		position: 'top-center'
