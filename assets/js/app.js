@@ -7,8 +7,9 @@ window.Bootstrap = require('bootstrap');
 const fs = require('fs');
 const find = require('find');
 const path = require('path');
-const {ipcRenderer} = require('electron');
+const {ipcRenderer, shell} = require('electron');
 const {dialog} = require('electron').remote;
+const { is } = require('electron-util');
 
 const Store = require('electron-store');
 const store = new Store();
@@ -66,6 +67,16 @@ function populate_settings() {
 }
 
 function wire_event_handlers() {
+	$("#r-download-link").click(function(e) {
+		e.preventDefault();
+
+		var url = "https://cran.r-project.org/bin/windows/base/";
+		if (is.macos) {
+			url = "https://cran.r-project.org/bin/macosx/";
+		}
+		shell.openExternal(url);
+	});
+
 	$("#welcome-new-case").click(function(e) {
 		e.preventDefault();
 		new_case();
