@@ -9,6 +9,17 @@ scripts_dir<-trim(args[2])  # directory where R related files will be
 
 
 ############# Auto-install of packages #############
+# r = getOption("repos")
+# r["CRAN"] = "http://cran.us.r-project.org"
+# options(repos = r)
+# install.packages("gtools")
+
+# install.packages("E:\\R-Packages\\plyr_1.8.4.zip", repos = NULL, type="source")
+# library("myRPackage", lib.loc="/usr/me/local/R/library")
+
+# > install.packages("D:\\work\\ousley\\nij-milner\\packages\\doParallel_1.0.15.zip", lib="D:\\work\\ousley\\nij-milner\\packages", repos=NULL)
+# > library("doParallel", lib.loc="D:\\work\\ousley\\nij-milner\\packages")
+
 if (!require("gtools")) { install.packages("gtools", repos = "http://cran.us.r-project.org") } 
 if (!require("MASS")) { install.packages("MASS", repos = "http://cran.us.r-project.org") } 
 if (!require("foreach")) { install.packages("foreach", repos = "http://cran.us.r-project.org") } 

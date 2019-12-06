@@ -5790,7 +5790,7 @@
             "order_no": "4",
             "title": "overhang",
             "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
-            "value": "2",
+            "value": "3",
             "abbreviation": "OH",
             "images": [
               {
@@ -6153,7 +6153,7 @@
             "order_no": "4",
             "title": "overhang",
             "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
-            "value": "2",
+            "value": "3",
             "abbreviation": "OH",
             "images": [
               {
