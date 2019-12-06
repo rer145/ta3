@@ -9,14 +9,14 @@ scripts_dir<-trim(args[2])  # directory where R related files will be
 
 
 ############# Auto-install of packages #############
-if (!require("gtools")) { install.packages("gtools") } 
-if (!require("MASS")) { install.packages("MASS") } 
-if (!require("foreach")) { install.packages("foreach") } 
-if (!require("iterators")) { install.packages("iterators") } 
-if (!require("doParallel")) { install.packages("doParallel") } 
-if (!require("randomGLM")) { install.packages("randomGLM") } 
-if (!require("glmnet")) { install.packages("glmnet") } 
-if (!require("msir")) { install.packages("msir") } 
+if (!require("gtools")) { install.packages("gtools", repos = "http://cran.us.r-project.org") } 
+if (!require("MASS")) { install.packages("MASS", repos = "http://cran.us.r-project.org") } 
+if (!require("foreach")) { install.packages("foreach", repos = "http://cran.us.r-project.org") } 
+if (!require("iterators")) { install.packages("iterators", repos = "http://cran.us.r-project.org") } 
+if (!require("doParallel")) { install.packages("doParallel", repos = "http://cran.us.r-project.org") } 
+if (!require("randomGLM")) { install.packages("randomGLM", repos = "http://cran.us.r-project.org") } 
+if (!require("glmnet")) { install.packages("glmnet", repos = "http://cran.us.r-project.org") } 
+if (!require("msir")) { install.packages("msir", repos = "http://cran.us.r-project.org") } 
 
 
 ############# List of Required Packages #############
