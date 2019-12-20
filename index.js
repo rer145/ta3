@@ -1,12 +1,13 @@
 'use strict';
 const path = require('path');
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain} = require('electron');
 /// const {autoUpdater} = require('electron-updater');
 const {is} = require('electron-util');
 const unhandled = require('electron-unhandled');
 const debug = require('electron-debug');
 const contextMenu = require('electron-context-menu');
 const windowStateKeeper = require('electron-window-state');
+const {download} = require("electron-dl");
 //const config = require('./config');
 const menu = require('./menu');
 const fs = require('fs');
@@ -55,7 +56,8 @@ const createMainWindow = async () => {
 		icon: path.join(__dirname, 'assets/img/icons/icon.png'),
 		webPreferences: {
 			nodeIntegration: true,
-			defaultEncoding: 'UTF-8'
+			defaultEncoding: 'UTF-8',
+			disableBlinkFeatures: "Auxclick"
 		}
 	});
 
@@ -132,10 +134,6 @@ function prep_files_and_settings() {
 	var userDataPath = app.getPath("userData");
 	store.set("config.userdata_path", userDataPath);
 
-	var user_packages_path = path.join(userDataPath, "packages");
-	make_directory(user_packages_path);
-	store.set("config.packages_path", user_packages_path);
-
 	var user_analysis_path = path.join(userDataPath, "analysis");
 	make_directory(user_analysis_path);
 	store.set("config.analysis_path", user_analysis_path);
@@ -144,7 +142,12 @@ function prep_files_and_settings() {
 	make_directory(user_r_path);
 	store.set("config.r_path", user_r_path);
 
+	var user_packages_path = path.join(user_r_path, "packages");
+	make_directory(user_packages_path);
+	store.set("config.packages_path", user_packages_path);
+
 	var r_path = path.join(__dirname, "assets/r");
+	var pkg_path = path.join(__dirname, "assets/r/packages");
 	copy_file(
         path.join(r_path, "ta3.R"), 
         path.join(user_r_path, "ta3.R"), 
@@ -173,6 +176,15 @@ function prep_files_and_settings() {
 		path.join(r_path, "verify_package.R"), 
 		path.join(user_r_path, "verify_package.R"), 
 		true);
+
+	// copy_file(path.join(pkg_path, "doParallel_1.0.15.zip"), path.join(user_packages_path, "doParallel_1.0.15.zip"), true);
+	// copy_file(path.join(pkg_path, "foreach_1.4.7.zip"), path.join(user_packages_path, "foreach_1.4.7.zip"), true);
+	// copy_file(path.join(pkg_path, "glmnet_3.0-1.zip"), path.join(user_packages_path, "glmnet_3.0-1.zip"), true);
+	// copy_file(path.join(pkg_path, "gtools_3.8.1.zip"), path.join(user_packages_path, "gtools_3.8.1.zip"), true);
+	// copy_file(path.join(pkg_path, "iterators_1.0.12.zip"), path.join(user_packages_path, "iterators_1.0.12.zip"), true);
+	// copy_file(path.join(pkg_path, "MASS_7.3-51.4.zip"), path.join(user_packages_path, "MASS_7.3-51.4.zip"), true);
+	// copy_file(path.join(pkg_path, "msir_1.3.2.zip"), path.join(user_packages_path, "msir_1.3.2.zip"), true);
+	// copy_file(path.join(pkg_path, "randomGLM_1.02-1.zip"), path.join(user_packages_path, "randomGLM_1.02-1.zip"), true);
 }
 
 function make_directory(dir) {
@@ -202,3 +214,14 @@ function copy_file(src, dest, replace) {
 		});
 	}
 };
+
+
+
+
+ipcMain.on("download-file", (event, info) => {
+	info.properties.onProgress = status => mainWindow.webContents.send("download-progress", status);
+	download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
+		.then(dl => {
+			mainWindow.webContents.send("download-complete", dl.getSavePath());
+		});
+});

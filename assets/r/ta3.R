@@ -6,29 +6,27 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 args = commandArgs(trailingOnly=TRUE)
 temp_dir<-trim(args[1])  # directory where input and output files will be
 scripts_dir<-trim(args[2])  # directory where R related files will be
+pkg_dir<-trim(args[3])  # directory where R install packages will be
 
 
 ############# Auto-install of packages #############
-# r = getOption("repos")
-# r["CRAN"] = "http://cran.us.r-project.org"
-# options(repos = r)
-# install.packages("gtools")
-
-# install.packages("E:\\R-Packages\\plyr_1.8.4.zip", repos = NULL, type="source")
-# library("myRPackage", lib.loc="/usr/me/local/R/library")
-
-# > install.packages("D:\\work\\ousley\\nij-milner\\packages\\doParallel_1.0.15.zip", lib="D:\\work\\ousley\\nij-milner\\packages", repos=NULL)
-# > library("doParallel", lib.loc="D:\\work\\ousley\\nij-milner\\packages")
-
-if (!require("gtools")) { install.packages("gtools", repos = "http://cran.us.r-project.org") } 
-if (!require("MASS")) { install.packages("MASS", repos = "http://cran.us.r-project.org") } 
-if (!require("foreach")) { install.packages("foreach", repos = "http://cran.us.r-project.org") } 
-if (!require("iterators")) { install.packages("iterators", repos = "http://cran.us.r-project.org") } 
-if (!require("doParallel")) { install.packages("doParallel", repos = "http://cran.us.r-project.org") } 
-if (!require("randomGLM")) { install.packages("randomGLM", repos = "http://cran.us.r-project.org") } 
-if (!require("glmnet")) { install.packages("glmnet", repos = "http://cran.us.r-project.org") } 
-if (!require("msir")) { install.packages("msir", repos = "http://cran.us.r-project.org") } 
-
+# if (!require("gtools")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\gtools_3.8.1.zip", sep="")), repos=NULL) } 
+# if (!require("MASS")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\MASS_7.3-51.4.zip", sep="")), repos=NULL) } 
+# if (!require("foreach")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\foreach_1.4.7.zip", sep="")), repos=NULL) } 
+# if (!require("iterators")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\iterators_1.0.12.zip", sep="")), repos=NULL) } 
+# if (!require("doParallel")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\doParallel_1.0.15.zip", sep="")), repos=NULL) } 
+# if (!require("randomGLM")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\randomGLM_1.02-1.zip", sep="")), repos=NULL) } 
+# if (!require("glmnet")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\glmnet_3.0-1.zip", sep="")), repos=NULL) } 
+# if (!require("msir")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\msir_1.3.2.zip", sep="")), repos=NULL) } 
+r<-"http://cran.us.r-project.org"
+if (!require("gtools")) { install.packages("gtools", repos=r) }
+if (!require("MASS")) { install.packages("MASS", repos=r) }
+if (!require("foreach")) { install.packages("foreach", repos=r) }
+if (!require("iterators")) { install.packages("iterators", repos=r) }
+if (!require("doParallel")) { install.packages("doParallel", repos=r) }
+if (!require("randomGLM")) { install.packages("randomGLM", repos=r) }
+if (!require("glmnet")) { install.packages("glmnet", repos=r) }
+if (!require("msir")) { install.packages("msir", repos=r) }
 
 ############# List of Required Packages #############
 library("gtools")
@@ -58,7 +56,7 @@ case_tall_file <- file.path(scripts_dir, "TA3_Case_Scores.Rda")
 # modified
 input_file<-file.path(temp_dir, "TA3_Input.csv")
 
-output_text<-file.path(temp_dir, "output.txt")
+output_file<-file.path(temp_dir, "output.txt")
 output_image1<-file.path(temp_dir, "output1.png")
 output_image2<-file.path(temp_dir, "output2.png")
 
@@ -75,7 +73,7 @@ if (development==TRUE) {
   writeLines(c("Rda Ordinal File Path: [", rda_fileO, "]", "\n"), sep='')
 
   writeLines(c("Input File Path: [", input_file, "]", "\n"), sep='')
-  writeLines(c("Output Text: [", output_text, "]", "\n"), sep='')
+  writeLines(c("Output Text: [", output_file, "]", "\n"), sep='')
   writeLines(c("Output Image1 : [", output_image1, "]", "\n"), sep='')
   writeLines(c("Output Image2 : [", output_image2, "]", "\n\n\n"), sep='')
 }
@@ -378,26 +376,69 @@ UB <- l$upper[ADindex]
 #print(paste('The estimated age at death is', round(PredAge), 'years and the Standard Error is', round(MeanStdError,1),'\n', 'using a sample size of',nrow(AnalDat)))
 
 # Nicely formatted output; need to output formatted names 
-cat( cat('---------------------------------------------',
-'             TA3 Age Estimation',
-'---------------------------------------------',
-'Using traits:',
-'---------------------------------',
-# NBF has the binary additions 0_12 etc.
-# NBF, 
-TA3_Case_Scores$TraitText,
-'---------------------------------', sep = '\n') , 
-'Sample size = ',  round(nrow(AnalDat)), '\n', 
-'---------------------------------', '\n', 
-'\n', 
-'Random GLM Analysis', '\n', 
-'Estimated age at death = ', round(PredAge,1), ' years ', '\n', 
-'Estimated lower 95% bound = ', round(LB,1), ' years ', '\n', 
-'Estimated upper 95% bound = ', round(UB,1), ' years ', '\n', 
+cat(
+  cat(
+    '---------------------------------------------',
+    '             TA3 Age Estimation',
+    '---------------------------------------------',
+    'Using traits:',
+    '---------------------------------',
+    # NBF has the binary additions 0_12 etc.
+    # NBF, 
+    TA3_Case_Scores$TraitText,
+    '---------------------------------', sep = '\n'
+  ), 
+  'Sample size = ',  round(nrow(AnalDat)), '\n', 
+  '---------------------------------', '\n', 
+  '\n', 
+  'Random GLM Analysis', '\n', 
+  'Estimated age at death = ', round(PredAge,1), ' years ', '\n', 
+  'Estimated lower 95% bound = ', round(LB,1), ' years ', '\n', 
+  'Estimated upper 95% bound = ', round(UB,1), ' years ', '\n', 
+  'Standard Error = ', round(MeanStdError,1), '\n',
+  '---------------------------------------------', '\n',
+  '\n', '\n', sep = ''
+);
 
-'Standard Error = ', round(MeanStdError,1), '\n',
-'---------------------------------------------', '\n',
-'\n', '\n', sep = '' );
+
+# write results to a file for reading
+write(
+  paste(
+    '---------------------------------------------',
+    '             TA3 Age Estimation',
+    '---------------------------------------------',
+    'Using traits:',
+    '---------------------------------',
+    sep='\n'
+  ), 
+  file=output_file,
+  append=FALSE,
+  sep=''
+)
+
+for (trait in TA3_Case_Scores$TraitText) {
+  write(trait, file=output_file, append=TRUE, sep='\n')
+}
+
+write(
+  paste(
+    '---------------------------------',
+    paste('Sample size = ', round(nrow(AnalDat)), sep=''),
+    '---------------------------------',
+    'Random GLM Analysis',
+    paste('Estimated age at death = ', round(PredAge,1), ' years', sep=''),
+    paste('Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
+    paste('Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
+    paste('Standard Error = ', round(MeanStdError,1), sep=''),
+    '---------------------------------------------',
+    sep='\n'
+  ),
+  file=output_file,
+  append=TRUE,
+  sep=''
+)
+
+
 
 
 ##################################################

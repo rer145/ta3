@@ -35,9 +35,9 @@ const showResults = () => {
 	win.getFocusedWindow().webContents.send('show-results');
 };
 
-const showRSettings = () => {
-	win.getFocusedWindow().webContents.send('verify-r-settings');
-};
+// const showRSettings = () => {
+// 	win.getFocusedWindow().webContents.send('verify-r-settings');
+// };
 
 const helpSubmenu = [
 	{
@@ -159,13 +159,13 @@ const analysisMenu = [
 	// 		store.set('config.entry_mode', 'expert');
 	// 	}
 	// }
-	{ type: 'separator' },
-	{
-		label: 'Verify R Settings',
-		click() {
-			showRSettings();
-		}
-	}
+	// { type: 'separator' },
+	// {
+	// 	label: 'Verify R Settings',
+	// 	click() {
+	// 		showRSettings();
+	// 	}
+	// }
 ];
 
 const debugSubmenu = [

@@ -8,6 +8,7 @@ const fs = require('fs');
 const find = require('find');
 const path = require('path');
 const {ipcRenderer, shell} = require('electron');
+const { BrowserWindow } = require('electron').remote;
 const {dialog} = require('electron').remote;
 const {is} = require('electron-util');
 const os = require('os');
@@ -18,15 +19,25 @@ const store = new Store();
 var sudo = require('sudo-prompt');
 
 const requiredPackages = [
-	'gtools',
-	'MASS',
-	'foreach',
-	'iterators',
-	'doParallel',
-	'randomGLM',
-	'glmnet',
-	'msir'
+	{package: 'gtools', url: 'https://cran.r-project.org/src/contrib/Archive/gtools/gtools_3.5.0.tar.gz'},
+	{package: 'MASS', url: 'https://cran.r-project.org/src/contrib/Archive/MASS/MASS_7.3-51.3.tar.gz'},
+	{package: 'foreach', url: 'https://cran.r-project.org/src/contrib/Archive/foreach/foreach_1.4.4.tar.gz'},
+	{package: 'iterators', url: 'https://cran.r-project.org/src/contrib/Archive/iterators/iterators_1.0.10.tar.gz'},
+	{package: 'doParallel', url: 'https://cran.r-project.org/src/contrib/Archive/doParallel/doParallel_1.0.14.tar.gz'},
+	{package: 'randomGLM', url: 'https://cran.r-project.org/src/contrib/Archive/randomGLM/randomGLM_1.00-1.tar.gz'},
+	{package: 'glmnet', url: 'https://cran.r-project.org/src/contrib/Archive/glmnet/glmnet_3.0-1.tar.gz'},
+	{package: 'msir', url: 'https://cran.r-project.org/src/contrib/Archive/msir/msir_1.3.1.tar.gz'},
 ];
+
+const known_r_dirs = [];
+if (is.windows) {
+	known_r_dirs.push('C:\\Program Files\\R');
+	known_r_dirs.push('C:\\Program Files\\Microsoft\\R Open');
+} else {
+	known_r_dirs.push('/usr/bin/Rscript');
+	known_r_dirs.push('/Library/Frameworks/R.framework/Resources/bin');
+	known_r_dirs.push("/Library/Frameworks/R.framework/Versions/3.5.1-MRO/Resources/bin/");
+}
 
 var current_traits = null;
 var current_trait_idx = -1;
@@ -41,13 +52,15 @@ $(document).ready(function() {
 });
 
 function app_init() {
+	show_loading_screen();
+	
 	window.appdb = load_database();
 	window.current_file = "";
 	window.is_dirty = false;
 	
 	populate_settings();
 	wire_event_handlers();
-	show_welcome_screen();
+	//show_welcome_screen();
 	//configure_user_guide();
 }
 
@@ -83,6 +96,11 @@ function wire_event_handlers() {
 		shell.openExternal(url);
 	});
 
+	$("#download-r-button").click(function(e) {
+		e.preventDefault();
+		download_r();
+	});
+
 	$("#welcome-new-case").click(function(e) {
 		e.preventDefault();
 		new_case();
@@ -99,10 +117,27 @@ function wire_event_handlers() {
 		open_case();
 	});
 
+	$("#loading-steps").on("click", ".rscript-settings-link", function() {
+		store.set('config.r_executable_path', $(this).text());
+		if ($(this).attr("data-next-step") != undefined) {
+			setup_execute(setup_steps, $(this).attr("data-next-step"));
+		}
+	});
+
+	$("#loading-steps").on("click", "#setup-download-r-button", function() {
+		e.preventDefault();
+		download_r();
+	});
+
+	$("#loading-steps").on("click", "#setup-manually-set-r-button", function() {
+		
+	});
+
 	$("#settings-modal").on("click", ".rscript-settings-link", function() {
 		store.set('config.r_executable_path', $(this).text());
 		$("#settings-rscript-path").html(store.get('config.r_executable_path'));
 	});
+
 	
 	$('#settings-modal').on('show.bs.modal', function (e) {
 		$("#settings-rscript-path").html(store.get('config.r_executable_path'));
@@ -338,9 +373,192 @@ function show_screen(id) {
 		$('#' + id).show();
 }
 
+function show_loading_screen() {
+	show_screen('loading-screen');
+	app_setup();
+}
+
+function setup_display_step(step, callback) {
+	var div = $("<p></p>");
+	div.html(step.text);
+	$("#loading-steps").append(div);
+	step.div = div;
+	callback(step);
+}
+
+function setup_execute_step(step, callback) {
+	setTimeout(() => {
+		step.command(step);
+		callback(step);
+	}, 300);
+}
+
+function setup_display_step_output(step, callback) {
+	if (step.result) {
+		step.div.html(step.text + ' <span class="text-success">OK</span>');
+	} else {
+		step.div.html(step.text + ' <span class="text-danger">FAILED</span>');
+	}
+
+	if (step.alert) {
+		var alert = $("<div></div>");
+		alert.addClass("alert")
+			.addClass("alert-" + step.alert.type)
+			.attr("role", "alert")
+			.html(step.alert.message);
+		$("#loading-steps").append(alert);
+	}
+
+	if (callback != null) {
+		callback();
+	}
+}
+
+const setup_check_r_config = function(s) {
+	var r_path = store.get("config.r_executable_path");
+
+	var found_r_paths = [];
+	if (is.windows) {
+		//for (var i = 0; i < known_r_dirs.length; i++) {
+		for (var i = 0; i < 1; i++) {
+			var files = find.fileSync(/Rscript.exe/, known_r_dirs[i]);
+			files.forEach(f => {
+				found_r_paths.push(f);
+			});
+		}
+	}
+
+	var result = false;
+	var message = "";
+	var alertType = "warning";
+
+	if (r_path === "") {
+		if (found_r_paths.length === 0) {
+			result = false;
+			alertType = "danger";
+			message = '<p>An installation of R cannot be located at the standard installation paths. If you know that R is installed already, click the <strong>Manually Set R Path</strong> button below. If you know you do NOT have R installed, click the <strong>Download and Install R</strong> button below.</p><p><a href="#" id="setup-download-r-button" class="btn btn-primary" data-next-step="1">Download and Install R</a> <a href="#" id="setup-manually-set-r-button" class="btn btn-primary" data-next-step="1">Manually Set R Path</a></p>';
+		} else {
+			result = false;
+			alertType = "warning";
+			message = '<p>The application configuration does not have a path set for R, but an installation of R has been found on your computer. Click one of the paths below to set the configuration.</p><p>';
+			for (var i = 0; i < found_r_paths.length; i++) {
+				message += '<a href="#" class="rscript-settings-link" data-next-step="1">' + found_r_paths[i] + '</a><br />';
+			}
+		}
+	} else {
+		// search for file saved in config (only look at file itself?)
+		var fileExists = fs.existsSync(r_path);
+
+		if (fileExists) {
+			result = true;
+		} else {
+			result = false;
+			alertType = "warning";
+			message = '<p>The application configuration has a path set for R, but it cannot be found by the application. Click one of the paths below to set the configuration.</p><p>';
+			for (var i = 0; i < found_r_paths.length; i++) {
+				message += '<a href="#" class="rscript-settings-link" data-next-step="1">' + found_r_paths[i] + '</a><br />';
+			}
+		}
+	}
+
+	//return (r_path !== "");
+	s.result = result;
+	if (!result) {
+		s.alert = {
+			type: alertType,
+			message: message
+		};
+	}
+	return s;
+}
+
+const setup_verify_r_packages = function(s) {
+	var result = false;
+	var alertType = "warning";
+	var message = "";
+
+	var r_path = store.get("config.r_path");
+	var packages_path = store.get("config.packages_path");
+	var r_script = path.join(r_path, "install_packages.R");
+	var parameters = [
+		packages_path,
+		r_script
+	];
+
+	var options = {
+		name: 'TA3 Subprocess'
+	};
+	var cmd = '"' + store.get("config.r_executable_path") + '"';
+	$.each(parameters, function(i,v) {
+		cmd = cmd + ' "' + v + '"';
+	});
+
+	// sudo.exec(cmd, options, 
+	// 	function(error, stdout, stderr) {
+	// 		if (error) {
+	// 			console.error(error);
+	// 			console.error(stderr);
+	// 			return false;
+	// 		}
+	// 		var output = JSON.stringify(stdout);
+	// 		console.log("verify stdout: " + output);
+	// 		toggle_package_status(pkg, template, output.includes("TRUE"));
+	// 	}
+	// );
+
+	s.result = result;
+	if (!result) {
+		s.alert = {
+			type: alertType,
+			message: message
+		};
+	}
+	return s;
+}
+
+
+// const setup_true = function(s) {
+// 	console.log("true");
+// 	s.result = true;
+// 	return s;
+// }
+
+// const setup_false = function(s) {
+// 	console.log("false");
+// 	s.result = false;
+// 	return s;
+// }
+
+function setup_execute(steps, next) {
+	if (steps.length > 0 && next < steps.length) {
+		setup_display_step(steps[next], function(s1) {
+			setup_execute_step(s1, function(s2) {
+				var result = s2.result;
+				var cb = null;
+				if (result)
+					cb = function() { setup_execute(steps, next+1) };
+				else 
+					cb = function() { console.log("Setup Complete"); }
+				setup_display_step_output(s2, cb);
+			});
+		});
+	}
+}
+
+function app_setup() {
+	if (setup_steps.length > 0) {
+		setup_display_step(setup_steps[0], function(s1) {
+			setup_execute_step(s1, function(s2) {
+				setup_display_step_output(s2, setup_execute(setup_steps, 1));
+			});
+		});
+	}
+	//show_welcome_screen();
+}
+
 function show_welcome_screen() {
 	show_screen('welcome-screen');
-	check_config_settings();
+	//check_config_settings();
 	check_offline(true);
 }
 
@@ -974,6 +1192,7 @@ function run_analysis() {
 	//var app_working_dir = __dirname.replace(/\\/g, "\\\\");
 	var temp_dir = store.get('config.analysis_path');
 	var scripts_dir = store.get('config.r_path');
+	var pkg_dir = store.get('config.packages_path');
 	var data_file = generate_csv_file();
 
 	var loadingDiv = $("#result-loading");
@@ -993,7 +1212,9 @@ function run_analysis() {
 		var parameters = [
 			path.join(scripts_dir, "ta3.R"), 
 			temp_dir,
-			scripts_dir];
+			scripts_dir,
+			pkg_dir
+		];
 
 		var resultPending = $("<div></div>");
 		resultPending.addClass("alert alert-info")
@@ -1014,7 +1235,7 @@ function run_analysis() {
 				.addClass("alert alert-warning")
 				.attr("role", "alert")
 				.html(debugStatusHtml)
-		);
+		).show();
 
 		//clean_temp_files();
 
@@ -1034,16 +1255,17 @@ function run_analysis() {
 						.attr("role", "alert")
 						.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
 					resultStatus.empty().append(resultError);
+					loadingDiv.hide();
 					return;
 				}
 
 				//display output text in Results tab
 				var outputDiv = $("#result-output");
 				var code = $("<pre></pre>");
-				code.append(stdout.toString());
+				//code.append(stdout.toString());
+				var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
+				code.append(results);
 				outputDiv.append(code);
-
-				//TODO: read from userdata_dir/output.txt and display
 
 				//display output images in Charts tab
 				//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
@@ -1053,6 +1275,7 @@ function run_analysis() {
 				//resultDebug.empty();
 				
 				loadingDiv.hide();
+				resultDebug.hide();
 
 				//show charts tab only when full analysis is completed
 				$('#main-tabs a[href="#charts"]').show();
@@ -1063,7 +1286,6 @@ function run_analysis() {
 		resultError.addClass("alert alert-danger")
 			.attr("role", "alert")
 			.html("There was an error while generating the data file for analysis.");
-		resultStatus.empty().append(resultError);
 	}
 }
 
@@ -1242,7 +1464,7 @@ function update_file_status() {
 
 
 function verify_package_install(pkg, template) {
-	var analysis_path = store.get("analysis_path");
+	var analysis_path = store.get("config.analysis_path");
 	var r_script = path.join(analysis_path, "verify_package.R");
 	var parameters = [
 		r_script,
@@ -1465,3 +1687,86 @@ function data_get_indexes_by_trait_db_name(trait, value) {
 	}
 	return [-1, -1, -1];
 }
+
+
+
+
+
+
+
+
+
+function get_filename_from_url(url) {
+	return url.substring(url.lastIndexOf('/') + 1);
+}
+
+function download_file(url) {
+	if (url != null && url.length > 0) {
+		ipcRenderer.send("download-file", {
+			url: url,
+			properties: {
+				directory: store.get("config.r_path")
+			}
+		});
+	}
+}
+
+function download_r() {
+	var url = "";
+	if (is.macos) {
+		url = "https://cran.r-project.org/bin/macosx/el-capitan/base/R-3.6.1.pkg";
+	} else if (is.windows) {
+		url = "https://cran.r-project.org/bin/windows/base/old/3.6.1/R-3.6.1-win.exe"
+	}
+	download_file(url);
+}
+
+function download_r_packages() {
+	for (var i = 0; i < requiredPackages.length; i++) {
+		download_file(requiredPackages[i].url);
+	}
+}
+
+function run_r_install(file) {
+	var options = {
+		name: 'TA3 Subprocess'
+	};
+	var cmd = '"' + file + '" /SILENT';
+
+	sudo.exec(cmd, options, 
+		function(error, stdout, stderr) {
+			if (error) {
+				console.error(error);
+				return;
+			}
+			// var output = JSON.stringify(stdout);
+			// console.log("r install stdout: " + output);
+			// do r_script scan check
+			show_loading_screen();
+		}
+	);
+}
+
+
+ipcRenderer.on("download-complete", (event, file) => {
+	console.log("Download complete", file);
+	//shell.openItem(file);
+	run_r_install(file);
+});
+ipcRenderer.on("download-progress", (event, progress) => {
+	// console.log(progress);
+	const progressInPercentages = progress * 100;
+	const cleanProgressInPercentages = Math.floor(progress * 100);
+	//console.log(progress);
+	BrowserWindow.getFocusedWindow().setProgressBar(progress.percent);
+});
+
+
+
+
+
+const setup_steps = [
+	{ text: "Verifying R configuration...", command: setup_check_r_config },
+//	{ text: "Verifying/Installing R packages...", command: setup_verify_r_packages },
+	{ text: "Starting the application...", command: show_welcome_screen }
+];
