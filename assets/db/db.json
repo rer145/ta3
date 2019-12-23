@@ -574,6 +574,30 @@
           null,
           null
         ]
+      },
+      {
+        "order_no": 3,
+        "text": "Scorable",
+        "traits": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          "cerv_scorable",
+          "thoracic_scorable",
+          "lumbar_scorable",
+          null,
+          null,
+          null
+        ]
       }
     ],
     "traits": [
@@ -2596,6 +2620,60 @@
           }
         ],
         "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "18",
+        "title": "Cervical scorable",
+        "generic_title": "Cervical lipping/candlewax",
+        "description": "",
+        "location": "",
+        "abbreviation": "CVLS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 10,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "cerv_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "19",
+        "title": "Thoracic scorable",
+        "generic_title": "Thoracic lipping/candlewax",
+        "description": "",
+        "location": "",
+        "abbreviation": "TVLS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 24,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "thoracic_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "20",
+        "title": "Lumbar scorable",
+        "generic_title": "Lumbar lipping/candlewax",
+        "description": "",
+        "location": "",
+        "abbreviation": "LVLS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 10,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "lumbar_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
       }
     ]
   },
@@ -2626,6 +2704,18 @@
           "R310_ossification",
           null,
           null
+        ]
+      },
+      {
+        "order_no": 3,
+        "text": "Scorable",
+        "traits": [
+          null,
+          null,
+          "R2profile_scorable",
+          "R2shingle_scorable",
+          "R310profile_scorable",
+          "R310shingle_scorable"
         ]
       }
     ],
@@ -3392,6 +3482,78 @@
             ]
           }
         ],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "10",
+        "title": "R2 rim profile scorable",
+        "generic_title": "R2 rim profile",
+        "description": "",
+        "location": "",
+        "abbreviation": "R2RPS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 2,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "R2profile_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "11",
+        "title": "R2 shingle scorable",
+        "generic_title": "R2 rim profile",
+        "description": "",
+        "location": "",
+        "abbreviation": "R2SS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 16,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "R2shingle_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "12",
+        "title": "R3-10 rim profile scorable",
+        "generic_title": "R3-10 rim profile",
+        "description": "",
+        "location": "",
+        "abbreviation": "R310RPS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 2,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "R310profile_scorable",
+        "notes": [],
+        "scores": [],
+        "images": []
+      },
+      {
+        "trait_no": -1,
+        "order_no": "13",
+        "title": "R3-10 shingle scorable",
+        "generic_title": "R3-10 shingle ribs",
+        "description": "",
+        "location": "",
+        "abbreviation": "R310SS",
+        "side": "M",
+        "scorable": true,
+        "max_score": 16,
+        "advanced_mode_only": true,
+        "advanced_grouping": "",
+        "db_name": "R310shingle_scorable",
+        "notes": [],
+        "scores": [],
         "images": []
       }
     ]

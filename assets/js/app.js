@@ -52,7 +52,8 @@ $(document).ready(function() {
 });
 
 function app_init() {
-	show_loading_screen();
+	//show_loading_screen();
+	show_welcome_screen();
 	
 	window.appdb = load_database();
 	window.current_file = "";
@@ -244,6 +245,30 @@ function wire_event_handlers() {
 				}
 			}
 		});
+	});
+
+	$("body").on("keyup", ".adv-text", function() {
+		var input = $(this);
+		var identifier = String(input.attr("data-section-text")) + "-" + String(input.attr("data-trait-text"));
+
+		if (!isNaN(input.val())) {
+			if (Number(input.val()) > Number(input.attr("data-max-score"))) {
+				input.addClass("invalid");
+				//input.val("");
+				input.blur();
+			} else {
+				input.removeClass("invalid");
+				toggle_score_selection_text(
+					input.attr("data-section-text"),
+					input.attr("data-trait-text"),
+					input.val(),
+					true
+				);
+			}
+		} else {
+			input.removeClass("invalid");
+			input.val("");
+		}
 	});
 
 	$("body").on('change', '.dirtyable', function() {
@@ -675,7 +700,10 @@ function populate_advanced_mode(section) {
 	// HEADER ROW
 	var header_row = $("<div></div>");
 	header_row.addClass("row").addClass("adv-row").addClass("adv-row-header");
-	var width = num_cols == 2 ? 4 : 6;
+	//var width = num_cols == 2 ? 4 : (num_cols == 3 ? 3 : 6) : ;
+	var width = 6;
+	if (num_cols == 3) width = 3;
+	if (num_cols == 2) width = 4;
 	var col_width = "col-xs-" + width;
 	
 	header_row.append($("<div></div>").addClass(col_width).text(data["name"]));
@@ -714,49 +742,77 @@ function populate_advanced_mode(section) {
 //   <button type="button" class="btn btn-default">Middle</button>
 //   <button type="button" class="btn btn-default">Right</button>
 // </div>
-						var group = $("<div></div>");
-						group.addClass("btn-group")
-							.attr("role", "group")
-							.attr("aria-label", "Trait scores for " + trait.title)
-							.attr("data-trait-text", trait.db_name);
-
-						for (var k = 0; k < trait.scores.length; k++) {
-							var btn = $("<button></button>");
-							btn.attr("type", "button")
-								.addClass("btn")
-								.addClass("btn-default")
-								.addClass("adv-radio")
-								.text(trait.scores[k].abbreviation)
+						if (trait.scorable) {
+							var group = $("<div></div>");
+							group.addClass("form-group").addClass("inline-block");
+							var input = $("<input></input>");
+							input.addClass("form-control")
+								.addClass("adv-text")
+								.attr("type", "text")
 								.attr("data-section-text", current_section_text)
 								.attr("data-trait-text", trait.db_name)
-								.attr("data-score-text", trait.scores[k].value)
-								.data("identifier", String(current_section_text) + "-" + String(trait.db_name) + "-" + String(trait.scores[k].value));
+								.data("identifier", String(current_section_text) + "-" + String(trait.db_name))
+								.attr("id", "scorable-" + trait.db_name)
+								.attr("data-max-score", trait.max_score);
+							var label = $("<label></label>");
+							label.attr("for", "scorable-" + trait.db_name)
+								.addClass("control-label")	
+								.addClass("small")
+								.html("(Max: " + trait.max_score + ")");
 
-							// var input = $("<input></input");
-							// input.attr("type", "radio")
-							// 	.addClass("adv-radio")
-							// 	.attr("id", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
-							// 	.attr("name", "adv-trait-" + i.toString() + "-" + j.toString())
-							// 	.attr("value", trait.scores[k].value)
-							// 	.attr("data-section-text", current_section_text)
-							// 	.attr("data-trait-text", trait.db_name)
-							// 	.attr("data-score-text", trait.scores[k].value);
-
-							var idx = find_item_in_selections_text(current_section_text, trait.db_name, trait.scores[k].value);
+							var idx = find_item_in_selections_text(current_section_text, trait.db_name);
 							var is_selected = (idx > -1);
 							if (is_selected) {
-								//input.attr("checked", "checked");
-								btn.addClass("active");
+								input.val(selections[idx].score);
 							}
-							
-							// var label = $("<label></label>");
-							// label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
-							// 	.html(trait.scores[k].abbreviation);
 
-							// trait_col.append(input).append(" ").append(label);
-							group.append(btn);
+							group.append(input).append(label);
+							trait_col.append(group);
+						} else {
+							var group = $("<div></div>");
+							group.addClass("btn-group")
+								.attr("role", "group")
+								.attr("aria-label", "Trait scores for " + trait.title)
+								.attr("data-trait-text", trait.db_name);
+
+							for (var k = 0; k < trait.scores.length; k++) {
+								var btn = $("<button></button>");
+								btn.attr("type", "button")
+									.addClass("btn")
+									.addClass("btn-default")
+									.addClass("adv-radio")
+									.text(trait.scores[k].abbreviation)
+									.attr("data-section-text", current_section_text)
+									.attr("data-trait-text", trait.db_name)
+									.attr("data-score-text", trait.scores[k].value)
+									.data("identifier", String(current_section_text) + "-" + String(trait.db_name) + "-" + String(trait.scores[k].value));
+
+								// var input = $("<input></input");
+								// input.attr("type", "radio")
+								// 	.addClass("adv-radio")
+								// 	.attr("id", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
+								// 	.attr("name", "adv-trait-" + i.toString() + "-" + j.toString())
+								// 	.attr("value", trait.scores[k].value)
+								// 	.attr("data-section-text", current_section_text)
+								// 	.attr("data-trait-text", trait.db_name)
+								// 	.attr("data-score-text", trait.scores[k].value);
+
+								var idx = find_item_in_selections_text(current_section_text, trait.db_name, trait.scores[k].value);
+								var is_selected = (idx > -1);
+								if (is_selected) {
+									//input.attr("checked", "checked");
+									btn.addClass("active");
+								}
+								
+								// var label = $("<label></label>");
+								// label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
+								// 	.html(trait.scores[k].abbreviation);
+
+								// trait_col.append(input).append(" ").append(label);
+								group.append(btn);
+								trait_col.append(group);
+							}
 						}
-						trait_col.append(group);
 						row.append(trait_col);
 					}
 				} else {
@@ -1010,29 +1066,45 @@ function toggle_score_selection(section_idx, trait_idx, score_idx) {
 	//console.log(selections);
 }
 
-function toggle_score_selection_text(section, trait, score) {
+function toggle_score_selection_text(section, trait, score, is_scorable) {
 	var selection = {
 		"section": section,
 		"trait": trait,
 		"score": score
 	};
 
-	var idx = find_item_in_selections_text(section, trait, score);
-	if (idx > -1) {
-		selections.splice(idx, 1);
-	} else {
-		for (var i = 0; i < selections.length; i++) {
-			if (selections[i].section === section && 
-				selections[i].trait === trait) {
-					selections.splice(i, 1);
+	var idx = -1;
+	if (is_scorable != undefined && is_scorable) {
+		idx = find_item_in_selections_text(section, trait);
+		if (idx > -1) {
+			if (score.toString().length === 0) {
+				selections.splice(idx, 1);
+			} else {
+				if (score != selections[idx].score) {
+					selections[idx].score = score;
 				}
+			}
+		} else {
+			selections.push(selection);
 		}
-		selections.push(selection);
+	} else {
+		idx = find_item_in_selections_text(section, trait, score);
+		if (idx > -1) {
+			selections.splice(idx, 1);
+		} else {
+			for (var i = 0; i < selections.length; i++) {
+				if (selections[i].section === section && 
+					selections[i].trait === trait) {
+						selections.splice(i, 1);
+					}
+			}
+			selections.push(selection);
+		}
 	}
 
 	window.is_dirty = true;
 	update_file_status();
-	//console.log(selections);
+	console.log(selections);
 }
 
 function find_item_in_selections(section_idx, trait_idx, score_idx) {
@@ -1047,12 +1119,21 @@ function find_item_in_selections(section_idx, trait_idx, score_idx) {
 }
 
 function find_item_in_selections_text(section, trait, score) {
-	for (var i = 0; i < selections.length; i++) {
-		if (selections[i].section === section && 
-			selections[i].trait === trait && 
-			selections[i].score === score) {
-				return i;
-			}
+	if (score != undefined) {
+		for (var i = 0; i < selections.length; i++) {
+			if (selections[i].section === section && 
+				selections[i].trait === trait && 
+				selections[i].score === score) {
+					return i;
+				}
+		}
+	} else {
+		for (var i = 0; i < selections.length; i++) {
+			if (selections[i].section === section && 
+				selections[i].trait === trait) {
+					return i;
+				}
+		}
 	}
 	return -1;
 }
@@ -1120,7 +1201,10 @@ function show_current_selections_text() {
 			var row = $("<tr></tr>");
 			row.append($("<td></td>").html(s.name));
 			row.append($("<td></td>").html(t.title));
-			row.append($("<td></td>").html(sc.title));
+			if (sc != undefined)
+				row.append($("<td></td>").html(sc.title));
+			else
+			row.append($("<td></td>").html(selections[i].score));
 			table_body.append(row);
 		}
 
@@ -1149,21 +1233,32 @@ function generate_csv_file() {
 			
 			var is_trait_entered = false;
 			var trait_entered_idx = -1;
-			var scores = traits[j].scores;
-			for (var k = 0; k < scores.length; k++) {
-				//var idx = find_item_in_selections(i, j, k);
-				var idx = find_item_in_selections_text(sections[i].abbreviation, traits[j].db_name, scores[k].value);
-				if (idx > -1) {
-					is_trait_entered = true;
-					trait_entered_idx = k;
-					break;
-				}
-			}
 
-			if (is_trait_entered) {
-				output += scores[trait_entered_idx].value + ',';
+			//console.log(traits[j].db_name, traits[j].scorable);
+			if (traits[j].scorable) {
+				var idx = find_item_in_selections_text(sections[i].abbreviation, traits[j].db_name);
+				if (idx > -1) {
+					output += selections[idx].score + ',';
+				} else {
+					output += 'NA,';
+				}
 			} else {
-				output += 'NA,';
+				var scores = traits[j].scores;
+				for (var k = 0; k < scores.length; k++) {
+					//var idx = find_item_in_selections(i, j, k);
+					var idx = find_item_in_selections_text(sections[i].abbreviation, traits[j].db_name, scores[k].value);
+					if (idx > -1) {
+						is_trait_entered = true;
+						trait_entered_idx = k;
+						break;
+					}
+				}
+
+				if (is_trait_entered) {
+					output += scores[trait_entered_idx].value + ',';
+				} else {
+					output += 'NA,';
+				}
 			}
 		}
 	}

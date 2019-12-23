@@ -93,3 +93,13 @@ img.trait-thumbnail {
 	display: flex;
 	align-items: center;
 }
+
+.adv-text {
+	display: inline !important;
+	width: 100px !important;
+	margin-right: 10px;
+}
+
+input.invalid {
+	border: 1px solid #f00;
+}
