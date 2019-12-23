@@ -52,8 +52,8 @@ $(document).ready(function() {
 });
 
 function app_init() {
-	//show_loading_screen();
-	show_welcome_screen();
+	show_loading_screen();
+	//show_welcome_screen();
 	
 	window.appdb = load_database();
 	window.current_file = "";
