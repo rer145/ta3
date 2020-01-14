@@ -70,12 +70,12 @@
 			}
 		],
 		"win": {
-			"icon": "build/icon.icns"
+			"icon": "build/icon.png"
 		},
 		"mac": {
 			"category": "public.app-category.education",
 			"darkModeSupport": false,
-			"icon": "build/icon.icns"
+			"icon": "build/icon.png"
 		},
 		"dmg": {
 			"iconSize": 160,
