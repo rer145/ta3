@@ -1,7 +1,7 @@
 {
 	"name": "ta3",
 	"productName": "Transition Analysis 3",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
 	"repository": "rer145/ta3",
@@ -57,6 +57,11 @@
 	},
 	"build": {
 		"appId": "edu.psu.TA3",
+		"productName": "Transition Analysis 3",
+		"directories": {
+			"buildResources": "build",
+			"output": "dist"
+		},
 		"publish": [
 			{
 				"provider": "github",
@@ -65,12 +70,12 @@
 			}
 		],
 		"win": {
-			"icon": "assets/icons/mamd.png"
+			"icon": "build/icon.icns"
 		},
 		"mac": {
 			"category": "public.app-category.education",
 			"darkModeSupport": false,
-			"icon": "assets/img/icons/icon.png"
+			"icon": "build/icon.icns"
 		},
 		"dmg": {
 			"iconSize": 160,

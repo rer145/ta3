@@ -2,6 +2,7 @@ const { dialog, ipcRenderer } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
 const win = require('electron').BrowserWindow;
+const { ipcMain } = require("electron");
 
 let updater;
 autoUpdater.autoDownload = false;
@@ -23,8 +24,10 @@ autoUpdater.on('download-progress', (progressObj) => {
 });
 
 autoUpdater.on('update-not-available', (info) => {
-	updater.enabled = true;
-	updater = null;
+	if (updater != null) {
+		updater.enabled = true;
+		updater = null;
+	}
 
 	win.getFocusedWindow().webContents.send('update-not-available', info);
 });
@@ -34,9 +37,28 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 function checkForUpdates(menuItem, focusedWindow, event) {
-	updater = menuItem;
-	updater.enabled = false;
+	if (menuItem != null) {
+		updater = menuItem;
+		//updater.enabled = false;
+	}
+
 	autoUpdater.checkForUpdates();
 }
+
+function downloadUpdate() {
+	autoUpdater.downloadUpdate();
+}
+
+function installUpdate() {
+	autoUpdater.quitAndInstall();
+}
+
+ipcMain.on('update-download', () => {
+	downloadUpdate();
+});
+
+ipcMain.on('update-install', () => {
+	installUpdate();
+});
 
 module.exports.checkForUpdates = checkForUpdates;

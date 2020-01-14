@@ -52,8 +52,8 @@ $(document).ready(function() {
 });
 
 function app_init() {
-	show_loading_screen();
-	//show_welcome_screen();
+	//show_loading_screen();
+	show_welcome_screen();
 	
 	window.appdb = load_database();
 	window.current_file = "";
@@ -343,6 +343,26 @@ function wire_event_handlers() {
 		if ($(e.target).attr("aria-controls") === "charts") {
 			$("#section-menu .list-group-item").removeClass("active");
 		}
+	});
+
+	$("body").on("click", "#download-update-button", function(e) {
+		e.preventDefault();
+		ipcRenderer.send("update-download");
+	});
+
+	$("body").on("click", "#dismiss-download-button", function(e) {
+		e.preventDefault();
+		$("#generic-alert").hide();
+	});
+
+	$("body").on("click", "#install-update-button", function(e) {
+		e.preventDefault();
+		ipcRenderer.send("update-install");
+	});
+
+	$("body").on("click", "#dismiss-install-button", function(e) {
+		e.preventDefault();
+		$("#generic-alert").hide();
 	});
 }
 
@@ -1670,24 +1690,33 @@ ipcRenderer.on('run-analysis', (event, arg) => {
 ipcRenderer.on('message', (event, arg) => {
 	console.log(arg);
 });
-ipcRenderer.on('update-error', (event, arg) => {
+ipcRenderer.on('update-error', (arg) => {
 	console.error(arg);
+	$("#generic-alert").removeClass()
+		.addClass("alert")
+		.addClass("alert-danger")
+		.html("<strong>Error</strong><br />" + JSON.stringify(arg))
+		.show()
+		.delay(6000)
+		.slideUp(200, function() { $(this).hide(); });
 });
 ipcRenderer.on('update-checking', (event, arg) => {
 	console.log("checking for update");
-	$.toast({
-		heading: 'Checking for update',
-		text: 'Checking remote servers for available updates...',
-		icon: 'info',
-		hideAfter: 3000,
-		position: 'top-center'
-	});
+	$("#generic-alert").removeClass()
+		.addClass("alert")
+		.addClass("alert-info")
+		.html("<strong>Checking for Updates</strong><br />Checking remote servers for available updates...")
+		.show();
 });
 ipcRenderer.on('update-available', (event, arg) => {
 	console.log("update available!");
+	console.log(event);
 	console.log(arg);
-	// show toast that does not disappear (hideAfter: false)
-	//  add two buttons in toast, if possible?
+	$("#generic-alert").removeClass()
+		.addClass("alert")
+		.addClass("alert-warning")
+		.html(`<strong>Update Available</strong><br />Version ${arg.version} is available for download.<br /><br /><a id="download-update-button" href="#" class="btn btn-warning alert-link">Download Update Now</a> <a id="dismiss-download-button" href="#" class="btn btn-default">Dismiss</a>`)
+		.show();
 });
 ipcRenderer.on('update-progress', (event, arg) => {
 	console.log("download progress", arg);
@@ -1695,19 +1724,23 @@ ipcRenderer.on('update-progress', (event, arg) => {
 ipcRenderer.on('update-not-available', (event, arg) => {
 	console.log("no update available");
 	console.log(arg);
-	$.toast({
-		heading: 'No Update Available',
-		text: `You are currently running version ${arg.version}, which is the most up to date version that is available.`,
-		icon: 'info',
-		hideAfter: 6000,
-		position: 'top-center'
-	});
+	$("#generic-alert").removeClass()
+		.addClass("alert")
+		.addClass("alert-success")
+		.html(`<strong>No Updates Available</strong><br />You are currently running version ${arg.version}, which is the most up to date version that is available.`)
+		.show()
+		.delay(4000)
+		.slideUp(200, function() { $(this).hide(); });
 });
 ipcRenderer.on('update-downloaded', (event, arg) => {
 	console.log("update downloaded");
 	console.log(arg);
+	$("#generic-alert").removeClass()
+		.addClass("alert")
+		.addClass("alert-info")
+		.html(`<strong>Install Update</strong><br />Version ${arg.version} is available for download.<br /><br /><a id="install-update-button" href="#" class="btn btn-warning alert-link">Install Update Now</a> <a id="dismiss-install-button" href="#" class="btn btn-default">Dismiss</a>`)
+		.show();
 });
-
 
 
 

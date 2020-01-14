@@ -5,26 +5,28 @@
 		<title>TA3 Age Estimation</title>
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 		<link rel="stylesheet" href="assets/css/index.css">
-		<link rel="stylesheet" href="assets/css/jquery.toast.min.css" />
 		<!-- <link rel="stylesheet" href="assets/css/bootstrap-toc.min.css" /> -->
 	</head>
 	<body>
 		
-		<div id="loading-screen" class="screen" style="display:block;">
-			<div class="vertical-center">
-				<div class="container">
-					<div class="panel panel-primary">
-						<div class="panel-heading">Loading TA3 Age Estimation...</div>
-						<div class="panel-body">
-							<div id="loading-steps"></div>
+		<div class="container-fluid">
+
+			<div id="generic-alert" class="alert" role="alert"></div>
+
+			<div id="loading-screen" class="screen" style="display:block;">
+				<div class="vertical-center">
+					<div class="container">
+						<div class="panel panel-primary">
+							<div class="panel-heading">Loading TA3 Age Estimation...</div>
+							<div class="panel-body">
+								<div id="loading-steps"></div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div id="welcome-screen" class="screen" style="display:none;">
-			<div class="container-fluid">
+			<div id="welcome-screen" class="screen" style="display:none;">
 				<div class="row">
 					<div class="col-xs-12 text-center">
 						<h1>Transition Analysis 3<br />(TA3)</h1>
@@ -72,12 +74,10 @@
 					</div>
 				</div>
 			</div>
-		</div>
 
 
 
-		<div id="case-screen" class="screen" style="display:none;">
-			<div class="container-fluid">
+			<div id="case-screen" class="screen" style="display:none;">
 				<div id="config-error-message" class="row" style="display:none;">
 					<div class="col-xs-12">
 						<div class="alert alert-danger" role="alert">
@@ -265,7 +265,6 @@
 		</div>
 
 
-
 		<div id="user-guide-modal" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
@@ -435,7 +434,6 @@
 
 
 		<script src="assets/js/app.js"></script>
-		<script src="assets/js/jquery.toast.min.js"></script>
 		<!-- <script src="assets/js/bootstrap-toc.min.js"></script> -->
 	</body>
 </html>

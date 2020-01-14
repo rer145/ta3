@@ -103,3 +103,7 @@ img.trait-thumbnail {
 input.invalid {
 	border: 1px solid #f00;
 }
+
+#generic-alert {
+	display: none;
+}
