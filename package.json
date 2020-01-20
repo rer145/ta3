@@ -70,7 +70,8 @@
 			}
 		],
 		"win": {
-			"icon": "build/icon.png"
+			"icon": "build/icon.png",
+			"verifyUpdateCodeSignature": false
 		},
 		"mac": {
 			"category": "public.app-category.education",
