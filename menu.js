@@ -97,7 +97,7 @@ ${debugInfo()}`;
 	}
 ];
 
-if (!is.macos) {
+//if (!is.macos) {
 	helpSubmenu.push(
 		{
 			type: 'separator'
@@ -107,7 +107,7 @@ if (!is.macos) {
 			text: 'Created by Dr. Stephen Ousley and Ron Richardson'
 		})
 	);
-}
+//}
 
 const analysisMenu = [
 	{
@@ -206,27 +206,75 @@ const debugSubmenu = [
 ];
 
 const macosTemplate = [
-	appMenu([
-		{
-			label: 'Preferences…',
-			accelerator: 'Command+,',
-			click() {
-				showPreferences();
+	// appMenu([
+	// 	{
+	// 		label: 'Preferences…',
+	// 		accelerator: 'Command+,',
+	// 		click() {
+	// 			showPreferences();
+	// 		},
+	// 		accelerator: 'CmdOrCtrl+Shift+S'
+	// 	}
+	// ]),
+	{
+		label: app.getName(),
+		submenu: [
+			{ role: 'about' },
+			{
+				label: 'Settings',
+				click() {
+					showPreferences();
+				},
+				accelerator: 'CmdOrCtrl+Shift+S'
 			},
-			accelerator: 'CmdOrCtrl+Shift+S'
-		}
-	]),
+			{ type: 'separator' },
+			{ role: 'services', submenu: [] },
+			{ role: 'hide' },
+			{ role: 'hideothers' },
+			{ role: 'unhide' },
+			{ type: 'separator' },
+			{ role: 'quit' }
+		]
+	},
 	{
 		role: 'fileMenu',
 		submenu: [
 			{
-				label: 'Custom'
+				label: 'New',
+				click() {
+					win.getFocusedWindow().webContents.send('new-case');
+				},
+				accelerator: 'CmdOrCtrl+N'
+			},
+			{
+				label: 'Open',
+				click() {
+					win.getFocusedWindow().webContents.send('open-case');
+				},
+				accelerator: 'CmdOrCtrl+O'
+			},
+			{
+				label: 'Save',
+				click() {
+					win.getFocusedWindow().webContents.send('save-case');
+				},
+				accelerator: 'CmdOrCtrl+S'
 			},
 			{
 				type: 'separator'
 			},
 			{
-				role: 'close'
+				label: 'Settings',
+				click() {
+					showPreferences();
+				},
+				accelerator: 'CmdOrCtrl+Shift+S'
+			},
+			{
+				type: 'separator'
+			},
+			{
+				role: 'quit'
 			}
 		]
 	},
@@ -235,7 +283,6 @@ const macosTemplate = [
 		submenu: [
 			{ role: 'copy' },
 			{ role: 'paste' },
-			{ role: 'pasteAndMatchStyle' },
 			{ role: 'selectAll' }
 		]
 	},
@@ -293,7 +340,6 @@ const otherTemplate = [
 			},
 			{
 				label: 'Settings',
-				accelerator: 'Control+,',
 				click() {
 					showPreferences();
 				},
