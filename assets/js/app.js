@@ -531,7 +531,7 @@ const setup_verify_r_packages = function(s) {
 	];
 
 	var options = {
-		name: 'TA3 Subprocess'
+		name: 'Transition Analysis 3'
 	};
 	var cmd = '"' + store.get("config.r_executable_path") + '"';
 	$.each(parameters, function(i,v) {
@@ -1355,7 +1355,7 @@ function run_analysis() {
 		//clean_temp_files();
 
 		var options = {
-			name: 'TA3 Subprocess'
+			name: 'Transition Analysis 3'
 		};
 		var cmd = '"' + store.get('config.r_executable_path') + '"';
 		$.each(parameters, function(i,v) {
@@ -1587,7 +1587,7 @@ function verify_package_install(pkg, template) {
 	];
 
 	var options = {
-		name: 'TA3 Subprocess'
+		name: 'Transition Analysis 3'
 	};
 	var cmd = '"' + store.get("config.r_executable_path") + '"';
 	$.each(parameters, function(i,v) {
@@ -1617,7 +1617,7 @@ function install_package(pkg, template) {
 	];
 
 	var options = {
-		name: 'TA3 Subprocess'
+		name: 'Transition Analysis 3'
 	};
 	var cmd = '"' + store.get("config.r_executable_path") + '"';
 	$.each(parameters, function(i,v) {
@@ -1857,7 +1857,7 @@ function download_r_packages() {
 
 function run_r_install(file) {
 	var options = {
-		name: 'TA3 Subprocess'
+		name: 'Transition Analysis 3'
 	};
 	var cmd = '"' + file + '" /SILENT';
 
