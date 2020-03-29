@@ -107,3 +107,9 @@ input.invalid {
 #generic-alert {
 	display: none;
 }
+
+
+
+.setup-item {
+	margin-bottom: 20px;
+}

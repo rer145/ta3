@@ -7,28 +7,30 @@ args = commandArgs(trailingOnly=TRUE)
 temp_dir<-trim(args[1])  # directory where input and output files will be
 scripts_dir<-trim(args[2])  # directory where R related files will be
 pkg_dir<-trim(args[3])  # directory where R install packages will be
+v<-trim(args[4])  # version number of the application
 
 
-############# Auto-install of packages #############
-# if (!require("gtools")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\gtools_3.8.1.zip", sep="")), repos=NULL) } 
-# if (!require("MASS")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\MASS_7.3-51.4.zip", sep="")), repos=NULL) } 
-# if (!require("foreach")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\foreach_1.4.7.zip", sep="")), repos=NULL) } 
-# if (!require("iterators")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\iterators_1.0.12.zip", sep="")), repos=NULL) } 
-# if (!require("doParallel")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\doParallel_1.0.15.zip", sep="")), repos=NULL) } 
-# if (!require("randomGLM")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\randomGLM_1.02-1.zip", sep="")), repos=NULL) } 
-# if (!require("glmnet")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\glmnet_3.0-1.zip", sep="")), repos=NULL) } 
-# if (!require("msir")) { install.packages(gsub("\\\\", "/", paste(pkg_dir, "\\\\msir_1.3.2.zip", sep="")), repos=NULL) } 
-r<-"http://cran.us.r-project.org"
-if (!require("gtools")) { install.packages("gtools", repos=r) }
-if (!require("MASS")) { install.packages("MASS", repos=r) }
-if (!require("foreach")) { install.packages("foreach", repos=r) }
-if (!require("iterators")) { install.packages("iterators", repos=r) }
-if (!require("doParallel")) { install.packages("doParallel", repos=r) }
-if (!require("randomGLM")) { install.packages("randomGLM", repos=r) }
-if (!require("glmnet")) { install.packages("glmnet", repos=r) }
-if (!require("msir")) { install.packages("msir", repos=r) }
+############# Update Environment #############
+.libPaths(c(pkg_dir, .libPaths()))
+rm(randomGLM)
 
-############# List of Required Packages #############
+
+############# Creating Local Variables for Saving/Usage #############
+
+rda_fileB <- file.path(scripts_dir, "TA3BUM.Rda")
+rda_fileO <- file.path(scripts_dir, "TA3OUM.Rda")
+case_tall_file <- file.path(scripts_dir, "TA3_Case_Scores.Rda")
+
+input_file<-file.path(temp_dir, "TA3_Input.csv")
+
+output_file<-file.path(temp_dir, "output.txt")
+output_image1<-file.path(temp_dir, "output1.png")
+#output_image2<-file.path(temp_dir, "output2.png")
+
+
+
+
+############# Import Required Packages #############
 library("gtools")
 library("MASS") 
 library("foreach")
@@ -39,59 +41,17 @@ library("glmnet")
 library("msir")
 
 
-############# Development Options #############
-development <- FALSE
-if (development) { scripts_dir <- file.path("c", "rthings") }
-if (development) { temp_dir <- file.path("c", "rthings") }
-
-
-
-############# Creating Local Variables for Saving/Usage #############
-
-# NEW / modified (we may want to change to slash (/) for Macs and Windows)
-rda_fileB <- file.path(scripts_dir, "TA3BUM.Rda")
-rda_fileO <- file.path(scripts_dir, "TA3OUM.Rda")
-case_tall_file <- file.path(scripts_dir, "TA3_Case_Scores.Rda")
-
-# modified
-input_file<-file.path(temp_dir, "TA3_Input.csv")
-
-output_file<-file.path(temp_dir, "output.txt")
-output_image1<-file.path(temp_dir, "output1.png")
-output_image2<-file.path(temp_dir, "output2.png")
 
 
 
 
-############# Debugging Arguments to Screen #############
-if (development==TRUE) {
-  writeLines(c("Temp Data Dir: [", temp_dir, "]", "\n"), sep='')
-  writeLines(c("Scripts Data Dir: [", scripts_dir, "]", "\n"), sep='')
-
-  # new / modified
-  writeLines(c("Rda Binary File Path: [", rda_fileB, "]", "\n"), sep='')
-  writeLines(c("Rda Ordinal File Path: [", rda_fileO, "]", "\n"), sep='')
-
-  writeLines(c("Input File Path: [", input_file, "]", "\n"), sep='')
-  writeLines(c("Output Text: [", output_file, "]", "\n"), sep='')
-  writeLines(c("Output Image1 : [", output_image1, "]", "\n"), sep='')
-  writeLines(c("Output Image2 : [", output_image2, "]", "\n\n\n"), sep='')
-}
 
 
 
-   ############### THIS IS LOCATED IN c:\Rthings\\ ###########################
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ #
-##################  copy below to %APPDATA% ###############
 
-######################### Start of R Processing ###############################
-#
-#                            version 0.42 - fixed x y
-#
-###############################################################################
 
-# NEW / MODIFIED BELOW
-# read in reference data
+############# TA3 Analysis #############
+
 TA3BUM<-readRDS(rda_fileB)
 TA3OUM<-readRDS(rda_fileO)
 
@@ -118,6 +78,7 @@ for (i in (1:nrow(TA3_Case_Scores) ) ) {
   }
   
 }
+
 
 # Remove NAs in case tabular data (but there may be no NAs, so cant just use !which)
 TA3_Case_Scores <- TA3_Case_Scores[which(complete.cases(TA3_Case_Scores$TraitScore)),]
@@ -316,96 +277,33 @@ AnalDat <- as.data.frame(AnalDat)
 
 ####################### Preprocessing Done ###################
 
-####### Start of R Statistical Analysis (example: randomGLM) ############
-
-require(randomGLM)
-require(msir)
-#require(glmnet)
-# parallel
-#nThr <- detectCores()
-
 
 # TODO: figure out how to show progress bar and estimate time remaining
 RGLM <- randomGLM(AnalDat, agesnu, classify = F, nBags = 100)
-#, nThreads=nThr,
-#replace = TRUE,
-#sampleWeight=NULL,
-# nObsInBag = if (replace) nrow(AnalDat) else as.integer(0.632 * nrow(AnalDat)),
-#nFeaturesInBag = ceiling(ifelse(ncol(AnalDat)<=10, ncol(AnalDat),
-#ifelse(ncol(AnalDat)<=300, (1.0276-0.00276*ncol(AnalDat))*ncol(AnalDat), ncol(AnalDat)/5))),
-#minInBagObs = min( max( nrow(AnalDat)/2, 5), 2*nrow(AnalDat)/3))
 
 
-#GLMN <- glmnet(AnalDat, agesnu, classify = F, nBags = 100, minInBagObs = 20)
 
-# Calculates and plots a 1.96 * SD prediction band, that is,
-# a 95% prediction band
-DFP <- cbind(agesnu, RGLM$predictedOOB)
-DFP <- as.data.frame(DFP)
-names(DFP) <- c('Age','PredAge')
-
-l <- loess.sd(DFP[,2],DFP[,1], nsigma = 1.96)
-
-# Save plot to file (enhanced plot)
-png(filename=output_image1, width = 1400, height = 1200, res = 300, pointsize = 7) # in temp dir> 
-
-# plot OOB estimated age and 95% CI for OOB individuals
-plot(DFP$PredAge, DFP$Age, ylim = c(15,110), xlim = c(15,110), , pch = 17, cex = 0.7, col = 'blue',
-     xlab = 'Predicted Age', ylab = 'Age', main = 'TA3 Age Estimation (Random GLM) 95% OOB PI')
-
-lines(l$x, l$y, lw = 3, lty=3, col= 'purple')
-lines(l$x, l$upper, lty=2, lw = 1, col= 'purple')
-lines(l$x, l$lower, lty=2, lw = 1, col= 'purple')
-# line of perfect agreement
-abline(0,1, lw = 1)
-
-dev.off()
+############# End of TA3 Analysis #############
 
 
-# produce basic output
-MeanStdError <- sqrt(mean((agesnu - predict(RGLM,AnalDat, type='response'))^2))
 
-# predicted age
-PredAge <- predict(RGLM,AnalCaseB, type='response')
 
-# get prediction intervals for this individual 
-ADindex <- which.min(abs(l$x  - PredAge))
-LB <- l$lower[ADindex]
-UB <- l$upper[ADindex]
 
-#print(paste('The estimated age at death is', round(PredAge), 'years and the Standard Error is', round(MeanStdError,1),'\n', 'using a sample size of',nrow(AnalDat)))
 
-# Nicely formatted output; need to output formatted names 
-cat(
-  cat(
-    '---------------------------------------------',
-    '             TA3 Age Estimation',
-    '---------------------------------------------',
-    'Using traits:',
-    '---------------------------------',
-    # NBF has the binary additions 0_12 etc.
-    # NBF, 
-    TA3_Case_Scores$TraitText,
-    '---------------------------------', sep = '\n'
-  ), 
-  'Sample size = ',  round(nrow(AnalDat)), '\n', 
-  '---------------------------------', '\n', 
-  '\n', 
-  'Random GLM Analysis', '\n', 
-  'Estimated age at death = ', round(PredAge,1), ' years ', '\n', 
-  'Estimated lower 95% bound = ', round(LB,1), ' years ', '\n', 
-  'Estimated upper 95% bound = ', round(UB,1), ' years ', '\n', 
-  'Standard Error = ', round(MeanStdError,1), '\n',
-  '---------------------------------------------', '\n',
-  '\n', '\n', sep = ''
-);
 
+
+
+
+
+############# Output to Application #############
 
 # write results to a file for reading
+v_line<-paste('                   v', v, sep='')
 write(
   paste(
     '---------------------------------------------',
     '             TA3 Age Estimation',
+    v_line,
     '---------------------------------------------',
     'Using traits:',
     '---------------------------------',
@@ -415,43 +313,3 @@ write(
   append=FALSE,
   sep=''
 )
-
-for (trait in TA3_Case_Scores$TraitText) {
-  write(trait, file=output_file, append=TRUE, sep='\n')
-}
-
-write(
-  paste(
-    '---------------------------------',
-    paste('Sample size = ', round(nrow(AnalDat)), sep=''),
-    '---------------------------------',
-    'Random GLM Analysis',
-    paste('Estimated age at death = ', round(PredAge,1), ' years', sep=''),
-    paste('Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
-    paste('Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
-    paste('Standard Error = ', round(MeanStdError,1), sep=''),
-    '---------------------------------------------',
-    sep='\n'
-  ),
-  file=output_file,
-  append=TRUE,
-  sep=''
-)
-
-
-
-
-##################################################
-# output
-#Current Case Selections
-#	Section	Trait	Score
-#	Vertebrae	C1 lipping	present (>=50%)
-#	Vertebrae	C1 eburnation	present
-#	Humerus	Humerus weight	light
-#	Humerus	Humerus lesser tubercle bumps (left)	present (>=1/3)
-#	Humerus	Humerus lesser tubercle bumps (right)	present (>=1/3)
-#	Lower Limb	Femur fovea margin lipping (right)	lipped (>= 10mm)
-#	Lower Limb	Femur head surface extra bone (left)	extra bone (>=10mm)
-#	Lower Limb	Femur trochanteric fossa exostoses (left)	present
-
-

@@ -12,8 +12,11 @@ const {
 } = require('electron-util');
 const Store = require('electron-store');
 const store = new Store();
+const cla = require('./assets/js/cla');
 
 const updater = require('./assets/js/updater');
+
+const appName = app.getName();
 
 const showPreferences = () => {
 	win.getFocusedWindow().webContents.send('settings');
@@ -104,7 +107,7 @@ ${debugInfo()}`;
 		},
 		aboutMenuItem({
 			icon: path.join(__dirname, 'assets', 'img', 'icons', 'icon.png'),
-			text: 'Created by Dr. Stephen Ousley and Ron Richardson'
+			text: 'Created by Ron Richardson and Stephen Ousley'
 		})
 	);
 //}
@@ -169,8 +172,15 @@ const analysisMenu = [
 ];
 
 const debugSubmenu = [
-	{ role: 'reload' },
-	{ role: 'forcereload' },
+	//{ role: 'reload' },
+	{
+		label: 'Force Reload',
+		click() {
+			app.relaunch();
+			app.quit();
+		},
+		accelerator: 'CmdOrCtrl+Shift+R'
+	},
 	{ type: 'separator' },
 	{
 		label: 'Show App Data',
@@ -201,6 +211,15 @@ const debugSubmenu = [
 			store.clear();
 			app.relaunch();
 			app.quit();
+		}
+	},
+	{
+		label: 'Run Installer',
+		click() {
+			store.set("settings.first_run", true);
+			app.relaunch();
+			app.quit();
+			//win.getFocusedWindow().webContents.send('check-installation');
 		}
 	}
 ];
@@ -386,7 +405,7 @@ const otherTemplate = [
 
 const template = process.platform === 'darwin' ? macosTemplate : otherTemplate;
 
-if (is.development) {
+if (is.development || cla.options.debug) {
 	template.push({
 		label: 'Debug',
 		submenu: debugSubmenu

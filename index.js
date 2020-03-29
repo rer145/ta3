@@ -15,6 +15,8 @@ const fs = require('fs');
 const Store = require('electron-store');
 const store = new Store();
 
+const cla = require('./assets/js/cla');
+
 unhandled();
 debug();
 contextMenu();
@@ -115,6 +117,8 @@ app.on('activate', async () => {
 	await app.whenReady();
 	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
+
+	mainWindow.webContents.send('application-ready', cla.options);
 })();
 
 
@@ -123,68 +127,78 @@ function prep_files_and_settings() {
 	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
 	store.set("version", appVersion);
 
-	if (!store.has("config.entry_mode")) {
-		store.set("config.entry_mode", "basic");
+	let firstRun = !store.has("settings.first_run") ? true : store.get("settings.first_run");
+	if (cla.options.forceInstall)
+		firstRun = true;
+
+	//let devMode = store.has("settings.dev_mode");
+	let autoUpdates = !store.has("settings.auto_check_for_updates") ? true : store.get("settings.auto_check_for_updates");
+
+	let entryMode = !store.has("settings.entry_mode") ? "basic" : store.get("settings.entry_mode");
+
+	store.set("settings", {
+		"auto_check_for_updates": autoUpdates,
+		"first_run": firstRun,
+		"entry_mode": entryMode
+	});
+
+
+	// user paths
+	let userDataPath = path.join(app.getPath("home"), "TA3");
+	make_directory(userDataPath);
+
+	let userPackagesPath = path.join(userDataPath, "packages");
+	let userAnalysisPath = path.join(userDataPath, "analysis");
+	make_directory(userPackagesPath);
+	make_directory(userAnalysisPath);
+
+	store.set("user", {
+		"userdata_path": userDataPath,
+		"packages_path": userPackagesPath,
+		"analysis_path": userAnalysisPath
+	});
+
+	// check if packages is empty, if so, consider it the first_run
+	fs.readdir(userPackagesPath, function(err, files) {
+		if (err)
+			console.error(err);
+		else
+			if (!files.length)
+				store.set("settings.first_run", true);
+	});
+
+
+
+	// app paths
+	let resourcesPath = process.resourcesPath;
+	if (cla.options && cla.options.resources && cla.options.resources.length > 0) {
+		resourcesPath = cla.options.resources;
+	} else {
+		if (is.development) {
+			resourcesPath = path.join(__dirname, "build");	
+		}
 	}
 
-	if (!store.has("config.r_executable_path")) {
-		store.set("config.r_executable_path", "");
+	let RPortablePath = path.join(resourcesPath, "R-Portable", "bin", "RScript.exe");
+	let RAnalysisPath = path.join(resourcesPath, "scripts");
+	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0) {
+		RAnalysisPath = cla.options.analysis;
+	}
+	
+	if (is.development) {
+		RPortablePath = path.join(
+			resourcesPath, 
+			"R-Portable", 
+			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
+			"bin", 
+			"RScript.exe");
 	}
 
-	var userDataPath = app.getPath("userData");
-	store.set("config.userdata_path", userDataPath);
-
-	var user_analysis_path = path.join(userDataPath, "analysis");
-	make_directory(user_analysis_path);
-	store.set("config.analysis_path", user_analysis_path);
-
-	var user_r_path = path.join(userDataPath, "r");
-	make_directory(user_r_path);
-	store.set("config.r_path", user_r_path);
-
-	var user_packages_path = path.join(user_r_path, "packages");
-	make_directory(user_packages_path);
-	store.set("config.packages_path", user_packages_path);
-
-	var r_path = path.join(__dirname, "assets/r");
-	var pkg_path = path.join(__dirname, "assets/r/packages");
-	copy_file(
-        path.join(r_path, "ta3.R"), 
-        path.join(user_r_path, "ta3.R"), 
-		true);
-	copy_file(
-		path.join(r_path, "TA3.Rda"), 
-		path.join(user_r_path, "TA3.Rda"), 
-		true);
-	copy_file(
-		path.join(r_path, "TA3BUM.Rda"), 
-		path.join(user_r_path, "TA3BUM.Rda"), 
-		true);
-	copy_file(
-		path.join(r_path, "TA3OUM.Rda"), 
-		path.join(user_r_path, "TA3OUM.Rda"), 
-		true);
-	copy_file(
-		path.join(r_path, "TA3_Case_Scores.Rda"), 
-		path.join(user_r_path, "TA3_Case_Scores.Rda"), 
-		true);
-	copy_file(
-		path.join(r_path, "install_package.R"), 
-		path.join(user_r_path, "install_package.R"), 
-		true);
-	copy_file(
-		path.join(r_path, "verify_package.R"), 
-		path.join(user_r_path, "verify_package.R"), 
-		true);
-
-	// copy_file(path.join(pkg_path, "doParallel_1.0.15.zip"), path.join(user_packages_path, "doParallel_1.0.15.zip"), true);
-	// copy_file(path.join(pkg_path, "foreach_1.4.7.zip"), path.join(user_packages_path, "foreach_1.4.7.zip"), true);
-	// copy_file(path.join(pkg_path, "glmnet_3.0-1.zip"), path.join(user_packages_path, "glmnet_3.0-1.zip"), true);
-	// copy_file(path.join(pkg_path, "gtools_3.8.1.zip"), path.join(user_packages_path, "gtools_3.8.1.zip"), true);
-	// copy_file(path.join(pkg_path, "iterators_1.0.12.zip"), path.join(user_packages_path, "iterators_1.0.12.zip"), true);
-	// copy_file(path.join(pkg_path, "MASS_7.3-51.4.zip"), path.join(user_packages_path, "MASS_7.3-51.4.zip"), true);
-	// copy_file(path.join(pkg_path, "msir_1.3.2.zip"), path.join(user_packages_path, "msir_1.3.2.zip"), true);
-	// copy_file(path.join(pkg_path, "randomGLM_1.02-1.zip"), path.join(user_packages_path, "randomGLM_1.02-1.zip"), true);
+	store.set("app", {
+		"resources_path": resourcesPath,
+		"rscript_path": RPortablePath,
+		"r_analysis_path": RAnalysisPath
+	});
 }
 
 function make_directory(dir) {

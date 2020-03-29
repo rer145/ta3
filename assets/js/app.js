@@ -7,7 +7,7 @@ window.Bootstrap = require('bootstrap');
 const fs = require('fs');
 const find = require('find');
 const path = require('path');
-const {ipcRenderer, shell} = require('electron');
+const {app, ipcRenderer, shell} = require('electron');
 const { BrowserWindow } = require('electron').remote;
 const {dialog} = require('electron').remote;
 const {is} = require('electron-util');
@@ -16,28 +16,10 @@ const os = require('os');
 const Store = require('electron-store');
 const store = new Store();
 
-var sudo = require('sudo-prompt');
+var exec = require('./assets/js/exec');
+const setup = require('./assets/js/setup');
 
-const requiredPackages = [
-	{package: 'gtools', url: 'https://cran.r-project.org/src/contrib/Archive/gtools/gtools_3.5.0.tar.gz'},
-	{package: 'MASS', url: 'https://cran.r-project.org/src/contrib/Archive/MASS/MASS_7.3-51.3.tar.gz'},
-	{package: 'foreach', url: 'https://cran.r-project.org/src/contrib/Archive/foreach/foreach_1.4.4.tar.gz'},
-	{package: 'iterators', url: 'https://cran.r-project.org/src/contrib/Archive/iterators/iterators_1.0.10.tar.gz'},
-	{package: 'doParallel', url: 'https://cran.r-project.org/src/contrib/Archive/doParallel/doParallel_1.0.14.tar.gz'},
-	{package: 'randomGLM', url: 'https://cran.r-project.org/src/contrib/Archive/randomGLM/randomGLM_1.00-1.tar.gz'},
-	{package: 'glmnet', url: 'https://cran.r-project.org/src/contrib/Archive/glmnet/glmnet_3.0-1.tar.gz'},
-	{package: 'msir', url: 'https://cran.r-project.org/src/contrib/Archive/msir/msir_1.3.1.tar.gz'},
-];
-
-const known_r_dirs = [];
-if (is.windows) {
-	known_r_dirs.push('C:\\Program Files\\R');
-	known_r_dirs.push('C:\\Program Files\\Microsoft\\R Open');
-} else {
-	known_r_dirs.push('/usr/bin/Rscript');
-	known_r_dirs.push('/Library/Frameworks/R.framework/Resources/bin');
-	known_r_dirs.push("/Library/Frameworks/R.framework/Versions/3.5.1-MRO/Resources/bin/");
-}
+var cla_args = {};
 
 var current_traits = null;
 var current_trait_idx = -1;
@@ -47,12 +29,19 @@ var selections = [];
 var current_trait_text = -1;
 var current_section_text = -1;
 
+const appName = "Transition Analysis 3";
+
 $(document).ready(function() {
-	app_init();
+	$("#current-version").text(store.get('version'));
+	$(".app-name").text(appName);
 });
 
+function app_install() {
+	show_setup_screen();
+	wire_setup_events();
+}
+
 function app_init() {
-	//show_loading_screen();
 	show_welcome_screen();
 	
 	window.appdb = load_database();
@@ -61,8 +50,6 @@ function app_init() {
 	
 	populate_settings();
 	wire_event_handlers();
-	//show_welcome_screen();
-	//configure_user_guide();
 }
 
 function load_database() {
@@ -71,37 +58,43 @@ function load_database() {
 }
 
 function populate_settings() {
-	$("#current-version").text(store.get('version'));
-
-	var entry_mode = store.get('config.entry_mode');
+	var entry_mode = store.get('settings.entry_mode');
 	if (entry_mode.length > 0) {
 		$("#entry_mode_" + entry_mode).attr('checked', 'checked');
 	} else {
 		$("#entry_mode_basic").attr('checked', 'checked');
-		store.set("config.entry_mode", "basic");
+		store.set("settings.entry_mode", "basic");
 	}
 }
 
+function wire_setup_events() {
+	$("#setup-start").on('click', function(e) {
+		e.preventDefault();
+		disable_button("setup-start");
+		
+		setup.start().then(function(response) {
+			store.set("settings.first_run", false);
+
+			app_init();
+
+			$("#generic-alert").removeClass()
+				.addClass("alert")
+				.addClass("alert-success")
+				.html("Transition Anaysis 3 is now ready to use!")
+				.show()
+				.delay(3000)
+				.slideUp();
+		}, function(error) {
+			store.set("settings.first_run", true);	// set to force install on next run
+			console.error(error);
+			$("#setup-error-log pre").html(error);
+			$("#setup-error-log").show();
+			enable_button("setup-start");
+		});
+	});
+}
+
 function wire_event_handlers() {
-	$("#r-download-link").click(function(e) {
-		e.preventDefault();
-
-		// check for macos release version. 10.6 and above only for R 3.6.1+
-		// must download archived versions of R for older macs
-		//console.log(os.release());
-
-		var url = "https://cran.r-project.org/bin/windows/base/";
-		if (is.macos) {
-			url = "https://cran.r-project.org/bin/macosx/";
-		}
-		shell.openExternal(url);
-	});
-
-	$("#download-r-button").click(function(e) {
-		e.preventDefault();
-		download_r();
-	});
-
 	$("#welcome-new-case").click(function(e) {
 		e.preventDefault();
 		new_case();
@@ -118,30 +111,14 @@ function wire_event_handlers() {
 		open_case();
 	});
 
-	$("#loading-steps").on("click", ".rscript-settings-link", function() {
-		store.set('config.r_executable_path', $(this).text());
-		if ($(this).attr("data-next-step") != undefined) {
-			setup_execute(setup_steps, $(this).attr("data-next-step"));
-		}
-	});
-
-	$("#loading-steps").on("click", "#setup-download-r-button", function() {
-		e.preventDefault();
-		download_r();
-	});
-
-	$("#loading-steps").on("click", "#setup-manually-set-r-button", function() {
-		
-	});
-
 	$("#settings-modal").on("click", ".rscript-settings-link", function() {
-		store.set('config.r_executable_path', $(this).text());
-		$("#settings-rscript-path").html(store.get('config.r_executable_path'));
+		store.set('settings.rscript_path', $(this).text());
+		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
 	});
 
 	
 	$('#settings-modal').on('show.bs.modal', function (e) {
-		$("#settings-rscript-path").html(store.get('config.r_executable_path'));
+		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
 		populate_settings();
 		show_suggested_rscript_paths();
 	});
@@ -150,14 +127,14 @@ function wire_event_handlers() {
 		var reader = new FileReader();
 		var path = e.currentTarget.files[0].path;
 		if (path.length > 0) {
-			store.set('config.r_executable_path', path);
-			$("#settings-rscript-path").html(store.get('config.r_executable_path', ''));
+			store.set('settings.rscript_path', path);
+			$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
 		}
 	});
 	
 	$("input:radio[name='settings_entry_mode']").change(function(e) {
 		console.log($(this).val());
-		store.set('config.entry_mode', $(this).val());
+		store.set('settings.entry_mode', $(this).val());
 	});
 
 	$("#save-setting-button").click(function(e) {
@@ -366,47 +343,18 @@ function wire_event_handlers() {
 	});
 }
 
-// function configure_user_guide() {
-// 	Toc.init({
-// 		$nav: $("#toc"),
-// 		$scope: $("#user-guide-modal")
-// 	});
-// 	$('#user-guide-modal').scrollspy({
-// 		target: "#toc"
-// 	});
-// 	$('#toc').affix({
-// 		offset: {
-// 			top: 100,
-// 			bottom: 200
-// 		}
-// 	});
-// }
-
-function check_offline(is_online) {
-	if (is_online)
-		$("#offline-error-message").hide();
-	else 
-		$("#offline-error-message").show();
-}
-
 function check_config_settings() {
 	var is_configured = false;
-	var temp = store.get('config.r_executable_path');
+	var temp = store.get('settings.rscript_path');
 	if (temp.length > 0) {
 		is_configured = true;
 	}
 	
 	if (!is_configured) {
 		$("#config-error-message").show();
-		//search_for_rscript();
 	} else {
 		$("#config-error-message").hide();
 	}
-
-	// var entry_mode = store.get('config.entry_mode');
-	// if (entry_mode.length == 0) {
-	// 	store.set('config.entry_mode', 'basic');
-	// }
 }
 
 function show_screen(id) {
@@ -418,193 +366,12 @@ function show_screen(id) {
 		$('#' + id).show();
 }
 
-function show_loading_screen() {
-	show_screen('loading-screen');
-	app_setup();
-}
-
-function setup_display_step(step, callback) {
-	var div = $("<p></p>");
-	div.html(step.text);
-	$("#loading-steps").append(div);
-	step.div = div;
-	callback(step);
-}
-
-function setup_execute_step(step, callback) {
-	setTimeout(() => {
-		step.command(step);
-		callback(step);
-	}, 300);
-}
-
-function setup_display_step_output(step, callback) {
-	if (step.result) {
-		step.div.html(step.text + ' <span class="text-success">OK</span>');
-	} else {
-		step.div.html(step.text + ' <span class="text-danger">FAILED</span>');
-	}
-
-	if (step.alert) {
-		var alert = $("<div></div>");
-		alert.addClass("alert")
-			.addClass("alert-" + step.alert.type)
-			.attr("role", "alert")
-			.html(step.alert.message);
-		$("#loading-steps").append(alert);
-	}
-
-	if (callback != null) {
-		callback();
-	}
-}
-
-const setup_check_r_config = function(s) {
-	var r_path = store.get("config.r_executable_path");
-
-	var found_r_paths = [];
-	if (is.windows) {
-		//for (var i = 0; i < known_r_dirs.length; i++) {
-		for (var i = 0; i < 1; i++) {
-			var files = find.fileSync(/Rscript.exe/, known_r_dirs[i]);
-			files.forEach(f => {
-				found_r_paths.push(f);
-			});
-		}
-	}
-
-	var result = false;
-	var message = "";
-	var alertType = "warning";
-
-	if (r_path === "") {
-		if (found_r_paths.length === 0) {
-			result = false;
-			alertType = "danger";
-			message = '<p>An installation of R cannot be located at the standard installation paths. If you know that R is installed already, click the <strong>Manually Set R Path</strong> button below. If you know you do NOT have R installed, click the <strong>Download and Install R</strong> button below.</p><p><a href="#" id="setup-download-r-button" class="btn btn-primary" data-next-step="1">Download and Install R</a> <a href="#" id="setup-manually-set-r-button" class="btn btn-primary" data-next-step="1">Manually Set R Path</a></p>';
-		} else {
-			result = false;
-			alertType = "warning";
-			message = '<p>The application configuration does not have a path set for R, but an installation of R has been found on your computer. Click one of the paths below to set the configuration.</p><p>';
-			for (var i = 0; i < found_r_paths.length; i++) {
-				message += '<a href="#" class="rscript-settings-link" data-next-step="1">' + found_r_paths[i] + '</a><br />';
-			}
-		}
-	} else {
-		// search for file saved in config (only look at file itself?)
-		var fileExists = fs.existsSync(r_path);
-
-		if (fileExists) {
-			result = true;
-		} else {
-			result = false;
-			alertType = "warning";
-			message = '<p>The application configuration has a path set for R, but it cannot be found by the application. Click one of the paths below to set the configuration.</p><p>';
-			for (var i = 0; i < found_r_paths.length; i++) {
-				message += '<a href="#" class="rscript-settings-link" data-next-step="1">' + found_r_paths[i] + '</a><br />';
-			}
-		}
-	}
-
-	//return (r_path !== "");
-	s.result = result;
-	if (!result) {
-		s.alert = {
-			type: alertType,
-			message: message
-		};
-	}
-	return s;
-}
-
-const setup_verify_r_packages = function(s) {
-	var result = false;
-	var alertType = "warning";
-	var message = "";
-
-	var r_path = store.get("config.r_path");
-	var packages_path = store.get("config.packages_path");
-	var r_script = path.join(r_path, "install_packages.R");
-	var parameters = [
-		packages_path,
-		r_script
-	];
-
-	var options = {
-		name: 'Transition Analysis 3'
-	};
-	var cmd = '"' + store.get("config.r_executable_path") + '"';
-	$.each(parameters, function(i,v) {
-		cmd = cmd + ' "' + v + '"';
-	});
-
-	// sudo.exec(cmd, options, 
-	// 	function(error, stdout, stderr) {
-	// 		if (error) {
-	// 			console.error(error);
-	// 			console.error(stderr);
-	// 			return false;
-	// 		}
-	// 		var output = JSON.stringify(stdout);
-	// 		console.log("verify stdout: " + output);
-	// 		toggle_package_status(pkg, template, output.includes("TRUE"));
-	// 	}
-	// );
-
-	s.result = result;
-	if (!result) {
-		s.alert = {
-			type: alertType,
-			message: message
-		};
-	}
-	return s;
-}
-
-
-// const setup_true = function(s) {
-// 	console.log("true");
-// 	s.result = true;
-// 	return s;
-// }
-
-// const setup_false = function(s) {
-// 	console.log("false");
-// 	s.result = false;
-// 	return s;
-// }
-
-function setup_execute(steps, next) {
-	if (steps.length > 0 && next < steps.length) {
-		setup_display_step(steps[next], function(s1) {
-			setup_execute_step(s1, function(s2) {
-				var result = s2.result;
-				var cb = null;
-				if (result)
-					cb = function() { setup_execute(steps, next+1) };
-				else 
-					cb = function() { console.log("Setup Complete"); }
-				setup_display_step_output(s2, cb);
-			});
-		});
-	}
-}
-
-function app_setup() {
-	if (setup_steps.length > 0) {
-		setup_display_step(setup_steps[0], function(s1) {
-			setup_execute_step(s1, function(s2) {
-				setup_display_step_output(s2, setup_execute(setup_steps, 1));
-			});
-		});
-	}
-	//show_welcome_screen();
+function show_setup_screen() {
+	show_screen('first-run-screen');
 }
 
 function show_welcome_screen() {
 	show_screen('welcome-screen');
-	//check_config_settings();
-	check_offline(true);
 }
 
 function init_case_screen() {
@@ -633,7 +400,7 @@ function show_case_screen() {
 
 function display_entry_mode(mode) {
 	if (mode === "" || mode === undefined) {
-		mode = store.get('config.entry_mode');
+		mode = store.get('settings.entry_mode');
 	}
 	$(".entry-mode").hide();
 	$("#trait-score-" + mode).show();
@@ -684,7 +451,7 @@ function select_section(obj) {
 }
 
 function populate_entry_mode() {
-	var mode = store.get('config.entry_mode');
+	var mode = store.get('settings.entry_mode');
 
 	if (mode === "basic") {
 		if (current_traits != null) {
@@ -843,44 +610,6 @@ function populate_advanced_mode(section) {
 			$("#advanced-mode-list").append(row);
 		}
 	}
-
-	// for (var i = 0; i < current_traits.length; i++) {
-	// 	var row = $("#advanced-mode-template").clone();
-	// 	row.removeAttr("id");
-	// 	row.find(".adv-trait-name").html(current_traits[i].title);
-
-	// 	for (var j = 0; j < 4; j++) {
-	// 		if (current_traits[i].scores[j] !== undefined) {
-	// 			var input = row.find(".adv-radio-" + j.toString());
-	// 			var label = row.find(".adv-label-" + j.toString());
-
-	// 			input.attr("id", "adv-trait-" + i.toString() + "-" + j.toString());
-	// 			input.attr("name", "adv-trait-" + i.toString());
-	// 			input.attr("value", current_traits[i].scores[j].value);
-	// 			input.attr("data-section-idx", current_section_idx);
-	// 			input.attr("data-section-text", current_section_text);
-	// 			input.attr("data-trait-idx", i);
-	// 			input.attr("data-trait-text", current_traits[i].db_name);
-	// 			input.attr("data-score-idx", j);
-	// 			input.attr("data-score-text", current_traits[i].scores[j].value);
-
-	// 			//var idx = find_item_in_selections(current_section_idx, i, j);
-	// 			var idx = find_item_in_selections_text(current_section_text, current_traits[i].db_name, current_traits[i].scores[j].value);
-	// 			var is_selected = (idx > -1);
-	// 			if (is_selected) {
-	// 				input.attr("checked", "checked");
-	// 			}
-
-	// 			label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString());
-	// 			label.html(current_traits[i].scores[j].abbreviation);
-	// 		} else {
-	// 			row.find(".adv-col-" + j.toString()).remove();
-	// 		}
-	// 	}
-
-	// 	row.removeClass("template");
-	// 	$("#advanced-mode-list").append(row);
-	// }
 }
 
 function populate_trait_prompt(trait) {
@@ -1045,10 +774,6 @@ function update_pager_buttons() {
 		$("#trait-pager .next").removeClass("disabled");
 	}
 }
-
-
-
-
 
 
 function toggle_score_selection(section_idx, trait_idx, score_idx) {
@@ -1291,7 +1016,7 @@ function generate_csv_file() {
 	}
 
 	try {
-		var fullPath = path.join(store.get('config.analysis_path'), filename);
+		var fullPath = path.join(store.get('user.analysis_path'), filename);
 		//console.log(fullPath);
 		fs.writeFileSync(fullPath, header + '\n' + output + '\n');
 		return filename;
@@ -1305,9 +1030,9 @@ function run_analysis() {
 	//TODO: disable buttons and tab switching while running?
 
 	//var app_working_dir = __dirname.replace(/\\/g, "\\\\");
-	var temp_dir = store.get('config.analysis_path');
-	var scripts_dir = store.get('config.r_path');
-	var pkg_dir = store.get('config.packages_path');
+	var temp_dir = store.get('user.analysis_path');
+	var scripts_dir = store.get('app.r_analysis_path');
+	var pkg_dir = store.get('user.packages_path');
 	var data_file = generate_csv_file();
 
 	var loadingDiv = $("#result-loading");
@@ -1328,7 +1053,8 @@ function run_analysis() {
 			path.join(scripts_dir, "ta3.R"), 
 			temp_dir,
 			scripts_dir,
-			pkg_dir
+			pkg_dir,
+			store.get("version")
 		];
 
 		var resultPending = $("<div></div>");
@@ -1338,7 +1064,7 @@ function run_analysis() {
 		resultStatus.empty().append(resultPending);
 
 
-		var debugStatusHtml = "<strong>Executable: </strong>" + store.get('config.r_executable_path') + "<br /><strong>Parameters: </strong><br /><ul>";
+		var debugStatusHtml = "<strong>Executable: </strong>" + store.get('settings.rscript_path') + "<br /><strong>Parameters: </strong><br /><ul>";
 
 		for (var i = 0; i < parameters.length; i++) {
 			debugStatusHtml += "<li>" + parameters[i] + "</li>";
@@ -1355,29 +1081,29 @@ function run_analysis() {
 		//clean_temp_files();
 
 		var options = {
-			name: 'Transition Analysis 3'
+			name: appName
 		};
-		var cmd = '"' + store.get('config.r_executable_path') + '"';
+		var cmd = '"' + store.get('settings.rscript_path') + '"';
 		$.each(parameters, function(i,v) {
 			cmd = cmd + ' "' + v + '"';
 		});
 
-		sudo.exec(cmd, options, 
+		exec.execFile(store.get("app.rscript_path"), parameters, 
 			function(error, stdout, stderr) {
-				if (error) {
-					var resultError = $("<div></div>");
-					resultError.addClass("alert alert-danger")
-						.attr("role", "alert")
-						.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
-					resultStatus.empty().append(resultError);
-					loadingDiv.hide();
-					return;
-				}
-
+				var resultError = $("<div></div>");
+				resultError.addClass("alert alert-danger")
+					.attr("role", "alert")
+					.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
+				resultStatus.empty().append(resultError);
+				loadingDiv.hide();
+				return;
+			},
+			function(stdout, stderr) {
 				//display output text in Results tab
 				var outputDiv = $("#result-output");
 				var code = $("<pre></pre>");
 				//code.append(stdout.toString());
+
 				var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
 				code.append(results);
 				outputDiv.append(code);
@@ -1394,8 +1120,45 @@ function run_analysis() {
 
 				//show charts tab only when full analysis is completed
 				$('#main-tabs a[href="#charts"]').show();
-			}
-		);
+			});
+
+
+
+
+		// sudo.exec(cmd, options, 
+		// 	function(error, stdout, stderr) {
+		// 		if (error) {
+		// 			var resultError = $("<div></div>");
+		// 			resultError.addClass("alert alert-danger")
+		// 				.attr("role", "alert")
+		// 				.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
+		// 			resultStatus.empty().append(resultError);
+		// 			loadingDiv.hide();
+		// 			return;
+		// 		}
+
+		// 		//display output text in Results tab
+		// 		var outputDiv = $("#result-output");
+		// 		var code = $("<pre></pre>");
+		// 		//code.append(stdout.toString());
+		// 		var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
+		// 		code.append(results);
+		// 		outputDiv.append(code);
+
+		// 		//display output images in Charts tab
+		// 		//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
+				
+		// 		show_output_image(path.join(temp_dir, "output1.png"), imageDiv);
+		// 		resultStatus.empty();
+		// 		//resultDebug.empty();
+				
+		// 		loadingDiv.hide();
+		// 		resultDebug.hide();
+
+		// 		//show charts tab only when full analysis is completed
+		// 		$('#main-tabs a[href="#charts"]').show();
+		// 	}
+		// );
 	} else {
 		var resultError = $("<div></div>");
 		resultError.addClass("alert alert-danger")
@@ -1412,45 +1175,6 @@ function show_output_image(filename, parent) {
 		parent.append(img);
 	}
 }
-
-
-
-
-
-function show_suggested_rscript_paths() {
-	var span = $("#settings-found-rscript");
-	span.empty().html('<p class="loading">Loading suggested paths...</p>');
-
-	if (process.platform === "win32" || process.platform === "win64") {
-		search_for_rscript('C:\\Program Files\\R');
-		search_for_rscript('C:\\Program Files\\Microsoft\\R Open');
-	}
-
-	if (process.platform === "darwin") {
-		search_for_rscript('/usr/bin/Rscript');
-        search_for_rscript('/Library/Frameworks/R.framework/Resources/bin');
-        search_for_rscript("/Library/Frameworks/R.framework/Versions/3.5.1-MRO/Resources/bin/");
-	}
-	
-	span.find("p.loading").remove();
-}
-
-function search_for_rscript(path) {
-	var span = $("#settings-found-rscript");
-    find.file(/Rscript.exe/, path, function(files) {
-		if (files.length > 0) {
-			for (var i = 0; i < files.length; i++) {
-				span.append(
-					$("<a></a>")
-						.addClass("rscript-settings-link")
-						.text(files[i])
-				).append($("<br></br>"));
-			}
-		}
-	})
-    .error(function(err) { console.error(err); });
-}
-
 
 
 
@@ -1480,7 +1204,7 @@ function open_case() {
 		title: 'Open TA3 Case File',
 		buttonLabel: 'Open TA3 File',
 		filters: [
-			{name: 'TA3 Analysis', extensions: ['ta3']}
+			{name: appName, extensions: ['ta3']}
 		]
 	}, function(files) {
 		if (files != undefined) {
@@ -1534,7 +1258,7 @@ function save_case() {
 			title: 'Save TA3 Case File',
 			buttonLabel: 'Save TA3 File',
 			filters: [
-				{name: 'TA3 Analysis', extensions: ['ta3']}
+				{name: appName, extensions: ['ta3']}
 			]
 		};
 		dialog.showSaveDialog(null, options, (p) => {
@@ -1571,75 +1295,6 @@ function update_file_status() {
 			$("#current_file_status").text("");	
 	}
 }
-
-
-
-
-
-
-
-function verify_package_install(pkg, template) {
-	var analysis_path = store.get("config.analysis_path");
-	var r_script = path.join(analysis_path, "verify_package.R");
-	var parameters = [
-		r_script,
-		pkg
-	];
-
-	var options = {
-		name: 'Transition Analysis 3'
-	};
-	var cmd = '"' + store.get("config.r_executable_path") + '"';
-	$.each(parameters, function(i,v) {
-		cmd = cmd + ' "' + v + '"';
-	});
-
-	sudo.exec(cmd, options, 
-		function(error, stdout, stderr) {
-			if (error) {
-				console.error(error);
-				console.error(stderr);
-				return false;
-			}
-			var output = JSON.stringify(stdout);
-			console.log("verify stdout: " + output);
-			toggle_package_status(pkg, template, output.includes("TRUE"));
-		}
-	);
-}
-
-function install_package(pkg, template) {
-	var analysis_path = store.get("analysis_path");
-	var r_script = path.join(analysis_path, "install_package.R");
-	var parameters = [
-		r_script,
-		pkg
-	];
-
-	var options = {
-		name: 'Transition Analysis 3'
-	};
-	var cmd = '"' + store.get("config.r_executable_path") + '"';
-	$.each(parameters, function(i,v) {
-		cmd = cmd + ' "' + v + '"';
-	});
-
-	sudo.exec(cmd, options, 
-		function(error, stdout, stderr) {
-			if (error) {
-				console.error(error);
-				console.log(stderr);
-				toggle_package_status(pkg, template, false); 
-				return false;
-			}
-			console.log('stdout: ' + JSON.stringify(stdout));
-			console.log('stderr: ' + JSON.stringify(stderr));
-			toggle_package_status(pkg, template, true);
-			return true;
-		}
-	);
-}
-
 
 
 
@@ -1818,83 +1473,23 @@ function data_get_indexes_by_trait_db_name(trait, value) {
 
 
 
-
-
-
-
-
-
-function get_filename_from_url(url) {
-	return url.substring(url.lastIndexOf('/') + 1);
+function enable_button(id) {
+	$("#" + id).removeAttr("disabled").removeClass("disabled");
 }
 
-function download_file(url) {
-	if (url != null && url.length > 0) {
-		ipcRenderer.send("download-file", {
-			url: url,
-			properties: {
-				directory: store.get("config.r_path")
-			}
-		});
+function disable_button(id) {
+	$("#" + id).attr("disabled", "disabled").addClass("disabled");
+}
+
+
+ipcRenderer.on('application-ready', (event, args) => {
+	cla_args = args;
+
+	let forceInstall = cla_args.forceInstall;
+	let is_installed = setup.check_installation(forceInstall);
+	if (is_installed) {
+		app_init();
+	} else {
+		app_install();
 	}
-}
-
-function download_r() {
-	var url = "";
-	if (is.macos) {
-		url = "https://cran.r-project.org/bin/macosx/el-capitan/base/R-3.6.1.pkg";
-	} else if (is.windows) {
-		url = "https://cran.r-project.org/bin/windows/base/old/3.6.1/R-3.6.1-win.exe"
-	}
-	download_file(url);
-}
-
-function download_r_packages() {
-	for (var i = 0; i < requiredPackages.length; i++) {
-		download_file(requiredPackages[i].url);
-	}
-}
-
-function run_r_install(file) {
-	var options = {
-		name: 'Transition Analysis 3'
-	};
-	var cmd = '"' + file + '" /SILENT';
-
-	sudo.exec(cmd, options, 
-		function(error, stdout, stderr) {
-			if (error) {
-				console.error(error);
-				return;
-			}
-			// var output = JSON.stringify(stdout);
-			// console.log("r install stdout: " + output);
-			// do r_script scan check
-			show_loading_screen();
-		}
-	);
-}
-
-
-ipcRenderer.on("download-complete", (event, file) => {
-	console.log("Download complete", file);
-	//shell.openItem(file);
-	run_r_install(file);
 });
-ipcRenderer.on("download-progress", (event, progress) => {
-	// console.log(progress);
-	const progressInPercentages = progress * 100;
-	const cleanProgressInPercentages = Math.floor(progress * 100);
-	//console.log(progress);
-	BrowserWindow.getFocusedWindow().setProgressBar(progress.percent);
-});
-
-
-
-
-
-const setup_steps = [
-	{ text: "Verifying R configuration...", command: setup_check_r_config },
-//	{ text: "Verifying/Installing R packages...", command: setup_verify_r_packages },
-	{ text: "Starting the application...", command: show_welcome_screen }
-];
