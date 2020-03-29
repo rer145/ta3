@@ -53,7 +53,7 @@ function app_init() {
 }
 
 function load_database() {
-	var db = JSON.parse(fs.readFileSync(path.join(__dirname, "/assets/db/db.json")).toString());
+	var db = JSON.parse(fs.readFileSync(path.join(__dirname, "/assets/db/db.min.json")).toString());
 	return db;
 }
 
@@ -132,7 +132,6 @@ function wire_event_handlers() {
 	});
 	
 	$("input:radio[name='settings_entry_mode']").change(function(e) {
-		console.log($(this).val());
 		store.set('settings.entry_mode', $(this).val());
 	});
 

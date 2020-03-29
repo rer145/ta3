@@ -3727,11 +3727,6 @@
                 "caption": "The epiphysis is only partially fused, so gravel is absent. (ID# 1841)"
               },
               {
-                "path": "assets/img/traits/CMEG-3a.jpg",
-                "title": "Absent",
-                "caption": "Left clavicle with a common shape variant (shallow concical divot) that often results in a corrugated texture. This texture is regular and the bone is smooth. It should not be mistaken for irregular bone growth added to the surface that is classified as \"gravel\". (ID# 1445)"
-              },
-              {
                 "path": "assets/img/traits/CMEG-11.jpg",
                 "title": "Not scorable",
                 "caption": "When a deep conical divot is present, the feature cannot be scored. (ID# 2476)"
@@ -3948,11 +3943,6 @@
                 "path": "assets/img/traits/CLM-5.jpg",
                 "title": "Present",
                 "caption": "Macropores are present within additional irregular bony growth. (ID# 2133)"
-              },
-              {
-                "path": "assets/img/traits/CLM-8.jpg",
-                "title": "Present",
-                "caption": "(ID# 2303)"
               },
               {
                 "path": "assets/img/traits/CLM-7.jpg",
@@ -4195,11 +4185,6 @@
                 "caption": "The epiphysis is only partially fused, so gravel is absent. (ID# 1841)"
               },
               {
-                "path": "assets/img/traits/CMEG-3b.jpg",
-                "title": "Absent",
-                "caption": "Right clavicle with a common shape variant (shallow concical divot) that often results in a corrugated texture. This texture is regular and the bone is smooth. It should not be mistaken for irregular bone growth added to the surface that is classified as \"gravel\". (ID# 1445)"
-              },
-              {
                 "path": "assets/img/traits/CMEG-11.jpg",
                 "title": "Not scorable",
                 "caption": "When a deep conical divot is present, the feature cannot be scored. (ID# 2476)"
@@ -4416,11 +4401,6 @@
                 "path": "assets/img/traits/CLM-5.jpg",
                 "title": "Present",
                 "caption": "Macropores are present within additional irregular bony growth. (ID# 2133)"
-              },
-              {
-                "path": "assets/img/traits/CLM-8.jpg",
-                "title": "Present",
-                "caption": "(ID# 2303)"
               },
               {
                 "path": "assets/img/traits/CLM-7.jpg",
