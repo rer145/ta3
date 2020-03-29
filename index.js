@@ -216,7 +216,7 @@ function prep_files_and_settings() {
 	let searchText = "### Setting TA3 .libPaths() ###";
 
 	fs.readFile(RProfileFile, function(err, data) {
-		if (err) console.err(err);
+		if (err) console.error(err);
 		
 		if (!data.includes(searchText)) {
 			let toAppend = "\n" + searchText + "\n.libPaths(c('" + userPackagesPath.replace(/\\/g, "/") + "'))\n";
