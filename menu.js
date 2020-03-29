@@ -181,6 +181,13 @@ const debugSubmenu = [
 		},
 		accelerator: 'CmdOrCtrl+Shift+R'
 	},
+	{
+		label: 'Developer Tools',
+		click() {
+			win.getFocusedWindow().toggleDevTools()
+		},
+		accelerator: 'CmdOrCtrl+Shift+I'
+	},
 	{ type: 'separator' },
 	{
 		label: 'Show App Data',
