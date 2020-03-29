@@ -1028,6 +1028,7 @@ function generate_csv_file() {
 
 function run_analysis() {
 	//TODO: disable buttons and tab switching while running?
+	//TODO: remove any existing output files before running
 
 	//var app_working_dir = __dirname.replace(/\\/g, "\\\\");
 	var temp_dir = store.get('user.analysis_path');
@@ -1050,6 +1051,7 @@ function run_analysis() {
 		loadingDiv.show();
 		
 		var parameters = [
+			store.get("app.rscript_path"),
 			path.join(scripts_dir, "ta3.R"), 
 			temp_dir,
 			scripts_dir,
@@ -1078,18 +1080,14 @@ function run_analysis() {
 				.html(debugStatusHtml)
 		).show();
 
-		//clean_temp_files();
 
-		var options = {
-			name: appName
-		};
-		var cmd = '"' + store.get('settings.rscript_path') + '"';
-		$.each(parameters, function(i,v) {
-			cmd = cmd + ' "' + v + '"';
-		});
-
-		exec.execFile(store.get("app.rscript_path"), parameters, 
+		// calling via a batch file
+		let batch_file = path.join(store.get("app.resources_path"), "analyze.bat");
+		exec.exec(
+			batch_file, 
+			parameters, 
 			function(error, stdout, stderr) {
+				console.error(error);
 				var resultError = $("<div></div>");
 				resultError.addClass("alert alert-danger")
 					.attr("role", "alert")
@@ -1099,6 +1097,7 @@ function run_analysis() {
 				return;
 			},
 			function(stdout, stderr) {
+				console.log(stdout);
 				//display output text in Results tab
 				var outputDiv = $("#result-output");
 				var code = $("<pre></pre>");
@@ -1122,25 +1121,27 @@ function run_analysis() {
 				$('#main-tabs a[href="#charts"]').show();
 			});
 
-
-
-
-		// sudo.exec(cmd, options, 
+		//RScript.exe "D:\\work\\ousley\\nij-milner\\ta3\\build\\scripts\\ta3.R" "C:\\Users\\ronri\\TA3\\analysis" "D:\\work\\ousley\\nij-milner\\ta3\\build\\scripts" "C:\\Users\\ronri\\TA3\\packages" "0.7.0"
+		
+		// call RScript.exe directly
+		// exec.execCmd(store.get("app.rscript_path"), parameters, 
 		// 	function(error, stdout, stderr) {
-		// 		if (error) {
-		// 			var resultError = $("<div></div>");
-		// 			resultError.addClass("alert alert-danger")
-		// 				.attr("role", "alert")
-		// 				.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
-		// 			resultStatus.empty().append(resultError);
-		// 			loadingDiv.hide();
-		// 			return;
-		// 		}
-
+		// 		console.error(error);
+		// 		var resultError = $("<div></div>");
+		// 		resultError.addClass("alert alert-danger")
+		// 			.attr("role", "alert")
+		// 			.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
+		// 		resultStatus.empty().append(resultError);
+		// 		loadingDiv.hide();
+		// 		return;
+		// 	},
+		// 	function(stdout, stderr) {
+		// 		console.log(stdout);
 		// 		//display output text in Results tab
 		// 		var outputDiv = $("#result-output");
 		// 		var code = $("<pre></pre>");
 		// 		//code.append(stdout.toString());
+
 		// 		var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
 		// 		code.append(results);
 		// 		outputDiv.append(code);
@@ -1157,8 +1158,7 @@ function run_analysis() {
 
 		// 		//show charts tab only when full analysis is completed
 		// 		$('#main-tabs a[href="#charts"]').show();
-		// 	}
-		// );
+		// 	});
 	} else {
 		var resultError = $("<div></div>");
 		resultError.addClass("alert alert-danger")

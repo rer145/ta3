@@ -1,31 +1,18 @@
-rm(list = ls())
-
-
 ############# Helper Functions #############
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 
 ############# Gathering of Arguments Passed In #############
 args = commandArgs(trailingOnly=TRUE)
-temp_dir<-trim(args[1])  # directory where input and output files will be
-scripts_dir<-trim(args[2])  # directory where R related files will be
-pkg_dir<-trim(args[3])  # directory where R install packages will be
-TA3ProgramVersion<-trim(args[4])  # version number of the application
+temp_dir<-trim("C:\\Users\\ronri\\TA3\\analysis")  # directory where input and output files will be
+scripts_dir<-trim("D:\\work\\ousley\\nij-milner\\ta3\\build\\scripts")  # directory where R related files will be
+pkg_dir<-trim("C:\\Users\\ronri\\TA3\\packages")  # directory where R install packages will be
+v<-trim("0.7.0")  # version number of the application
 
 
 ############# Update Environment #############
-#.libPaths(c(pkg_dir, .libPaths()))
-.libPaths(c(pkg_dir))
+.libPaths(c(pkg_dir, .libPaths()))
 setwd(scripts_dir)
-
-
-############# Development Options #############
-development <- FALSE
-if (development) { scripts_dir <- file.path("c:", "rthings") }
-if (development) { temp_dir <- file.path("c:", "rthings") }
-
-
-
 
 
 ############# Creating Local Variables for Saving/Usage #############
@@ -42,15 +29,14 @@ output_image1<-file.path(temp_dir, "output1.png")
 
 
 
-############# List of Required Packages #############
-require("gtools")
-require("MASS") 
-require("foreach")
-require("iterators")
-require("doParallel")
-require("randomGLM")
-require("glmnet")
-require("msir")
+
+############# Import Required Packages #############
+library("gtools")
+library("MASS") 
+library("foreach")
+library("iterators")
+library("doParallel")
+library("glmnet")
 
 
 
@@ -62,42 +48,8 @@ require("msir")
 
 
 
-############# TA3 Analysis (Stephen D. Ousley) #############
+############# TA3 Analysis #############
 
-
-   
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ #
-##################  copy below to %APPDATA% ###############
-
-###############################################################################
-######################### Start of R Processing ###############################
-#
-#         0.45 added binary vs. raw data 
-#         0.44 - fixed plots and sped up calculations
-#         0.43 - fixed development colons; smarter output; 
-#         0.42 - fixed x y
-#
-###############################################################################
-###############################################################################
-
-# NEW / MODIFIED BELOW
-# R code version
-      TA3RCodeVersion <- '0.45.0';
-
-# software version.  currently or soon 0.70 
-      #TA3ProgramVersion <- '0.70';
-
-
-# use binary or raw scores?
-UseBinaryScores <- TRUE;
-
-# set some vars to nothing so errors do not get repeated
-PredAge <- 0;
-AnalDat <- 0;
-TA3_Case_Scores <- 0;
-
-
-# read in reference data
 TA3BUM<-readRDS(rda_fileB)
 TA3OUM<-readRDS(rda_fileO)
 
@@ -108,7 +60,7 @@ TA3_Case_Scores <- readRDS(case_tall_file)
 TA3_Case_Scores$TraitDBName <- as.character(TA3_Case_Scores$TraitDBName)
 TA3_Case_Scores$TraitText <- as.character(TA3_Case_Scores$TraitText)
 
-# process trait scores file, has ALL scores including NAs
+# process trait scores file
 TA3_Input <- read.csv(input_file)
 
 # update values in case file (tall) from scores file (wide)
@@ -124,6 +76,7 @@ for (i in (1:nrow(TA3_Case_Scores) ) ) {
   }
   
 }
+
 
 # Remove NAs in case tabular data (but there may be no NAs, so cant just use !which)
 TA3_Case_Scores <- TA3_Case_Scores[which(complete.cases(TA3_Case_Scores$TraitScore)),]
@@ -273,23 +226,10 @@ if (OrdinalCols[1] > '') {
 ####### Extract Data; choice is for binary or ordinal, still uncertain in many cases  ###########################
 #### Extract binary data for now
 # get field names not blank (no NAs)
+NBF <- names(AnalCaseB)
 
-if (UseBinaryScores) # binary
-{ 
-  NBF <- names(AnalCaseB)   
-  #read from binary file 
-  AnalDat <- na.omit(TA3BUM[c('RandID','age',NBF)])
 
-  
-} else   # ordinal
-{
-  NBF <- names(AnalCase)   
-  #read from ordinal file 
-  AnalDat <- na.omit(TA3OUM[c('RandID','age',NBF)])
-  
-  
-}
-
+AnalDat <- na.omit(TA3BUM[c('RandID','age',NBF)])
 
 # pre-process data
 # separate RandIDs
@@ -335,21 +275,12 @@ AnalDat <- as.data.frame(AnalDat)
 
 ####################### Preprocessing Done ###################
 
-####### Start of R Statistical Analysis (example: randomGLM) ############
+require(randomGLM)
+require(msir)
 
-#require(randomGLM)
-#require(msir)
-#require(glmnet)
-# parallel
-#nThr <- detectCores()
+# TODO: figure out how to show progress bar and estimate time remaining
+RGLM <- randomGLM(AnalDat, agesnu, classify = F, nBags = 100)
 
-
-# TODO: can we show progress bar and estimate time remaining?
-# nFeaturesinBag 
-# nBags usually 100, but 20 or 30 should be just fine
-
-RGLM <- randomGLM(AnalDat, agesnu, classify = F, nBags = 100) #  , keepModels = T) (no need to keep models)
-#RGLM <- randomGLM(AnalDat, agesnu, classify = F, nBags = 100, keepModels = T, maxInteractionOrder = 2, nFeaturesInBag = 100)
 
 #, nThreads=nThr,
 #replace = TRUE,
@@ -364,48 +295,38 @@ RGLM <- randomGLM(AnalDat, agesnu, classify = F, nBags = 100) #  , keepModels = 
 
 # Calculates and plots a 1.96 * SD prediction band, that is,
 # a 95% prediction band
-DFP <- cbind(RGLM$predictedOOB, agesnu)
+DFP <- cbind(agesnu, RGLM$predictedOOB)
 DFP <- as.data.frame(DFP)
-names(DFP) <- c('PredAge','Age')
+names(DFP) <- c('Age','PredAge')
 
-# larger span now makes MUCH better (default = 0.67, Weisberg (2005):112 )
-lol <- loess.sd(DFP, nsigma = 1.96, span = 1)  
+l <- loess.sd(DFP[,2],DFP[,1], nsigma = 1.96)
 
-# predicted age
-if (UseBinaryScores)
-  { PredAge <- predict(RGLM,AnalCaseB, type='response')
-
-  }  else
-  { PredAge <- predict(RGLM,AnalCase, type='response')
-}
-
-
-# produce basic output: MSE
-MeanStdError <- sqrt(mean((DFP$PredAge - DFP$Age)^2))
-
-
-# get prediction intervals for this individual 
-ADindex <- which.min(abs(lol$x  - PredAge))
-LB <- lol$lower[ADindex]
-UB <- lol$upper[ADindex]
-
-
-# Save plot to file (enhanced plot)  IF APP RUNNING
-if (!development) { png(filename=output_image1, width = 1400, height = 1200, res = 300, pointsize = 7)   }
+# Save plot to file (enhanced plot)
+png(filename=output_image1, width = 1400, height = 1200, res = 300, pointsize = 7) # in temp dir> 
 
 # plot OOB estimated age and 95% CI for OOB individuals
 plot(DFP$PredAge, DFP$Age, ylim = c(15,110), xlim = c(15,110), , pch = 17, cex = 0.7, col = 'blue',
      xlab = 'Predicted Age', ylab = 'Age', main = 'TA3 Age Estimation (Random GLM) 95% OOB PI')
 
-lines(lol$x, lol$y, lw = 3, lty=3, col= 'purple')
-lines(lol$x, lol$upper, lty=2, lw = 1, col= 'purple')
-lines(lol$x, lol$lower, lty=2, lw = 1, col= 'purple')
+lines(l$x, l$y, lw = 3, lty=3, col= 'purple')
+lines(l$x, l$upper, lty=2, lw = 1, col= 'purple')
+lines(l$x, l$lower, lty=2, lw = 1, col= 'purple')
 # line of perfect agreement
 abline(0,1, lw = 1)
 
-if (!development) {  dev.off()  }
+dev.off()
 
 
+# produce basic output
+MeanStdError <- sqrt(mean((agesnu - predict(RGLM,AnalDat, type='response'))^2))
+
+# predicted age
+PredAge <- predict(RGLM,AnalCaseB, type='response')
+
+# get prediction intervals for this individual 
+ADindex <- which.min(abs(l$x  - PredAge))
+LB <- l$lower[ADindex]
+UB <- l$upper[ADindex]
 
 #print(paste('The estimated age at death is', round(PredAge), 'years and the Standard Error is', round(MeanStdError,1),'\n', 'using a sample size of',nrow(AnalDat)))
 
@@ -434,29 +355,16 @@ cat(
   '\n', '\n', sep = ''
 );
 
-if (UseBinaryScores) {scorestr <- 'Using binary scores from'} else {scorestr <- 'Using raw scores from'};
-
-
-############# End of TA3 Analysis #############
-
-
-
-
-
-
-
-############# Save output to Application #############
-
 
 # write results to a file for reading
+v_line<-paste('                   v', v, sep='')
 write(
   paste(
     '---------------------------------------------',
     '             TA3 Age Estimation',
-    '             Program Version', TA3ProgramVersion,
-    '             R Code Version', TA3RCodeVersion,
+    v_line,
     '---------------------------------------------',
-    scorestr,
+    'Using traits:',
     '---------------------------------',
     sep='\n'
   ), 
@@ -478,10 +386,7 @@ write(
     paste('Estimated age at death = ', round(PredAge,1), ' years', sep=''),
     paste('Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
     paste('Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
-    paste('  '),
     paste('Standard Error = ', round(MeanStdError,1), sep=''),
-    paste('Corr(Age and Pred Age) = ', round(cor(DFP$Age,DFP$PredAge),3), sep=''),
-  
     '---------------------------------------------',
     sep='\n'
   ),
@@ -492,4 +397,55 @@ write(
 
 
 
-if (development) {  read.delim(file.path(temp_dir, 'output.txt'))  }
+############# End of TA3 Analysis #############
+
+
+
+
+
+
+
+
+
+
+
+############# Output to Application #############
+
+# write results to a file for reading
+v_line<-paste('                   v', v, sep='')
+write(
+  paste(
+    '---------------------------------------------',
+    '             TA3 Age Estimation',
+    v_line,
+    '---------------------------------------------',
+    'Using traits:',
+    '---------------------------------',
+    sep='\n'
+  ), 
+  file=output_file,
+  append=FALSE,
+  sep=''
+)
+
+for (trait in TA3_Case_Scores$TraitText) {
+  write(trait, file=output_file, append=TRUE, sep='\n')
+}
+
+write(
+  paste(
+    '---------------------------------',
+    paste('Sample size = ', round(nrow(AnalDat)), sep=''),
+    '---------------------------------',
+    'Random GLM Analysis',
+    paste('Estimated age at death = ', round(PredAge,1), ' years', sep=''),
+    paste('Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
+    paste('Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
+    paste('Standard Error = ', round(MeanStdError,1), sep=''),
+    '---------------------------------------------',
+    sep='\n'
+  ),
+  file=output_file,
+  append=TRUE,
+  sep=''
+)

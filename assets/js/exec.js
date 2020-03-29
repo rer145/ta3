@@ -38,6 +38,28 @@ function exec(file, parameters, error_callback, result_callback) {
 	);
 }
 
+function execCmd(file, parameters, error_callback, result_callback) {
+	//this should do a UAC prompt
+	//let cmd = 'cmd.exe /c "' + file + '"';
+	let cmd = 'cmd.exe /c "' + file.replace(/\\/g, "\\\\") + '"';
+	$.each(parameters, function(i,v) {
+		cmd = cmd + ' "' + v.replace(/\\/g, "\\\\") + '"';
+	});
+
+	console.warn("Executing [" + cmd + "]");
+
+	cp.exec(
+		cmd,
+		parameters,
+		function (error, stdout, stderr) {
+			if (error)
+				error_callback(error, stdout, stderr);
+			else
+				result_callback(stdout, stderr);
+		}
+	);
+}
+
 function batch(file, parameters) {
 	let params = ['/c', file];
 	$.each(parameters, function(k,v) {
@@ -82,4 +104,4 @@ function execFile(file, parameters, error_callback, result_callback) {
 	);
 }
 
-module.exports = { sudo, exec, batch, execBat, execFile };
+module.exports = { sudo, exec, execCmd, batch, execBat, execFile };

@@ -35,9 +35,10 @@ if (is.na(dest_path)) {
 
 if (!is.na(dest_path)) {
   print(paste("Installing TO", dest_path))
-  print(paste("libPaths()", .libPaths()))
+  #print(paste("libPaths()", .libPaths()))
 
-  .libPaths(c(dest_path, .libPaths()))
+  #.libPaths(c(dest_path, .libPaths()))
+  .libPaths(c(dest_path))
   print(paste(".libPaths()", .libPaths()))
   
 	do.package.install("gtools", "2020-03-01")
