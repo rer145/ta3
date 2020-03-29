@@ -15,7 +15,7 @@ TA3ProgramVersion<-trim(args[4])  # version number of the application
 
 ############# Update Environment #############
 #.libPaths(c(pkg_dir, .libPaths()))
-#.libPaths(c(pkg_dir))
+.libPaths(c(pkg_dir))
 setwd(scripts_dir)
 
 

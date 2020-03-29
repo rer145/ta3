@@ -62,7 +62,7 @@ if (!is.na(dest_path)) {
   #print(paste("libPaths()", .libPaths()))
 
   #.libPaths(c(dest_path, .libPaths()))
-  #.libPaths(c(dest_path))
+  .libPaths(c(dest_path))
   print(paste(".libPaths()", .libPaths()))
 
   #do.package.update("MASS", "2020-03-01")
