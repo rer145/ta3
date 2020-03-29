@@ -183,6 +183,7 @@ function prep_files_and_settings() {
 	}
 
 	let RPortablePath = path.join(resourcesPath, "R-Portable", "bin", "RScript.exe");
+	let RProfileFile = path.join(resourcesPath, "R-Portable", "library", "base", "R", "Rprofile");
 	let RAnalysisPath = path.join(resourcesPath, "scripts");
 	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0) {
 		RAnalysisPath = cla.options.analysis;
@@ -195,6 +196,15 @@ function prep_files_and_settings() {
 			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
 			"bin", 
 			"RScript.exe");
+
+		RProfileFile = path.join(
+			resourcesPath, 
+			"R-Portable", 
+			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
+			"library", 
+			"base",
+			"R",
+			"Rprofile");
 	}
 
 	store.set("app", {
@@ -205,18 +215,13 @@ function prep_files_and_settings() {
 
 
 	// update and copy Rprofile with .libPath() info
-	let RProfileFile = path.join(
-		resourcesPath, 
-		"R-Portable", 
-		is.macos ? "R-Portable-Mac" : "R-Portable-Win",
-		"library", 
-		"base",
-		"R",
-		"Rprofile");
 	let searchText = "### Setting TA3 .libPaths() ###";
 
 	fs.readFile(RProfileFile, function(err, data) {
-		if (err) console.error(err);
+		if (err) {
+			console.error(err);
+			return;
+		}
 		
 		if (!data.includes(searchText)) {
 			let toAppend = "\n" + searchText + "\n.libPaths(c('" + userPackagesPath.replace(/\\/g, "/") + "'))\n";
