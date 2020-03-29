@@ -141,17 +141,17 @@ const analysisMenu = [
 	{
 		label: 'Use Basic Mode',
 		type: 'radio',
-		checked: store.get('config.entry_mode') == 'basic',
+		checked: store.get('settings.entry_mode') == 'basic',
 		click() {
-			store.set('config.entry_mode', 'basic');
+			store.set('settings.entry_mode', 'basic');
 		}
 	},
 	{
 		label: 'Use Advanced Mode (text)',
 		type: 'radio',
-		checked: store.get('config.entry_mode') == 'advanced',
+		checked: store.get('settings.entry_mode') == 'advanced',
 		click() {
-			store.set('config.entry_mode', 'advanced');
+			store.set('settings.entry_mode', 'advanced');
 		}
 	},
 	// {
@@ -405,7 +405,7 @@ const otherTemplate = [
 
 const template = process.platform === 'darwin' ? macosTemplate : otherTemplate;
 
-if (is.development || cla.options.debug) {
+if (is.development || cla.options.debug || store.get("settings.dev_mode")) {
 	template.push({
 		label: 'Debug',
 		submenu: debugSubmenu

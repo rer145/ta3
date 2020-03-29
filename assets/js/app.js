@@ -120,7 +120,6 @@ function wire_event_handlers() {
 	$('#settings-modal').on('show.bs.modal', function (e) {
 		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
 		populate_settings();
-		show_suggested_rscript_paths();
 	});
 
 	$("#rscript_file_input").change(function(e) {
@@ -1066,7 +1065,7 @@ function run_analysis() {
 		resultStatus.empty().append(resultPending);
 
 
-		var debugStatusHtml = "<strong>Executable: </strong>" + store.get('settings.rscript_path') + "<br /><strong>Parameters: </strong><br /><ul>";
+		var debugStatusHtml = "<strong>Executable: </strong>" + store.get('app.rscript_path') + "<br /><strong>Parameters: </strong><br /><ul>";
 
 		for (var i = 0; i < parameters.length; i++) {
 			debugStatusHtml += "<li>" + parameters[i] + "</li>";
@@ -1120,45 +1119,6 @@ function run_analysis() {
 				//show charts tab only when full analysis is completed
 				$('#main-tabs a[href="#charts"]').show();
 			});
-
-		//RScript.exe "D:\\work\\ousley\\nij-milner\\ta3\\build\\scripts\\ta3.R" "C:\\Users\\ronri\\TA3\\analysis" "D:\\work\\ousley\\nij-milner\\ta3\\build\\scripts" "C:\\Users\\ronri\\TA3\\packages" "0.7.0"
-		
-		// call RScript.exe directly
-		// exec.execCmd(store.get("app.rscript_path"), parameters, 
-		// 	function(error, stdout, stderr) {
-		// 		console.error(error);
-		// 		var resultError = $("<div></div>");
-		// 		resultError.addClass("alert alert-danger")
-		// 			.attr("role", "alert")
-		// 			.html("<p><strong>There was an error executing the analysis script:</strong></p><p>" + error + "</p>");
-		// 		resultStatus.empty().append(resultError);
-		// 		loadingDiv.hide();
-		// 		return;
-		// 	},
-		// 	function(stdout, stderr) {
-		// 		console.log(stdout);
-		// 		//display output text in Results tab
-		// 		var outputDiv = $("#result-output");
-		// 		var code = $("<pre></pre>");
-		// 		//code.append(stdout.toString());
-
-		// 		var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
-		// 		code.append(results);
-		// 		outputDiv.append(code);
-
-		// 		//display output images in Charts tab
-		// 		//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
-				
-		// 		show_output_image(path.join(temp_dir, "output1.png"), imageDiv);
-		// 		resultStatus.empty();
-		// 		//resultDebug.empty();
-				
-		// 		loadingDiv.hide();
-		// 		resultDebug.hide();
-
-		// 		//show charts tab only when full analysis is completed
-		// 		$('#main-tabs a[href="#charts"]').show();
-		// 	});
 	} else {
 		var resultError = $("<div></div>");
 		resultError.addClass("alert alert-danger")

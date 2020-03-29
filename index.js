@@ -136,10 +136,13 @@ function prep_files_and_settings() {
 
 	let entryMode = !store.has("settings.entry_mode") ? "basic" : store.get("settings.entry_mode");
 
+	let devMode = !store.has("settings.dev_mode") ? false : store.get("settings.dev_mode");
+
 	store.set("settings", {
 		"auto_check_for_updates": autoUpdates,
 		"first_run": firstRun,
-		"entry_mode": entryMode
+		"entry_mode": entryMode,
+		"dev_mode": devMode
 	});
 
 
@@ -198,6 +201,31 @@ function prep_files_and_settings() {
 		"resources_path": resourcesPath,
 		"rscript_path": RPortablePath,
 		"r_analysis_path": RAnalysisPath
+	});
+
+
+	// update and copy Rprofile with .libPath() info
+	let RProfileFile = path.join(
+		resourcesPath, 
+		"R-Portable", 
+		is.macos ? "R-Portable-Mac" : "R-Portable-Win",
+		"library", 
+		"base",
+		"R",
+		"Rprofile");
+	let searchText = "### Setting TA3 .libPaths() ###";
+
+	fs.readFile(RProfileFile, function(err, data) {
+		if (err) console.err(err);
+		
+		if (!data.includes(searchText)) {
+			let toAppend = "\n" + searchText + "\n.libPaths(c('" + userPackagesPath.replace(/\\/g, "/") + "'))\n";
+			
+			fs.appendFile(RProfileFile, toAppend, function(err) {
+				if (err) console.err(err);
+				//console.log("Rprofile settings updated");
+			});
+		}
 	});
 }
 

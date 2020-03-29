@@ -15,7 +15,7 @@ TA3ProgramVersion<-trim(args[4])  # version number of the application
 
 ############# Update Environment #############
 #.libPaths(c(pkg_dir, .libPaths()))
-.libPaths(c(pkg_dir))
+#.libPaths(c(pkg_dir))
 setwd(scripts_dir)
 
 
@@ -23,7 +23,6 @@ setwd(scripts_dir)
 development <- FALSE
 if (development) { scripts_dir <- file.path("c:", "rthings") }
 if (development) { temp_dir <- file.path("c:", "rthings") }
-
 
 
 
@@ -54,10 +53,10 @@ require("msir")
 
 
 
-
-
-
-
+############# Debugging Information #############
+sessionInfo()
+.libPaths()
+getwd()
 
 
 
@@ -406,33 +405,8 @@ abline(0,1, lw = 1)
 if (!development) {  dev.off()  }
 
 
-
 #print(paste('The estimated age at death is', round(PredAge), 'years and the Standard Error is', round(MeanStdError,1),'\n', 'using a sample size of',nrow(AnalDat)))
 
-# Nicely formatted output; need to output formatted names 
-cat(
-  cat(
-    '---------------------------------------------',
-    '             TA3 Age Estimation',
-    '---------------------------------------------',
-    'Using traits:',
-    '---------------------------------',
-    # NBF has the binary additions 0_12 etc.
-    # NBF, 
-    TA3_Case_Scores$TraitText,
-    '---------------------------------', sep = '\n'
-  ), 
-  'Sample size = ',  round(nrow(AnalDat)), '\n', 
-  '---------------------------------', '\n', 
-  '\n', 
-  'Random GLM Analysis', '\n', 
-  'Estimated age at death = ', round(PredAge,1), ' years ', '\n', 
-  'Estimated lower 95% bound = ', round(LB,1), ' years ', '\n', 
-  'Estimated upper 95% bound = ', round(UB,1), ' years ', '\n', 
-  'Standard Error = ', round(MeanStdError,1), '\n',
-  '---------------------------------------------', '\n',
-  '\n', '\n', sep = ''
-);
 
 if (UseBinaryScores) {scorestr <- 'Using binary scores from'} else {scorestr <- 'Using raw scores from'};
 
@@ -449,15 +423,16 @@ if (UseBinaryScores) {scorestr <- 'Using binary scores from'} else {scorestr <- 
 
 
 # write results to a file for reading
+progVersion<-paste('  Program Version ', TA3ProgramVersion, sep='')
+codeVersion<-paste('  R Code Version ', TA3RCodeVersion, sep='')
 write(
   paste(
     '---------------------------------------------',
-    '             TA3 Age Estimation',
-    '             Program Version', TA3ProgramVersion,
-    '             R Code Version', TA3RCodeVersion,
+    'TA3 Age Estimation',
+    progVersion,
+    codeVersion,
     '---------------------------------------------',
-    scorestr,
-    '---------------------------------',
+    ' ',
     sep='\n'
   ), 
   file=output_file,
@@ -465,24 +440,32 @@ write(
   sep=''
 )
 
+
+write(paste(
+    scorestr,
+    '---------------------------------',
+    sep='\n'),
+    file=output_file,
+    append=TRUE,
+    sep=''
+)
+
 for (trait in TA3_Case_Scores$TraitText) {
-  write(trait, file=output_file, append=TRUE, sep='\n')
+  write(paste('  ', trait, sep=''), file=output_file, append=TRUE, sep='\n')
 }
 
 write(
   paste(
-    '---------------------------------',
+    ' ',
     paste('Sample size = ', round(nrow(AnalDat)), sep=''),
-    '---------------------------------',
+    ' ',
     'Random GLM Analysis',
-    paste('Estimated age at death = ', round(PredAge,1), ' years', sep=''),
-    paste('Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
-    paste('Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
+    paste('  Estimated age at death = ', round(PredAge,1), ' years', sep=''),
+    paste('  Estimated lower 95% bound = ', round(LB,1), ' years', sep=''),
+    paste('  Estimated upper 95% bound = ', round(UB,1), ' years', sep=''),
     paste('  '),
-    paste('Standard Error = ', round(MeanStdError,1), sep=''),
-    paste('Corr(Age and Pred Age) = ', round(cor(DFP$Age,DFP$PredAge),3), sep=''),
-  
-    '---------------------------------------------',
+    paste('  Standard Error = ', round(MeanStdError,1), sep=''),
+    paste('  Corr(Age and Pred Age) = ', round(cor(DFP$Age,DFP$PredAge),3), sep=''),
     sep='\n'
   ),
   file=output_file,

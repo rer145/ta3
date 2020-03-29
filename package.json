@@ -79,6 +79,10 @@
 				{
 					"from": "./build/setup",
 					"to": "setup"
+				},
+				{
+					"from": "./build/analyze.bat",
+					"to": "analyze.bat"
 				}
 			]
 		},
