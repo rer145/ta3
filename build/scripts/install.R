@@ -36,6 +36,7 @@ do.package.install<-function(pkg_name, build_date) {
           pkg_name, 
           repos=paste("https://mran.microsoft.com/snapshot/", build_date, sep=""),
           lib=dest_path,
+          dependencies=TRUE,
           verbose=FALSE,
           quiet=TRUE)
         print("    Package installed successfully!")

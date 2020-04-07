@@ -124,6 +124,11 @@ app.on('activate', async () => {
 
 
 function prep_files_and_settings() {
+	// console.log("process args");
+	// console.log(process.argv);
+	// console.log("cla");
+	// console.log(cla.options);
+
 	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
 	store.set("version", appVersion);
 
