@@ -19,7 +19,12 @@ const cla = require('./assets/js/cla');
 
 unhandled();
 debug();
-contextMenu();
+contextMenu({
+	showCopyImage: true,
+	showCopyImageAddress: false,
+	showSaveImage: false,
+	showSaveImageAs: true
+});
 
 // Note: Must match `build.appId` in package.json
 app.setAppUserModelId('edu.psu.TA3');

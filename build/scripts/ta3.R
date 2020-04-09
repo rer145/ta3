@@ -48,7 +48,7 @@ require("foreach")
 require("iterators")
 require("doParallel")
 require("randomGLM")
-require("glmnet")
+#require("glmnet")
 require("msir")
 
 

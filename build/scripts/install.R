@@ -74,7 +74,7 @@ if (!is.na(dest_path)) {
 	do.package.install("iterators", "2020-03-01")
 	do.package.install("doParallel", "2020-03-01")
 	do.package.install("randomGLM", "2020-03-01")
-	do.package.install("glmnet", "2020-03-01")
+	#do.package.install("glmnet", "2020-03-01")
 	do.package.install("msir", "2020-03-01")
 }
 

@@ -1,0 +1,4 @@
+Latest Windows installer: https://tinyurl.com/ta3-setup
+Trait Images: https://tinyurl.com/ta3-images
+R-Portable: https://github.com/rer145/R-Portable
+Analysis Files: https://tinyurl.com/ta3-analysis
