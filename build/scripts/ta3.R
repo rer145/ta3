@@ -54,9 +54,9 @@ require("msir")
 
 
 ############# Debugging Information #############
-sessionInfo()
-.libPaths()
-getwd()
+#sessionInfo()
+#.libPaths()
+#getwd()
 
 
 

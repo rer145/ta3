@@ -68,14 +68,14 @@ if (!is.na(dest_path)) {
 
   #do.package.update("MASS", "2020-03-01")
   
-	do.package.install("gtools", "2020-03-01")
-	do.package.install("MAAS", "2020-03-01")
-	do.package.install("foreach", "2020-03-01")
-	do.package.install("iterators", "2020-03-01")
-	do.package.install("doParallel", "2020-03-01")
-	do.package.install("randomGLM", "2020-03-01")
-	#do.package.install("glmnet", "2020-03-01")
-	do.package.install("msir", "2020-03-01")
+	do.package.install("gtools", "2020-04-03")
+	do.package.install("MAAS", "2020-04-03")
+	do.package.install("foreach", "2020-04-03")
+	do.package.install("iterators", "2020-04-03")
+	do.package.install("doParallel", "2020-04-03")
+	do.package.install("randomGLM", "2020-04-03")
+	#do.package.install("glmnet", "2020-04-01")
+	do.package.install("msir", "2020-04-03")
 }
 
 print("Finished Install of R Packages")

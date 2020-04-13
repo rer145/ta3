@@ -1047,7 +1047,34 @@ function run_analysis() {
 
 	if (data_file.length > 0) {
 		loadingDiv.show();
-		
+		let batch_file = path.join(store.get("app.resources_path"), "analyze.bat");
+
+
+		// run debugging session information script
+		try {
+			exec.exec(
+				batch_file, 
+				[
+					store.get("app.rscript_path"),
+					path.join(scripts_dir, "session.R"), 
+					temp_dir,
+					scripts_dir,
+					pkg_dir,
+					store.get("version")
+				], 
+				function(error, stdout, stderr) {
+					console.error(error);
+					console.error(stdout);
+					console.error(stderr);
+					return;
+				},
+				function(stdout, stderr) {
+					console.log(stdout);
+					console.log(stderr);
+				}
+			);
+		} catch(ex) { console.error(ex); }
+
 		var parameters = [
 			store.get("app.rscript_path"),
 			path.join(scripts_dir, "ta3.R"), 
@@ -1079,8 +1106,6 @@ function run_analysis() {
 		).show();
 
 
-		// calling via a batch file
-		let batch_file = path.join(store.get("app.resources_path"), "analyze.bat");
 		exec.exec(
 			batch_file, 
 			parameters, 
