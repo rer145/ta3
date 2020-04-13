@@ -16,7 +16,7 @@
 		"start-analysis": "electron . -analysis=\"d:\\Test Path Windows\\TA 3\\scripts\"",
 		
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder --macos",
+		"dist": "electron-builder --macos --windows -p always",
 		"dist-win": "electron-builder --windows",
 		"dist-mac": "electron-builder --macos",
 
@@ -52,7 +52,7 @@
 	"build": {
 		"appId": "edu.psu.TA3",
 		"productName": "Transition Analysis 3",
-		"copyright": "Copyright 2020 ${author}",
+		"copyright": "Copyright ${author}",
 		"directories": {
 			"buildResources": "build",
 			"output": "dist"

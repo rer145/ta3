@@ -16,8 +16,18 @@ const Store = require('electron-store');
 const store = new Store();
 
 const cla = require('./assets/js/cla');
+const uuid = require('uuid/v4');
 
-unhandled();
+unhandled({
+	reportButton: error => {
+		openNewGitHubIssue({
+			user: 'rer145',
+			repo: 'mamd-analytical',
+			body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
+		});
+	}
+});
+
 debug();
 contextMenu({
 	showCopyImage: true,
@@ -135,7 +145,10 @@ function prep_files_and_settings() {
 	// console.log(cla.options);
 
 	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
-	store.set("version", appVersion);
+	//store.set("version", appVersion);
+
+	let uid = store.get("uuid", uuid());
+	let analytics = store.get("settings.analytics", true);
 
 	let firstRun = !store.has("settings.first_run") ? true : store.get("settings.first_run");
 	if (cla.options.forceInstall)
@@ -143,17 +156,15 @@ function prep_files_and_settings() {
 
 	//let devMode = store.has("settings.dev_mode");
 	let autoUpdates = !store.has("settings.auto_check_for_updates") ? true : store.get("settings.auto_check_for_updates");
-
 	let entryMode = !store.has("settings.entry_mode") ? "basic" : store.get("settings.entry_mode");
-
 	let devMode = !store.has("settings.dev_mode") ? false : store.get("settings.dev_mode");
 
-	store.set("settings", {
-		"auto_check_for_updates": autoUpdates,
-		"first_run": firstRun,
-		"entry_mode": entryMode,
-		"dev_mode": devMode
-	});
+	// store.set("settings", {
+	// 	"auto_check_for_updates": autoUpdates,
+	// 	"first_run": firstRun,
+	// 	"entry_mode": entryMode,
+	// 	"dev_mode": devMode
+	// });
 
 
 	// user paths
@@ -165,20 +176,15 @@ function prep_files_and_settings() {
 	make_directory(userPackagesPath);
 	make_directory(userAnalysisPath);
 
-	store.set("user", {
-		"userdata_path": userDataPath,
-		"packages_path": userPackagesPath,
-		"analysis_path": userAnalysisPath
-	});
+	// store.set("user", {
+	// 	"userdata_path": userDataPath,
+	// 	"packages_path": userPackagesPath,
+	// 	"analysis_path": userAnalysisPath
+	// });
 
 	// check if packages is empty, if so, consider it the first_run
-	fs.readdir(userPackagesPath, function(err, files) {
-		if (err)
-			console.error(err);
-		else
-			if (!files.length)
-				store.set("settings.first_run", true);
-	});
+	if (fs.readdirSync(userPackagesPath).length == 0)
+		firstRun = true;
 
 
 
@@ -217,11 +223,58 @@ function prep_files_and_settings() {
 			"Rprofile");
 	}
 
-	store.set("app", {
-		"resources_path": resourcesPath,
-		"rscript_path": RPortablePath,
-		"r_analysis_path": RAnalysisPath
-	});
+	// mac only - R-Portable will be copied to user home directory
+	//  unable to execute within asar package
+	if (is.macos) {
+		let RPortable = path.join(userDataPath, "R-Portable");
+		make_directory(RPortable);
+
+		if (fs.readdirSync(RPortable).length == 0)
+			firstRun = true;
+
+		RPortablePath = path.join(
+			userDataPath,
+			"R-Portable",
+			"bin",
+			"RScript"
+		);
+	}
+
+
+	// // windows only - copy over installation batch files
+	// if (is.windows) {
+
+	// }
+
+	// store.set("app", {
+	// 	"resources_path": resourcesPath,
+	// 	"rscript_path": RPortablePath,
+	// 	"r_analysis_path": RAnalysisPath
+	// });
+
+
+	let settings = {
+		"version": appVersion,
+		"uuid": uid,
+		"settings": {
+			"analytics": analytics,
+			"auto_check_for_updates": autoUpdates,
+			"first_run": firstRun,
+			"entry_mode": entryMode,
+			"dev_mode": devMode
+		},
+		"user": {
+			"userdata_path": userDataPath,
+			"packages_path": userPackagesPath,
+			"analysis_path": userAnalysisPath
+		},
+		"app": {
+			"resources_path": resourcesPath,
+			"rscript_path": RPortablePath,
+			"r_analysis_path": RAnalysisPath
+		}
+	};
+	store.set(settings);
 
 
 	// update and copy Rprofile with .libPath() info

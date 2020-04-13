@@ -1,7 +1,23 @@
 'use strict';
 
-var sp = require('sudo-prompt');
-var cp = require('child_process');
+const sp = require('sudo-prompt');
+const cp = require('child_process');
+const fs = require('fs');
+
+function chmod(path, mode, error_callback, result_callback) {
+	// fs.access(path, fs.constants.X_OK, (err) => {
+	// 	if (err) {
+	// 		error_callback(err);
+	// 	} else {
+			fs.chmod(path, mode, (err2) => {
+				if (err2)
+					error_callback(err2);
+				else
+					result_callback();
+			});
+	// 	}
+	// });
+}
 
 function sudo(command, options, error_callback, result_callback) {
 	sp.exec(
@@ -16,35 +32,19 @@ function sudo(command, options, error_callback, result_callback) {
 	);
 }
 
-function exec(file, parameters, error_callback, result_callback) {
+function exec(file, parameters, error_callback, result_callback, unquoteFile) {
 	//this should do a UAC prompt
 	//let cmd = 'cmd.exe /c "' + file + '"';
 	let cmd = '"' + file + '"';
+	if (unquoteFile != undefined && unquoteFile) {
+		cmd = file;
+	}
+
 	$.each(parameters, function(i,v) {
 		cmd = cmd + ' "' + v + '"';
 	});
 
-	console.warn("Executing [" + cmd + "]");
-
-	cp.exec(
-		cmd,
-		parameters,
-		function (error, stdout, stderr) {
-			if (error)
-				error_callback(error, stdout, stderr);
-			else
-				result_callback(stdout, stderr);
-		}
-	);
-}
-
-function execCmd(file, parameters, error_callback, result_callback) {
-	//this should do a UAC prompt
-	//let cmd = 'cmd.exe /c "' + file + '"';
-	let cmd = 'cmd.exe /c "' + file.replace(/\\/g, "\\\\") + '"';
-	$.each(parameters, function(i,v) {
-		cmd = cmd + ' "' + v.replace(/\\/g, "\\\\") + '"';
-	});
+	
 
 	console.warn("Executing [" + cmd + "]");
 
@@ -104,4 +104,17 @@ function execFile(file, parameters, error_callback, result_callback) {
 	);
 }
 
-module.exports = { sudo, exec, execCmd, batch, execBat, execFile };
+function spawn(file, parameters, error_callback, result_callback) {
+	// cp.spawn(
+	// 	file, 
+	// 	parameters, 
+	// 	function (error, stdout, stderr) {
+	// 		if (error)
+	// 			error_callback(error, stdout, stderr);
+	// 		else
+	// 			result_callback(stdout, stderr);
+	// 	}
+	// );
+}
+
+module.exports = { chmod, sudo, exec, batch, execBat, execFile, spawn };

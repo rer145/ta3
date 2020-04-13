@@ -17,7 +17,7 @@ let scripts_path = path.join(store.get("app.resources_path"), "setup");
 function check_installation(forceInstall) {
 	reset();
 
-	if (is.windows) {
+	if (is.windows || is.macos) {
 		if (forceInstall)
 			return false;
 		else
@@ -36,7 +36,7 @@ function start() {
 	reset();
 	
 	return new Promise(function(resolve, reject) {
-		if (is.windows) {
+		if (is.windows || is.macos) {
 			setTimeout(function() {
 				install_rportable()
 					.then(function(response) {
@@ -52,9 +52,6 @@ function start() {
 					
 			});
 		}
-		else if (is.macos) {
-			resolve("No installation configured for MacOS");
-		}
 		else {
 			resolve("Operating System not compatible.");
 		}
@@ -67,20 +64,33 @@ function install_rportable() {
 		console.log("Installing R-Portable:", batch_file);
 		start_progress("setup-r");
 
-		exec.exec(
-			batch_file, 
-			[], 
-			function(error, stdout, stderr) {
-				console.error(error);
-				end_progress("setup-r", -1, stderr);
-				reject(stderr);
-			}, 
-			function(stdout, stderr) {
-				console.log(stdout);
-				end_progress("setup-r", 0, "R-Portable (v3.6.2) installation was successful.");
-				resolve();
-			});
+		if (is.macos) {
+			let source_root = path.join(store.get("app.resources_path"), "R-Portable");
+			let dest_root = path.join(store.get("user.userdata_path"), "R-Portable");
 
+			if (is.development) {
+				source_root = path.join(store.get("app.resources_path"), "R-Portable", "R-Portable-Mac");
+			}
+
+			batch_file = 'cp -a "' + source_root + '/." "' + dest_root + '/"';
+		}
+
+		if (is.windows || is.macos) {
+			console.log("Executing:", batch_file);
+			exec.exec(
+				batch_file, 
+				[], 
+				function(error, stdout, stderr) {
+					console.error(error);
+					end_progress("setup-r", -1, stderr);
+					reject(stderr);
+				}, 
+				function(stdout, stderr) {
+					console.log(stdout);
+					end_progress("setup-r", 0, "R-Portable (v3.6.2) installation was successful.");
+					resolve();
+				});
+		}
 	});
 }
 
@@ -96,19 +106,40 @@ function install_packages() {
 			store.get("app.r_analysis_path")
 		];
 
-		exec.exec(
-			batch_file, 
-			params, 
-			function(error, stdout, stderr) {
-				console.error(error);
-				end_progress("setup-packages", -1, stderr);
-				reject(stderr);
-			}, 
-			function(stdout, stderr) {
-				console.log(stdout);
-				end_progress("setup-packages", 0, "R package installation was successful.");
-				resolve();
-			});
+		if (is.macos) {
+			exec.chmod(
+				store.get("app.rscript_path"), 
+				0o777, 
+				function(error) {
+					console.error(error);
+					end_progress("setup-packages", -1, error);
+					reject(error);
+				},
+				function() {
+					console.log("Set execution permissions on RScript successfully.");
+				}
+			);
+
+			batch_file = '"' + store.get("app.rscript_path") + '" "' + path.join(store.get("app.r_analysis_path"), "install.R") + '" "' + store.get("user.packages_path") + '"';
+			params = [];
+		}
+
+		if (is.windows || is.macos) {
+			console.log("Executing:", batch_file);
+			exec.exec(
+				batch_file, 
+				params, 
+				function(error, stdout, stderr) {
+					console.error(error);
+					end_progress("setup-packages", -1, stderr);
+					reject(stderr);
+				}, 
+				function(stdout, stderr) {
+					console.log(stdout);
+					end_progress("setup-packages", 0, "R package installation was successful.");
+					resolve();
+				});
+		}
 	});
 }
 
