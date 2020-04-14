@@ -96,12 +96,12 @@ AnalDat <- 0;
 TA3_Case_Scores <- 0;
 
 
-# read in reference data
-TA3BUM<-readRDS(rda_fileB)
-TA3OUM<-readRDS(rda_fileO)
+# read in reference data files if not already present
+if (!(exists('TA3BUM'))) {TA3BUM<-readRDS(rda_fileB)}
+if (!(exists('TA3OUM'))) {TA3OUM<-readRDS(rda_fileO)}
+if (!(exists('TA3_Case_Scores'))) {TA3_Case_Scores<-readRDS(case_tall_file)}
 
-# read in case template; all NA except for first one, will be changed.
-TA3_Case_Scores <- readRDS(case_tall_file)
+
 
 # convert factors to character format in case scores 
 TA3_Case_Scores$TraitDBName <- as.character(TA3_Case_Scores$TraitDBName)
