@@ -1047,15 +1047,15 @@ function run_analysis() {
 
 	if (data_file.length > 0) {
 		loadingDiv.show();
-		let batch_file = path.join(store.get("app.resources_path"), "analyze.bat");
-
+		//let batch_file = path.join(store.get("app.resources_path"), "analyze.bat");
+		let batch_file = store.get("app.rscript_path");
 
 		// run debugging session information script
 		try {
-			exec.exec(
+			exec.execFile(
 				batch_file, 
 				[
-					store.get("app.rscript_path"),
+					//store.get("app.rscript_path"),
 					path.join(scripts_dir, "session.R"), 
 					temp_dir,
 					scripts_dir,
@@ -1076,7 +1076,7 @@ function run_analysis() {
 		} catch(ex) { console.error(ex); }
 
 		var parameters = [
-			store.get("app.rscript_path"),
+			//store.get("app.rscript_path"),
 			path.join(scripts_dir, "ta3.R"), 
 			temp_dir,
 			scripts_dir,
@@ -1106,7 +1106,7 @@ function run_analysis() {
 		).show();
 
 
-		exec.exec(
+		exec.execFile(
 			batch_file, 
 			parameters, 
 			function(error, stdout, stderr) {
@@ -1184,7 +1184,7 @@ function new_case() {
 
 function open_case() {
 	dialog.showOpenDialog({
-		properties: ['openfile'],
+		properties: ['openFile'],
 		title: 'Open TA3 Case File',
 		buttonLabel: 'Open TA3 File',
 		filters: [

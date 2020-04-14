@@ -89,7 +89,8 @@ function install_rportable() {
 					console.log(stdout);
 					end_progress("setup-r", 0, "R-Portable (v3.6.2) installation was successful.");
 					resolve();
-				});
+				},
+				is.macos);
 		}
 	});
 }
@@ -138,7 +139,8 @@ function install_packages() {
 					console.log(stdout);
 					end_progress("setup-packages", 0, "R package installation was successful.");
 					resolve();
-				});
+				},
+				is.macos);
 		}
 	});
 }
