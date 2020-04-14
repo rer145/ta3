@@ -16,7 +16,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 const cla = require('./assets/js/cla');
-const uuid = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 
 unhandled({
 	reportButton: error => {
@@ -147,7 +147,7 @@ function prep_files_and_settings() {
 	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
 	//store.set("version", appVersion);
 
-	let uid = store.get("uuid", uuid());
+	let uid = store.get("uuid", uuidv4());
 	let analytics = store.get("settings.analytics", true);
 
 	let firstRun = !store.has("settings.first_run") ? true : store.get("settings.first_run");
