@@ -14,12 +14,10 @@
 		"test": "npm run lint",
 		"start": "electron .",
 		"start-analysis": "electron . -analysis=\"d:\\Test Path Windows\\TA 3\\scripts\"",
-		
 		"pack": "electron-builder --dir",
 		"dist": "electron-builder --macos --windows -p always",
 		"dist-win": "electron-builder --windows",
 		"dist-mac": "electron-builder --macos",
-
 		"travis-pack": "electron-builder --dir",
 		"travis-dist": "electron-builder --macos --windows -p always",
 		"travis-dist-win": "electron-builder --windows -p always",
@@ -43,7 +41,8 @@
 		"os": "^0.1.1",
 		"popper.js": "^1.16.0",
 		"sudo-prompt": "^9.0.0",
-		"tether": "^1.4.7"
+		"tether": "^1.4.7",
+		"uuid": "^7.0.3"
 	},
 	"devDependencies": {
 		"electron": "^6.0.7",
