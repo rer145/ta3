@@ -99,8 +99,8 @@ TA3_Case_Scores <- 0;
 # read in reference data files if not already present
 if (!(exists('TA3BUM'))) {TA3BUM<-readRDS(rda_fileB)}
 if (!(exists('TA3OUM'))) {TA3OUM<-readRDS(rda_fileO)}
-if (!(exists('TA3_Case_Scores'))) {TA3_Case_Scores<-readRDS(case_tall_file)}
 
+TA3_Case_Scores<-readRDS(case_tall_file)
 
 
 # convert factors to character format in case scores 
