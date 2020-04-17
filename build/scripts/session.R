@@ -11,6 +11,7 @@ temp_dir<-trim(args[1])  # directory where input and output files will be
 scripts_dir<-trim(args[2])  # directory where R related files will be
 pkg_dir<-trim(args[3])  # directory where R install packages will be
 TA3ProgramVersion<-trim(args[4])  # version number of the application
+TA3RCodeVersion<-trim(args[5])  # version number of the R code
 
 
 ############# Update Environment #############

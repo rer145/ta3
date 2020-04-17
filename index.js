@@ -1,4 +1,5 @@
 'use strict';
+const os = require('os');
 const path = require('path');
 const {app, BrowserWindow, Menu, ipcMain} = require('electron');
 /// const {autoUpdater} = require('electron-updater');
@@ -144,8 +145,24 @@ function prep_files_and_settings() {
 	// console.log("cla");
 	// console.log(cla.options);
 
-	const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
+	//const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
+	const appVersion = app.getVersion();
 	//store.set("version", appVersion);
+
+	const systemInfo = {
+		"node_version": process.versions['node'],
+		"electron_version": process.versions['electron'],
+		"chrome_version": process.versions['chrome'].replace(/\.\d+$/, ''),
+		"platform": process.platform,
+		"arch": process.arch,
+		"platform_release": os.release(),
+		"locale": app.getLocale(),
+		"locale_country_code": app.getLocaleCountryCode(),
+		"r_portable_version": '3.6.2',
+		"r_code_version": '0.4.5',
+		"db_version": '1.0.0'
+	};
+
 
 	let uid = store.get("uuid", uuidv4());
 	let analytics = store.get("settings.analytics", true);
@@ -263,6 +280,7 @@ function prep_files_and_settings() {
 			"entry_mode": entryMode,
 			"dev_mode": devMode
 		},
+		"system": systemInfo,
 		"user": {
 			"userdata_path": userDataPath,
 			"packages_path": userPackagesPath,

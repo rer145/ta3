@@ -1060,7 +1060,8 @@ function run_analysis() {
 					temp_dir,
 					scripts_dir,
 					pkg_dir,
-					store.get("version")
+					store.get("version"),
+					store.get("system.r_code_version")
 				], 
 				function(error, stdout, stderr) {
 					console.error(error);
@@ -1081,7 +1082,8 @@ function run_analysis() {
 			temp_dir,
 			scripts_dir,
 			pkg_dir,
-			store.get("version")
+			store.get("version"),
+			store.get("system.r_code_version")
 		];
 
 		var resultPending = $("<div></div>");

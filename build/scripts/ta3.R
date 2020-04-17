@@ -11,6 +11,7 @@ temp_dir<-trim(args[1])  # directory where input and output files will be
 scripts_dir<-trim(args[2])  # directory where R related files will be
 pkg_dir<-trim(args[3])  # directory where R install packages will be
 TA3ProgramVersion<-trim(args[4])  # version number of the application
+TA3RCodeVersion<-trim(args[5])  # version number of the R code
 
 
 ############# Update Environment #############
@@ -81,7 +82,7 @@ require("msir")
 
 # NEW / MODIFIED BELOW
 # R code version
-      TA3RCodeVersion <- '0.45.0';
+      #TA3RCodeVersion <- '0.45.0';
 
 # software version.  currently or soon 0.70 
       #TA3ProgramVersion <- '0.70';

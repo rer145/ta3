@@ -42,6 +42,8 @@ const showResults = () => {
 // 	win.getFocusedWindow().webContents.send('verify-r-settings');
 // };
 
+const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${store.get("version")}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("system.r_code_version")}\nDatabase: ${store.get("system.db_version")}`;
+
 const helpSubmenu = [
 	{
 		label: 'User Guide',
@@ -67,7 +69,7 @@ const helpSubmenu = [
 	{ type: 'separator' },
 	openUrlMenuItem({
 		label: 'Website',
-		url: 'https://github.com/rer145/ta3'
+		url: 'https://statsmachine.net/software/TA3/'
 	}),
 	openUrlMenuItem({
 		label: 'Source Code',
@@ -107,7 +109,8 @@ ${debugInfo()}`;
 		},
 		aboutMenuItem({
 			icon: path.join(__dirname, 'assets', 'img', 'icons', 'icon.png'),
-			text: 'Created by Ron Richardson and Stephen Ousley'
+			text: aboutMenuText,
+			website: 'https://statsmachine.net/software/TA3/'
 		})
 	);
 //}
@@ -326,9 +329,9 @@ const macosTemplate = [
 			{ role: 'togglefullscreen' }
 		]
 	},
-	{
-		role: 'windowMenu'
-	},
+	// {
+	// 	role: 'windowMenu'
+	// },
 	{
 		role: 'help',
 		submenu: helpSubmenu
@@ -401,9 +404,9 @@ const otherTemplate = [
 			{ role: 'togglefullscreen' }
 		]
 	},
-	{
-		role: 'windowMenu'
-	},
+	// {
+	// 	role: 'windowMenu'
+	// },
 	{
 		role: 'help',
 		submenu: helpSubmenu
