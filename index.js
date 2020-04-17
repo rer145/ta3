@@ -17,6 +17,7 @@ const Store = require('electron-store');
 const store = new Store();
 
 const cla = require('./assets/js/cla');
+const log = require('./assets/js/logger');
 const { v4: uuidv4 } = require('uuid');
 
 unhandled({

@@ -19,6 +19,9 @@ const store = new Store();
 var exec = require('./assets/js/exec');
 const setup = require('./assets/js/setup');
 
+const now = require('performance-now');
+const log = require('./assets/js/logger');
+
 var cla_args = {};
 
 var current_traits = null;
@@ -72,7 +75,13 @@ function wire_setup_events() {
 		e.preventDefault();
 		disable_button("setup-start");
 		
+		let t0 = now();
 		setup.start().then(function(response) {
+			let t1 = now();
+			if (store.get("settings.analytics", true)) {
+				log.perf.info(`Time to Setup: ${(t1-t0)}`);
+			}
+
 			store.set("settings.first_run", false);
 
 			app_init();
@@ -1064,6 +1073,7 @@ function run_analysis() {
 					store.get("system.r_code_version")
 				], 
 				function(error, stdout, stderr) {
+					log.dbg.debug(`Error running session.R: ${error}`);
 					console.error(error);
 					console.error(stdout);
 					console.error(stderr);
@@ -1108,10 +1118,20 @@ function run_analysis() {
 		).show();
 
 
+		let t0 = now();
 		exec.execFile(
 			batch_file, 
 			parameters, 
 			function(error, stdout, stderr) {
+				let t1 = now();
+
+				if (store.get("settings.analytics", true)) {
+					log.perf.error(`Time to Analyze: ${(t1-t0)}`);
+
+					let inputs = fs.readFileSync(path.join(temp_dir, data_file)).toString();
+					log.perf.debug(inputs);
+				}
+
 				console.error(error);
 				var resultError = $("<div></div>");
 				resultError.addClass("alert alert-danger")
@@ -1122,6 +1142,16 @@ function run_analysis() {
 				return;
 			},
 			function(stdout, stderr) {
+				let t1 = now();
+
+				if (store.get("settings.analytics", true)) {
+					log.perf.info(`Time to Analyze: ${(t1-t0)}`);
+
+					// let inputs = fs.readFileSync(path.join(temp_dir, data_file)).toString();
+					log.perf.debug(selections);
+				}
+
+					
 				console.log(stdout);
 				//display output text in Results tab
 				var outputDiv = $("#result-output");
@@ -1131,6 +1161,11 @@ function run_analysis() {
 				var results = fs.readFileSync(path.join(temp_dir, "output.txt")).toString();
 				code.append(results);
 				outputDiv.append(code);
+
+				if (store.get("settings.analytics", true)) {
+					log.analysis.info(selections);
+					log.analysis.info(results);
+				}
 
 				//display output images in Charts tab
 				//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));

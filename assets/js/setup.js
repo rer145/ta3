@@ -9,7 +9,9 @@ const {is} = require('electron-util');
 const Store = require('electron-store');
 const store = new Store();
 
+const now = require('performance-now');
 const exec = require('./exec');
+const log = require('./logger');
 
 let scripts_path = path.join(store.get("app.resources_path"), "setup");
 
@@ -60,6 +62,8 @@ function start() {
 
 function install_rportable() {
 	return new Promise(function(resolve, reject) {
+		let t0 = now();
+
 		let batch_file = path.join(scripts_path, "install_rportable.bat");
 		console.log("Installing R-Portable:", batch_file);
 		start_progress("setup-r");
@@ -81,11 +85,19 @@ function install_rportable() {
 				batch_file, 
 				[], 
 				function(error, stdout, stderr) {
+					log.dbg.debug(`Error installing R-Portable: ${error}`);
+					log.dbg.debug(batch_file);
+
 					console.error(error);
 					end_progress("setup-r", -1, stderr);
 					reject(stderr);
 				}, 
 				function(stdout, stderr) {
+					let t1 = now();
+					if (store.get("settings.analytics", true)) {
+						log.perf.info(`Time to install R-Portable: ${(t1-t0)}`);
+					}
+
 					console.log(stdout);
 					end_progress("setup-r", 0, "R-Portable (v3.6.2) installation was successful.");
 					resolve();
@@ -97,6 +109,8 @@ function install_rportable() {
 
 function install_packages() {
 	return new Promise(function(resolve, reject) {
+		let t0 = now();
+
 		let batch_file = path.join(scripts_path, "install_packages.bat");
 		console.log("Installing Packages:", batch_file);
 		start_progress("setup-packages");
@@ -112,6 +126,7 @@ function install_packages() {
 				store.get("app.rscript_path"), 
 				0o777, 
 				function(error) {
+					log.dbg.error(`Error setting chmod permissions on ${store.get("app.rscript_path")}: ${error}`);
 					console.error(error);
 					end_progress("setup-packages", -1, error);
 					reject(error);
@@ -131,11 +146,18 @@ function install_packages() {
 				batch_file, 
 				params, 
 				function(error, stdout, stderr) {
+					log.dbg.error(`Error installing packages: ${error}`);
+					log.dbg.debug(batch_file);
+					log.dbg.debug(params);
 					console.error(error);
 					end_progress("setup-packages", -1, stderr);
 					reject(stderr);
 				}, 
 				function(stdout, stderr) {
+					let t1 = now();
+					if (store.get("settings.analytics", true)) {
+						log.perf.info(`Time to install packages: ${(t1-t0)}`);
+					}
 					console.log(stdout);
 					end_progress("setup-packages", 0, "R package installation was successful.");
 					resolve();
