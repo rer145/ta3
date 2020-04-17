@@ -523,7 +523,7 @@
     ]
   },
   {
-    "name": "Vertebrae",
+    "name": "Vertebral Column",
     "abbreviation": "vertebrae",
     "order_no": "2",
     "columns": [
@@ -3559,7 +3559,7 @@
     ]
   },
   {
-    "name": "Upper Limb",
+    "name": "Clavicle & Scapula",
     "abbreviation": "upperlimb",
     "order_no": "4",
     "columns": [
@@ -5706,977 +5706,9 @@
     ]
   },
   {
-    "name": "Lower Limb",
-    "abbreviation": "lowerlimb",
-    "order_no": "7",
-    "columns": [
-      {
-        "order_no": 1,
-        "text": "L",
-        "traits": [
-          "fovea_marginL",
-          "fem_head_surfL",
-          "troch_lat_surfL",
-          "troch_fossa_exostL",
-          "troch_med_surf_exostL"
-        ]
-      },
-      {
-        "order_no": 2,
-        "text": "R",
-        "traits": [
-          "fovea_marginR",
-          "fem_head_surfR",
-          "troch_lat_surfR",
-          "troch_fossa_exostR",
-          "troch_med_surf_exostR"
-        ]
-      }
-    ],
-    "traits": [
-      {
-        "trait_no": 52,
-        "order_no": "1",
-        "title": "Femur fovea margin lipping (left)",
-        "generic_title": "Fovea margin lipping",
-        "description": "",
-        "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
-        "abbreviation": "FFMLL",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fovea_marginL",
-        "notes": [
-          "In some cases, lipping around the fovea merges with an adjacent area of roughening on the femoral head.",
-          "Rarely the fovea is small and appears filled in with bone with no margin clearly separable from the interior. These atypical femora are not scored for this trait."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The edge of the fovea is smooth or, more typically, has a rounded or sharp margin.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FFML-1.jpg",
-                "title": "Absent",
-                "caption": "The margins of the fovea are slightly raised, but are smooth and rounded. (ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FFML-2.jpg",
-                "title": "Absent",
-                "caption": "The fovea has a raised and sharp, but regular, margin. For lipping to be present, the bone growth around the fovea must be irregular. (ID# 1143)"
-              },
-              {
-                "path": "assets/img/traits/FFML-6.jpg",
-                "title": "Unscorable",
-                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "lipped (>= 10mm)",
-            "description": "Irregular bony growths extends continuously for >= 10mm around the fovea margin.<br/><br/>This irregular lipping can be as much as 2-4mm wide, which looks like a flat plateau extending beyond the edge of the fovea.",
-            "value": "1",
-            "abbreviation": ">=10mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FFML-3.jpg",
-                "title": "Lipped",
-                "caption": "The entire fovea is slightly irregular with some postmortem damage present on the inferior border. (ID# 2000)"
-              },
-              {
-                "path": "assets/img/traits/FFML-4.jpg",
-                "title": "Lipped",
-                "caption": "The entire fovea has a thick, irregular rim. (ID# 1552)"
-              },
-              {
-                "path": "assets/img/traits/FFML-5.jpg",
-                "title": "Lipped",
-                "caption": "(ID# 2693)"
-              },
-              {
-                "path": "assets/img/traits/FFML-6.jpg",
-                "title": "Unscorable",
-                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 53,
-        "order_no": "2",
-        "title": "Femur head surface extra bone (left)",
-        "generic_title": "Head surface",
-        "description": "",
-        "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
-        "abbreviation": "FHEBL",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fem_head_surfL",
-        "notes": [
-          "Sometimes lipping of the fovea margin and the rough femoral surface area join one another.",
-          "Often the rough area lies immediately alongside the fovea, and it may join the lipping that defines the fovea's edge. The bone deposits, however, can be islands of rough-looking bone separated by as much as a centimeter or more from the fovea. In the intervening area, the original sooth subchondral bone is visible."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The normally smooth articulation surface of the femoral head is either smooth, or has < 5mm of a bone deposit. If pitting (removal of bone from the surface) is present, it should be ignored.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-1.jpg",
-                "title": "Absent",
-                "caption": "The entire femoral head is smooth. (ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-2.jpg",
-                "title": "Absent",
-                "caption": "An area of pitting is present, but there is not more than 5mm of extra bony growth. (ID# 2260)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-3.jpg",
-                "title": "Absent",
-                "caption": "The surface is slightly roughened but <5mm of additional bone growth is present. (ID# 2039)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "extra bone (5-9.9mm)",
-            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
-            "value": "1",
-            "abbreviation": ">=5mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-4.jpg",
-                "title": "Extra bone (>= 5mm)",
-                "caption": "The surface is slightly pitted, but more than 5mm of additional bony growth is present. (ID# 2734)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-5.jpg",
-                "title": "Extra bone (>= 5mm)",
-                "caption": "(ID# 2315)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "extra bone (>=10mm)",
-            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
-            "value": "2",
-            "abbreviation": ">=10mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-6.jpg",
-                "title": "Extra bone (>= 10mm)",
-                "caption": "(ID# 1876)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 54,
-        "order_no": "3",
-        "title": "Femur greater trochanter roughening (left)",
-        "generic_title": "Troch lat surf roughening",
-        "description": "lateral surface",
-        "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
-        "abbreviation": "FGTRL",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_lat_surfL",
-        "notes": [],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The bone is smooth, or only a small area (< 10x20mm triangle) is rough.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "rough (triangle)",
-            "description": "A 10x20mm triangle of slightly to extensively rough bone is present on the surface.",
-            "value": "1",
-            "abbreviation": "tri",
-            "images": []
-          },
-          {
-            "order_no": "3",
-            "title": "rough (rectangle)",
-            "description": "A 10x20mm rectangle of bone is slightly to extensively roughened by the addition of flat to irregular bone growth on top of the trochanter's original smooth surface. No overhand of sufficient size is present.",
-            "value": "2",
-            "abbreviation": "rec",
-            "images": []
-          },
-          {
-            "order_no": "4",
-            "title": "overhang",
-            "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
-            "value": "3",
-            "abbreviation": "OH",
-            "images": [
-              {
-                "path": "assets/img/traits/FGTR-1a.jpg",
-                "title": "Overhang",
-                "caption": "Lateral (a) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-1b.jpg",
-                "title": "Overhang",
-                "caption": "Posterior (b) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-2a.jpg",
-                "title": "Overhang",
-                "caption": "(ID# 1919)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-2b.jpg",
-                "title": "Overhang",
-                "caption": "(ID# 1919)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 55,
-        "order_no": "4",
-        "title": "Femur trochanteric fossa exostoses (left)",
-        "generic_title": "Troch fossa exos",
-        "description": "",
-        "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
-        "abbreviation": "FTFEL",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_fossa_exostL",
-        "notes": [],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The area is smooth with little or no evidence of generally sharp exostoses. A single exostosis is considered absent.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "At least two exostoses are clearly visible in the depths of the fossa. Occasionally the exostoses will merge into a single large area with multiple peaks, and is also scored as present.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFE-1.jpg",
-                "title": "Present",
-                "caption": "(ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-2.jpg",
-                "title": "Present",
-                "caption": "Extostoses located (L) within and (R) slightly superior to the depths of teh trochanteric fossa. (ID# 2328)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-3L.jpg",
-                "title": "Present",
-                "caption": "The trochanteric fossa (circled) and medial trochanteric fossa exostoses are present. (ID# 1800)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-4.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1808)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-5.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1876)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 56,
-        "order_no": "5",
-        "title": "Femur trochanteric medial exostoses (left)",
-        "generic_title": "Troch med surf exos",
-        "description": "",
-        "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
-        "abbreviation": "FTFML",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_med_surf_exostL",
-        "notes": [
-          "The exostoses generally form a distinctly rough patch of bone that is separate from the similar patch of roughened bone deep within the trochanteric fossa. The two areas are occasionally confluent.",
-          "Occasionally the exostoses take the form a rough raised rim surrounding a small oval tendon insertion.",
-          "In some individuals, this area has low raised, but regular, ridges that do not extend off the surface of the bone. In the absence of raised, distinct exostoses, the feature should be scored as absent."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The area is smooth or has, at most, a single exostosis.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFME-1.jpg",
-                "title": "Absent",
-                "caption": "(ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-2.jpg",
-                "title": "Absent",
-                "caption": "Low rounded linear elevations that are not irregular additions of bone. (ID# 2486)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "A patch of >= 2 exostoses, similar to those seen in the trochanteric fossa, are present.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFME-3L.jpg",
-                "title": "Present",
-                "caption": "Both trochanteric fossa and medial trochanteric fossa (circled) exostoses are present. (ID# 1800)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-4.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1808)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-5.jpg",
-                "title": "Present",
-                "caption": "Exostoses are almost mergin with those in the trochanteric fossa. (ID# 2730)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-6.jpg",
-                "title": "Present",
-                "caption": "Atypical exostoses expressed as raised ridges. Image reversed. (ID# 1954)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-7.jpg",
-                "title": "Present",
-                "caption": "Small exostoses (circled) are located slightly more lateral than where they are typically found (arrow). Although the location of exostoses in this region may vary slightly, exostoses located on the proximal portion of the greater trochanter should not be scored. (ID# 2547)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 52,
-        "order_no": "6",
-        "title": "Femur fovea margin lipping (right)",
-        "generic_title": "Fovea margin lipping",
-        "description": "",
-        "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
-        "abbreviation": "FFMLR",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fovea_marginR",
-        "notes": [
-          "In some cases, lipping around the fovea merges with an adjacent area of roughening on the femoral head.",
-          "Rarely the fovea is small and appears filled in with bone with no margin clearly separable from the interior. These atypical femora are not scored for this trait."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The edge of the fovea is smooth or, more typically, has a rounded or sharp margin.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FFML-1.jpg",
-                "title": "Absent",
-                "caption": "The margins of the fovea are slightly raised, but are smooth and rounded. (ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FFML-2.jpg",
-                "title": "Absent",
-                "caption": "The fovea has a raised and sharp, but regular, margin. For lipping to be present, the bone growth around the fovea must be irregular. (ID# 1143)"
-              },
-              {
-                "path": "assets/img/traits/FFML-6.jpg",
-                "title": "Unscorable",
-                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "lipped (>= 10mm)",
-            "description": "Irregular bony growths extends continuously for >= 10mm around the fovea margin.<br/><br/>This irregular lipping can be as much as 2-4mm wide, which looks like a flat plateau extending beyond the edge of the fovea.",
-            "value": "1",
-            "abbreviation": ">=10mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FFML-3.jpg",
-                "title": "Lipped",
-                "caption": "The entire fovea is slightly irregular with some postmortem damage present on the inferior border. (ID# 2000)"
-              },
-              {
-                "path": "assets/img/traits/FFML-4.jpg",
-                "title": "Lipped",
-                "caption": "The entire fovea has a thick, irregular rim. (ID# 1552)"
-              },
-              {
-                "path": "assets/img/traits/FFML-5.jpg",
-                "title": "Lipped",
-                "caption": "(ID# 2693)"
-              },
-              {
-                "path": "assets/img/traits/FFML-6.jpg",
-                "title": "Unscorable",
-                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 53,
-        "order_no": "7",
-        "title": "Femur head surface extra bone (right)",
-        "generic_title": "Head surface",
-        "description": "",
-        "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
-        "abbreviation": "FHEBR",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fem_head_surfR",
-        "notes": [
-          "Sometimes lipping of the fovea margin and the rough femoral surface area join one another.",
-          "Often the rough area lies immediately alongside the fovea, and it may join the lipping that defines the fovea's edge. The bone deposits, however, can be islands of rough-looking bone separated by as much as a centimeter or more from the fovea. In the intervening area, the original sooth subchondral bone is visible."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The normally smooth articulation surface of the femoral head is either smooth, or has < 5mm of a bone deposit. If pitting (removal of bone from the surface) is present, it should be ignored.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-1.jpg",
-                "title": "Absent",
-                "caption": "The entire femoral head is smooth. (ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-2.jpg",
-                "title": "Absent",
-                "caption": "An area of pitting is present, but there is not more than 5mm of extra bony growth. (ID# 2260)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-3.jpg",
-                "title": "Absent",
-                "caption": "The surface is slightly roughened but <5mm of additional bone growth is present. (ID# 2039)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "extra bone (5-9.9mm)",
-            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
-            "value": "1",
-            "abbreviation": ">=5mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-4.jpg",
-                "title": "Extra bone (>= 5mm)",
-                "caption": "The surface is slightly pitted, but more than 5mm of additional bony growth is present. (ID# 2734)"
-              },
-              {
-                "path": "assets/img/traits/FHEB-5.jpg",
-                "title": "Extra bone (>= 5mm)",
-                "caption": "(ID# 2315)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "extra bone (>=10mm)",
-            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
-            "value": "2",
-            "abbreviation": ">=10mm",
-            "images": [
-              {
-                "path": "assets/img/traits/FHEB-6.jpg",
-                "title": "Extra bone (>= 10mm)",
-                "caption": "(ID# 1876)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 54,
-        "order_no": "8",
-        "title": "Femur greater trochanter roughening (right)",
-        "generic_title": "Troch lat surf roughening",
-        "description": "lateral surface",
-        "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
-        "abbreviation": "FGTRR",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_lat_surfR",
-        "notes": [],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The bone is smooth, or only a small area (< 10x20mm triangle) is rough.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "rough (triangle)",
-            "description": "A 10x20mm triangle of slightly to extensively rough bone is present on the surface.",
-            "value": "1",
-            "abbreviation": "tri",
-            "images": []
-          },
-          {
-            "order_no": "3",
-            "title": "rough (rectangle)",
-            "description": "A 10x20mm rectangle of bone is slightly to extensively roughened by the addition of flat to irregular bone growth on top of the trochanter's original smooth surface. No overhand of sufficient size is present.",
-            "value": "2",
-            "abbreviation": "rec",
-            "images": []
-          },
-          {
-            "order_no": "4",
-            "title": "overhang",
-            "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
-            "value": "3",
-            "abbreviation": "OH",
-            "images": [
-              {
-                "path": "assets/img/traits/FGTR-1a.jpg",
-                "title": "Overhang",
-                "caption": "Lateral (a) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-1b.jpg",
-                "title": "Overhang",
-                "caption": "Posterior (b) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-2a.jpg",
-                "title": "Overhang",
-                "caption": "(ID# 1919)"
-              },
-              {
-                "path": "assets/img/traits/FGTR-2b.jpg",
-                "title": "Overhang",
-                "caption": "(ID# 1919)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 55,
-        "order_no": "9",
-        "title": "Femur trochanteric fossa exostoses (right)",
-        "generic_title": "Troch fossa exos",
-        "description": "",
-        "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
-        "abbreviation": "FTFER",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_fossa_exostR",
-        "notes": [],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The area is smooth with little or no evidence of generally sharp exostoses. A single exostosis is considered absent.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "At least two exostoses are clearly visible in the depths of the fossa. Occasionally the exostoses will merge into a single large area with multiple peaks, and is also scored as present.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFE-1.jpg",
-                "title": "Present",
-                "caption": "(ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-2.jpg",
-                "title": "Present",
-                "caption": "Extostoses located (L) within and (R) slightly superior to the depths of teh trochanteric fossa. (ID# 2328)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-3R.jpg",
-                "title": "Present",
-                "caption": "The trochanteric fossa (circled) and medial trochanteric fossa exostoses are present. The fossa exostoses have merged into a single large spike with multiple peaks. (ID# 1800)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-4.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1808)"
-              },
-              {
-                "path": "assets/img/traits/FTFE-5.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1876)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 56,
-        "order_no": "10",
-        "title": "Femur trochanteric medial exostoses (right)",
-        "generic_title": "Troch med surf exos",
-        "description": "",
-        "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
-        "abbreviation": "FTFMR",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "troch_med_surf_exostR",
-        "notes": [
-          "The exostoses generally form a distinctly rough patch of bone that is separate from the similar patch of roughened bone deep within the trochanteric fossa. The two areas are occasionally confluent.",
-          "Occasionally the exostoses take the form a rough raised rim surrounding a small oval tendon insertion.",
-          "In some individuals, this area has low raised, but regular, ridges that do not extend off the surface of the bone. In the absence of raised, distinct exostoses, the feature should be scored as absent."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The area is smooth or has, at most, a single exostosis.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFME-1.jpg",
-                "title": "Absent",
-                "caption": "(ID# 2727)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-2.jpg",
-                "title": "Absent",
-                "caption": "Low rounded linear elevations that are not irregular additions of bone. (ID# 2486)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "A patch of >= 2 exostoses, similar to those seen in the trochanteric fossa, are present.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FTFME-3R.jpg",
-                "title": "Present",
-                "caption": "Both trochanteric fossa and medial trochanteric fossa (circled) exostoses are present. (ID# 1800)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-4.jpg",
-                "title": "Present",
-                "caption": "Image reversed. (ID# 1808)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-5.jpg",
-                "title": "Present",
-                "caption": "Exostoses are almost mergin with those in the trochanteric fossa. (ID# 2730)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-6.jpg",
-                "title": "Present",
-                "caption": "Atypical exostoses expressed as raised ridges. Image reversed. (ID# 1954)"
-              },
-              {
-                "path": "assets/img/traits/FTFME-7.jpg",
-                "title": "Present",
-                "caption": "Small exostoses (circled) are located slightly more lateral than where they are typically found (arrow). Although the location of exostoses in this region may vary slightly, exostoses located on the proximal portion of the greater trochanter should not be scored. (ID# 2547)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      }
-    ]
-  },
-  {
-    "name": "Tibia, Fibia, & Calcaneus",
-    "abbreviation": "tibiafibiacalcaneus",
-    "order_no": "8",
-    "columns": [
-      {
-        "order_no": 1,
-        "text": "L & All",
-        "traits": [
-          "Tib_LW",
-          "fibula_mercury_wingsL",
-          "Calc_LW"
-        ]
-      },
-      {
-        "order_no": 2,
-        "text": "R",
-        "traits": [
-          null,
-          "fibula_mercury_wingsR",
-          null
-        ]
-      }
-    ],
-    "traits": [
-      {
-        "trait_no": 58,
-        "order_no": "1",
-        "title": "Fibula wings (left)",
-        "generic_title": "Fibula wings",
-        "description": "",
-        "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
-        "abbreviation": "FWL",
-        "side": "L",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fibula_mercury_wingsL",
-        "notes": [
-          "The most important feature is the amount of projection beyond the fibula's anterior margin. The other aspects of the feature, described above, are included in the definition because they often are the most apparent characteristic when the bone is first handled."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The feature is entirely abset, or the bony growth does not extend 1mm anteriorly beyond the margin of the fibula for a full 3mm in a proximal to distal direction.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FW-1.jpg",
-                "title": "Absent",
-                "caption": "Lateral (a) and medial (b) surfaces of a left fibula. A few faint striations are present on the lateral surface, but there is no ossification beyond the anterior border. In (b), slight postmortem damage makes the anterior border slightly irregular. (ID# 2547)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "There is a projection of bone >= 1mm beyond the anterior margin of the fibula for >= 3mm in length (i.e. at least a 1x3mm rectangle). The anterior margin of the projection is typically irregular and its surface has multiple striations paralleling the long axis of the feature. This extension of bone, which continues onto the lateral surface of the fibula, has a smooth, sclerotic appearance.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FW-2L.jpg",
-                "title": "Present",
-                "caption": "Views of the lateral (top) and medial (bottom) surfaces. On the lateral surface there is obvious sclerotic ossification. The extention and length of the ossification 9at least 1mm extension x 3mm length) can be most easily measured by looking at the medial surface. (ID# 2659)"
-              },
-              {
-                "path": "assets/img/traits/FW-3a.jpg",
-                "title": "Present",
-                "caption": "Lateral surface of a left fibula. (ID# 2325)"
-              },
-              {
-                "path": "assets/img/traits/FW-3b.jpg",
-                "title": "Present",
-                "caption": "Medial surface of a left fibula. Specimen number removed. (ID# 2325)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 59,
-        "order_no": "2",
-        "title": "Fibula wings (right)",
-        "generic_title": "Fibula wings",
-        "description": "",
-        "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
-        "abbreviation": "FWR",
-        "side": "R",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "fibula_mercury_wingsR",
-        "notes": [
-          "The most important feature is the amount of projection beyond the fibula's anterior margin. The other aspects of the feature, described above, are included in the definition because they often are the most apparent characteristic when the bone is first handled."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "absent",
-            "description": "The feature is entirely abset, or the bony growth does not extend 1mm anteriorly beyond the margin of the fibula for a full 3mm in a proximal to distal direction.",
-            "value": "0",
-            "abbreviation": "abs",
-            "images": [
-              {
-                "path": "assets/img/traits/FW-1.jpg",
-                "title": "Absent",
-                "caption": "Lateral (a) and medial (b) surfaces of a left fibula. A few faint striations are present on the lateral surface, but there is no ossification beyond the anterior border. In (b), slight postmortem damage makes the anterior border slightly irregular. (ID# 2547)"
-              }
-            ]
-          },
-          {
-            "order_no": "2",
-            "title": "present",
-            "description": "There is a projection of bone >= 1mm beyond the anterior margin of the fibula for >= 3mm in length (i.e. at least a 1x3mm rectangle). The anterior margin of the projection is typically irregular and its surface has multiple striations paralleling the long axis of the feature. This extension of bone, which continues onto the lateral surface of the fibula, has a smooth, sclerotic appearance.",
-            "value": "1",
-            "abbreviation": "pres",
-            "images": [
-              {
-                "path": "assets/img/traits/FW-2R.jpg",
-                "title": "Present",
-                "caption": "Views of the lateral (top) and medial (bottom) surfaces. On the lateral surface there is obvious sclerotic ossification. The extention and length of the ossification 9at least 1mm extension x 3mm length) can be most easily measured by looking at the medial surface. (ID# 2659)"
-              }
-            ]
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 57,
-        "order_no": "3",
-        "title": "Tibia light weight",
-        "generic_title": "Tibia weight",
-        "description": "",
-        "location": "The entire tibia",
-        "abbreviation": "",
-        "side": "U",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "Tib_LW",
-        "notes": [
-          "This trait should be recorded or, at least, mentally noted, when the bones are first picked up, usually when unpacking the skeleton's box. Handling bones for some time before scoring can result in skewed perceptions of relative bone weight.",
-          "In only rare cases will bone weight be asymmetric. When that occurs, record both sides and make a note on the data collection form."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "normal",
-            "description": "The bone weight falls within what one might expect for an individual of that size. Bones that are borderline, or only slightly lighter than normal, should be scored as normal. This observation is subjective, so err on the side of classifying the bone as normal.",
-            "value": "0",
-            "abbreviation": "norm",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "light",
-            "description": "The bone must be noticeably lighter than expected, but otherwise normal in appearance. A light tibia is often little more than a cortical bone shell.",
-            "value": "1",
-            "abbreviation": "light",
-            "images": []
-          }
-        ],
-        "images": []
-      },
-      {
-        "trait_no": 59,
-        "order_no": "4",
-        "title": "Calcaneus light weight",
-        "generic_title": "Calcaneus weight",
-        "description": "",
-        "location": "The entire calcaneus",
-        "abbreviation": "",
-        "side": "U",
-        "scorable": false,
-        "max_score": 0,
-        "advanced_mode_only": false,
-        "advanced_grouping": "",
-        "db_name": "Calc_LW",
-        "notes": [
-          "This trait should be recorded or, at least, mentally noted, when the bones are first picked up, usually when unpacking the skeleton's box. Handling bones for some time before scoring can result in skewed perceptions of relative bone weight.",
-          "In only rare cases will bone weight be asymmetric. When that occurs, record both sides and make a note on the data collection form."
-        ],
-        "scores": [
-          {
-            "order_no": "1",
-            "title": "normal",
-            "description": "The bone weight falls within what one might expect for an individual of that size. Bones that are borderline, or only slightly lighter than normal, should be scored as normal. This observation is subjective, so err on the side of classifying the bone as normal.",
-            "value": "0",
-            "abbreviation": "norm",
-            "images": []
-          },
-          {
-            "order_no": "2",
-            "title": "light",
-            "description": "The bone must be noticeably lighter than expected. The cortical bone is often extremely fragile and paper-thin.",
-            "value": "1",
-            "abbreviation": "light",
-            "images": []
-          }
-        ],
-        "images": []
-      }
-    ]
-  },
-  {
     "name": "Innominate, Sacroiliac Joint, & Acetabulum",
     "abbreviation": "innominate",
-    "order_no": "9",
+    "order_no": "7",
     "columns": [
       {
         "order_no": 1,
@@ -8233,7 +7265,7 @@
   {
     "name": "Auricular Surface",
     "abbreviation": "auricular",
-    "order_no": "10",
+    "order_no": "8",
     "columns": [
       {
         "order_no": 1,
@@ -8836,7 +7868,7 @@
   {
     "name": "Pubic Symphysis",
     "abbreviation": "pubic",
-    "order_no": "11",
+    "order_no": "9",
     "columns": [
       {
         "order_no": 1,
@@ -9845,6 +8877,974 @@
             "caption": "Location of the dorsal margin."
           }
         ]
+      }
+    ]
+  },
+  {
+    "name": "Femur",
+    "abbreviation": "lowerlimb",
+    "order_no": "10",
+    "columns": [
+      {
+        "order_no": 1,
+        "text": "L",
+        "traits": [
+          "fovea_marginL",
+          "fem_head_surfL",
+          "troch_lat_surfL",
+          "troch_fossa_exostL",
+          "troch_med_surf_exostL"
+        ]
+      },
+      {
+        "order_no": 2,
+        "text": "R",
+        "traits": [
+          "fovea_marginR",
+          "fem_head_surfR",
+          "troch_lat_surfR",
+          "troch_fossa_exostR",
+          "troch_med_surf_exostR"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "trait_no": 52,
+        "order_no": "1",
+        "title": "Femur fovea margin lipping (left)",
+        "generic_title": "Fovea margin lipping",
+        "description": "",
+        "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
+        "abbreviation": "FFMLL",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fovea_marginL",
+        "notes": [
+          "In some cases, lipping around the fovea merges with an adjacent area of roughening on the femoral head.",
+          "Rarely the fovea is small and appears filled in with bone with no margin clearly separable from the interior. These atypical femora are not scored for this trait."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The edge of the fovea is smooth or, more typically, has a rounded or sharp margin.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FFML-1.jpg",
+                "title": "Absent",
+                "caption": "The margins of the fovea are slightly raised, but are smooth and rounded. (ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FFML-2.jpg",
+                "title": "Absent",
+                "caption": "The fovea has a raised and sharp, but regular, margin. For lipping to be present, the bone growth around the fovea must be irregular. (ID# 1143)"
+              },
+              {
+                "path": "assets/img/traits/FFML-6.jpg",
+                "title": "Unscorable",
+                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "lipped (>= 10mm)",
+            "description": "Irregular bony growths extends continuously for >= 10mm around the fovea margin.<br/><br/>This irregular lipping can be as much as 2-4mm wide, which looks like a flat plateau extending beyond the edge of the fovea.",
+            "value": "1",
+            "abbreviation": ">=10mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FFML-3.jpg",
+                "title": "Lipped",
+                "caption": "The entire fovea is slightly irregular with some postmortem damage present on the inferior border. (ID# 2000)"
+              },
+              {
+                "path": "assets/img/traits/FFML-4.jpg",
+                "title": "Lipped",
+                "caption": "The entire fovea has a thick, irregular rim. (ID# 1552)"
+              },
+              {
+                "path": "assets/img/traits/FFML-5.jpg",
+                "title": "Lipped",
+                "caption": "(ID# 2693)"
+              },
+              {
+                "path": "assets/img/traits/FFML-6.jpg",
+                "title": "Unscorable",
+                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 53,
+        "order_no": "2",
+        "title": "Femur head surface extra bone (left)",
+        "generic_title": "Head surface",
+        "description": "",
+        "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
+        "abbreviation": "FHEBL",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fem_head_surfL",
+        "notes": [
+          "Sometimes lipping of the fovea margin and the rough femoral surface area join one another.",
+          "Often the rough area lies immediately alongside the fovea, and it may join the lipping that defines the fovea's edge. The bone deposits, however, can be islands of rough-looking bone separated by as much as a centimeter or more from the fovea. In the intervening area, the original sooth subchondral bone is visible."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The normally smooth articulation surface of the femoral head is either smooth, or has < 5mm of a bone deposit. If pitting (removal of bone from the surface) is present, it should be ignored.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-1.jpg",
+                "title": "Absent",
+                "caption": "The entire femoral head is smooth. (ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-2.jpg",
+                "title": "Absent",
+                "caption": "An area of pitting is present, but there is not more than 5mm of extra bony growth. (ID# 2260)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-3.jpg",
+                "title": "Absent",
+                "caption": "The surface is slightly roughened but <5mm of additional bone growth is present. (ID# 2039)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "extra bone (5-9.9mm)",
+            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
+            "value": "1",
+            "abbreviation": ">=5mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-4.jpg",
+                "title": "Extra bone (>= 5mm)",
+                "caption": "The surface is slightly pitted, but more than 5mm of additional bony growth is present. (ID# 2734)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-5.jpg",
+                "title": "Extra bone (>= 5mm)",
+                "caption": "(ID# 2315)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "extra bone (>=10mm)",
+            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
+            "value": "2",
+            "abbreviation": ">=10mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-6.jpg",
+                "title": "Extra bone (>= 10mm)",
+                "caption": "(ID# 1876)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 54,
+        "order_no": "3",
+        "title": "Femur greater trochanter roughening (left)",
+        "generic_title": "Troch lat surf roughening",
+        "description": "lateral surface",
+        "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
+        "abbreviation": "FGTRL",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_lat_surfL",
+        "notes": [],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The bone is smooth, or only a small area (< 10x20mm triangle) is rough.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "rough (triangle)",
+            "description": "A 10x20mm triangle of slightly to extensively rough bone is present on the surface.",
+            "value": "1",
+            "abbreviation": "tri",
+            "images": []
+          },
+          {
+            "order_no": "3",
+            "title": "rough (rectangle)",
+            "description": "A 10x20mm rectangle of bone is slightly to extensively roughened by the addition of flat to irregular bone growth on top of the trochanter's original smooth surface. No overhand of sufficient size is present.",
+            "value": "2",
+            "abbreviation": "rec",
+            "images": []
+          },
+          {
+            "order_no": "4",
+            "title": "overhang",
+            "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
+            "value": "3",
+            "abbreviation": "OH",
+            "images": [
+              {
+                "path": "assets/img/traits/FGTR-1a.jpg",
+                "title": "Overhang",
+                "caption": "Lateral (a) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-1b.jpg",
+                "title": "Overhang",
+                "caption": "Posterior (b) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-2a.jpg",
+                "title": "Overhang",
+                "caption": "(ID# 1919)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-2b.jpg",
+                "title": "Overhang",
+                "caption": "(ID# 1919)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 55,
+        "order_no": "4",
+        "title": "Femur trochanteric fossa exostoses (left)",
+        "generic_title": "Troch fossa exos",
+        "description": "",
+        "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
+        "abbreviation": "FTFEL",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_fossa_exostL",
+        "notes": [],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The area is smooth with little or no evidence of generally sharp exostoses. A single exostosis is considered absent.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "At least two exostoses are clearly visible in the depths of the fossa. Occasionally the exostoses will merge into a single large area with multiple peaks, and is also scored as present.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFE-1.jpg",
+                "title": "Present",
+                "caption": "(ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-2.jpg",
+                "title": "Present",
+                "caption": "Extostoses located (L) within and (R) slightly superior to the depths of teh trochanteric fossa. (ID# 2328)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-3L.jpg",
+                "title": "Present",
+                "caption": "The trochanteric fossa (circled) and medial trochanteric fossa exostoses are present. (ID# 1800)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-4.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1808)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-5.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1876)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 56,
+        "order_no": "5",
+        "title": "Femur trochanteric medial exostoses (left)",
+        "generic_title": "Troch med surf exos",
+        "description": "",
+        "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
+        "abbreviation": "FTFML",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_med_surf_exostL",
+        "notes": [
+          "The exostoses generally form a distinctly rough patch of bone that is separate from the similar patch of roughened bone deep within the trochanteric fossa. The two areas are occasionally confluent.",
+          "Occasionally the exostoses take the form a rough raised rim surrounding a small oval tendon insertion.",
+          "In some individuals, this area has low raised, but regular, ridges that do not extend off the surface of the bone. In the absence of raised, distinct exostoses, the feature should be scored as absent."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The area is smooth or has, at most, a single exostosis.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFME-1.jpg",
+                "title": "Absent",
+                "caption": "(ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-2.jpg",
+                "title": "Absent",
+                "caption": "Low rounded linear elevations that are not irregular additions of bone. (ID# 2486)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "A patch of >= 2 exostoses, similar to those seen in the trochanteric fossa, are present.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFME-3L.jpg",
+                "title": "Present",
+                "caption": "Both trochanteric fossa and medial trochanteric fossa (circled) exostoses are present. (ID# 1800)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-4.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1808)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-5.jpg",
+                "title": "Present",
+                "caption": "Exostoses are almost mergin with those in the trochanteric fossa. (ID# 2730)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-6.jpg",
+                "title": "Present",
+                "caption": "Atypical exostoses expressed as raised ridges. Image reversed. (ID# 1954)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-7.jpg",
+                "title": "Present",
+                "caption": "Small exostoses (circled) are located slightly more lateral than where they are typically found (arrow). Although the location of exostoses in this region may vary slightly, exostoses located on the proximal portion of the greater trochanter should not be scored. (ID# 2547)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 52,
+        "order_no": "6",
+        "title": "Femur fovea margin lipping (right)",
+        "generic_title": "Fovea margin lipping",
+        "description": "",
+        "location": "The margin of the femoral fovea where the ligamentum teres attaches (ligamentum capitis femoris).",
+        "abbreviation": "FFMLR",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fovea_marginR",
+        "notes": [
+          "In some cases, lipping around the fovea merges with an adjacent area of roughening on the femoral head.",
+          "Rarely the fovea is small and appears filled in with bone with no margin clearly separable from the interior. These atypical femora are not scored for this trait."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The edge of the fovea is smooth or, more typically, has a rounded or sharp margin.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FFML-1.jpg",
+                "title": "Absent",
+                "caption": "The margins of the fovea are slightly raised, but are smooth and rounded. (ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FFML-2.jpg",
+                "title": "Absent",
+                "caption": "The fovea has a raised and sharp, but regular, margin. For lipping to be present, the bone growth around the fovea must be irregular. (ID# 1143)"
+              },
+              {
+                "path": "assets/img/traits/FFML-6.jpg",
+                "title": "Unscorable",
+                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "lipped (>= 10mm)",
+            "description": "Irregular bony growths extends continuously for >= 10mm around the fovea margin.<br/><br/>This irregular lipping can be as much as 2-4mm wide, which looks like a flat plateau extending beyond the edge of the fovea.",
+            "value": "1",
+            "abbreviation": ">=10mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FFML-3.jpg",
+                "title": "Lipped",
+                "caption": "The entire fovea is slightly irregular with some postmortem damage present on the inferior border. (ID# 2000)"
+              },
+              {
+                "path": "assets/img/traits/FFML-4.jpg",
+                "title": "Lipped",
+                "caption": "The entire fovea has a thick, irregular rim. (ID# 1552)"
+              },
+              {
+                "path": "assets/img/traits/FFML-5.jpg",
+                "title": "Lipped",
+                "caption": "(ID# 2693)"
+              },
+              {
+                "path": "assets/img/traits/FFML-6.jpg",
+                "title": "Unscorable",
+                "caption": "The fovea cannot be scored because more than 10mm of the fovea is damaged. It is not possible to tell how much lipping was originally present. (ID# 2733)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 53,
+        "order_no": "7",
+        "title": "Femur head surface extra bone (right)",
+        "generic_title": "Head surface",
+        "description": "",
+        "location": "The femoral head, excluding the area in immediate proximity to the articulation margin with the femoral neck (edge of the femoral head).",
+        "abbreviation": "FHEBR",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fem_head_surfR",
+        "notes": [
+          "Sometimes lipping of the fovea margin and the rough femoral surface area join one another.",
+          "Often the rough area lies immediately alongside the fovea, and it may join the lipping that defines the fovea's edge. The bone deposits, however, can be islands of rough-looking bone separated by as much as a centimeter or more from the fovea. In the intervening area, the original sooth subchondral bone is visible."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The normally smooth articulation surface of the femoral head is either smooth, or has < 5mm of a bone deposit. If pitting (removal of bone from the surface) is present, it should be ignored.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-1.jpg",
+                "title": "Absent",
+                "caption": "The entire femoral head is smooth. (ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-2.jpg",
+                "title": "Absent",
+                "caption": "An area of pitting is present, but there is not more than 5mm of extra bony growth. (ID# 2260)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-3.jpg",
+                "title": "Absent",
+                "caption": "The surface is slightly roughened but <5mm of additional bone growth is present. (ID# 2039)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "extra bone (5-9.9mm)",
+            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
+            "value": "1",
+            "abbreviation": ">=5mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-4.jpg",
+                "title": "Extra bone (>= 5mm)",
+                "caption": "The surface is slightly pitted, but more than 5mm of additional bony growth is present. (ID# 2734)"
+              },
+              {
+                "path": "assets/img/traits/FHEB-5.jpg",
+                "title": "Extra bone (>= 5mm)",
+                "caption": "(ID# 2315)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "extra bone (>=10mm)",
+            "description": "Extra bone measuring >= 5mm in its longest dimension is present on the articulation surface.",
+            "value": "2",
+            "abbreviation": ">=10mm",
+            "images": [
+              {
+                "path": "assets/img/traits/FHEB-6.jpg",
+                "title": "Extra bone (>= 10mm)",
+                "caption": "(ID# 1876)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 54,
+        "order_no": "8",
+        "title": "Femur greater trochanter roughening (right)",
+        "generic_title": "Troch lat surf roughening",
+        "description": "lateral surface",
+        "location": "The lateral surface and lateral-inferior edge of the greater trochanter.",
+        "abbreviation": "FGTRR",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_lat_surfR",
+        "notes": [],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The bone is smooth, or only a small area (< 10x20mm triangle) is rough.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "rough (triangle)",
+            "description": "A 10x20mm triangle of slightly to extensively rough bone is present on the surface.",
+            "value": "1",
+            "abbreviation": "tri",
+            "images": []
+          },
+          {
+            "order_no": "3",
+            "title": "rough (rectangle)",
+            "description": "A 10x20mm rectangle of bone is slightly to extensively roughened by the addition of flat to irregular bone growth on top of the trochanter's original smooth surface. No overhand of sufficient size is present.",
+            "value": "2",
+            "abbreviation": "rec",
+            "images": []
+          },
+          {
+            "order_no": "4",
+            "title": "overhang",
+            "description": "Irregular bony growth extends >= 1mm distally from the original surface of the bone for >= 10mm horizontally along the greater trochanter's inferior margin. When viewed anteriorly or posteriorly, there is a gap between the femur shaft and the extra bone growth (i.e. an overhang).",
+            "value": "3",
+            "abbreviation": "OH",
+            "images": [
+              {
+                "path": "assets/img/traits/FGTR-1a.jpg",
+                "title": "Overhang",
+                "caption": "Lateral (a) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-1b.jpg",
+                "title": "Overhang",
+                "caption": "Posterior (b) view of an overhang. The roughened bone on the posterior view (a) is characteristic of the type of deposits scored in both roughened categories. (ID# 1831)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-2a.jpg",
+                "title": "Overhang",
+                "caption": "(ID# 1919)"
+              },
+              {
+                "path": "assets/img/traits/FGTR-2b.jpg",
+                "title": "Overhang",
+                "caption": "(ID# 1919)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 55,
+        "order_no": "9",
+        "title": "Femur trochanteric fossa exostoses (right)",
+        "generic_title": "Troch fossa exos",
+        "description": "",
+        "location": "Depths of the trochanteric fossa where the obturator externus inserts.",
+        "abbreviation": "FTFER",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_fossa_exostR",
+        "notes": [],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The area is smooth with little or no evidence of generally sharp exostoses. A single exostosis is considered absent.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "At least two exostoses are clearly visible in the depths of the fossa. Occasionally the exostoses will merge into a single large area with multiple peaks, and is also scored as present.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFE-1.jpg",
+                "title": "Present",
+                "caption": "(ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-2.jpg",
+                "title": "Present",
+                "caption": "Extostoses located (L) within and (R) slightly superior to the depths of teh trochanteric fossa. (ID# 2328)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-3R.jpg",
+                "title": "Present",
+                "caption": "The trochanteric fossa (circled) and medial trochanteric fossa exostoses are present. The fossa exostoses have merged into a single large spike with multiple peaks. (ID# 1800)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-4.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1808)"
+              },
+              {
+                "path": "assets/img/traits/FTFE-5.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1876)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 56,
+        "order_no": "10",
+        "title": "Femur trochanteric medial exostoses (right)",
+        "generic_title": "Troch med surf exos",
+        "description": "",
+        "location": "Area immediately proximal to the trochanteric fossa on the medial side of the proximal end of the greater trochanter where obturator internus and gemelli insert.",
+        "abbreviation": "FTFMR",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "troch_med_surf_exostR",
+        "notes": [
+          "The exostoses generally form a distinctly rough patch of bone that is separate from the similar patch of roughened bone deep within the trochanteric fossa. The two areas are occasionally confluent.",
+          "Occasionally the exostoses take the form a rough raised rim surrounding a small oval tendon insertion.",
+          "In some individuals, this area has low raised, but regular, ridges that do not extend off the surface of the bone. In the absence of raised, distinct exostoses, the feature should be scored as absent."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The area is smooth or has, at most, a single exostosis.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFME-1.jpg",
+                "title": "Absent",
+                "caption": "(ID# 2727)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-2.jpg",
+                "title": "Absent",
+                "caption": "Low rounded linear elevations that are not irregular additions of bone. (ID# 2486)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "A patch of >= 2 exostoses, similar to those seen in the trochanteric fossa, are present.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FTFME-3R.jpg",
+                "title": "Present",
+                "caption": "Both trochanteric fossa and medial trochanteric fossa (circled) exostoses are present. (ID# 1800)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-4.jpg",
+                "title": "Present",
+                "caption": "Image reversed. (ID# 1808)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-5.jpg",
+                "title": "Present",
+                "caption": "Exostoses are almost mergin with those in the trochanteric fossa. (ID# 2730)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-6.jpg",
+                "title": "Present",
+                "caption": "Atypical exostoses expressed as raised ridges. Image reversed. (ID# 1954)"
+              },
+              {
+                "path": "assets/img/traits/FTFME-7.jpg",
+                "title": "Present",
+                "caption": "Small exostoses (circled) are located slightly more lateral than where they are typically found (arrow). Although the location of exostoses in this region may vary slightly, exostoses located on the proximal portion of the greater trochanter should not be scored. (ID# 2547)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      }
+    ]
+  },
+  {
+    "name": "Tibia, Fibia, & Calcaneus",
+    "abbreviation": "tibiafibiacalcaneus",
+    "order_no": "11",
+    "columns": [
+      {
+        "order_no": 1,
+        "text": "L & All",
+        "traits": [
+          "Tib_LW",
+          "fibula_mercury_wingsL",
+          "Calc_LW"
+        ]
+      },
+      {
+        "order_no": 2,
+        "text": "R",
+        "traits": [
+          null,
+          "fibula_mercury_wingsR",
+          null
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "trait_no": 58,
+        "order_no": "1",
+        "title": "Fibula wings (left)",
+        "generic_title": "Fibula wings",
+        "description": "",
+        "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
+        "abbreviation": "FWL",
+        "side": "L",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fibula_mercury_wingsL",
+        "notes": [
+          "The most important feature is the amount of projection beyond the fibula's anterior margin. The other aspects of the feature, described above, are included in the definition because they often are the most apparent characteristic when the bone is first handled."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The feature is entirely abset, or the bony growth does not extend 1mm anteriorly beyond the margin of the fibula for a full 3mm in a proximal to distal direction.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FW-1.jpg",
+                "title": "Absent",
+                "caption": "Lateral (a) and medial (b) surfaces of a left fibula. A few faint striations are present on the lateral surface, but there is no ossification beyond the anterior border. In (b), slight postmortem damage makes the anterior border slightly irregular. (ID# 2547)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "There is a projection of bone >= 1mm beyond the anterior margin of the fibula for >= 3mm in length (i.e. at least a 1x3mm rectangle). The anterior margin of the projection is typically irregular and its surface has multiple striations paralleling the long axis of the feature. This extension of bone, which continues onto the lateral surface of the fibula, has a smooth, sclerotic appearance.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FW-2L.jpg",
+                "title": "Present",
+                "caption": "Views of the lateral (top) and medial (bottom) surfaces. On the lateral surface there is obvious sclerotic ossification. The extention and length of the ossification 9at least 1mm extension x 3mm length) can be most easily measured by looking at the medial surface. (ID# 2659)"
+              },
+              {
+                "path": "assets/img/traits/FW-3a.jpg",
+                "title": "Present",
+                "caption": "Lateral surface of a left fibula. (ID# 2325)"
+              },
+              {
+                "path": "assets/img/traits/FW-3b.jpg",
+                "title": "Present",
+                "caption": "Medial surface of a left fibula. Specimen number removed. (ID# 2325)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 59,
+        "order_no": "2",
+        "title": "Fibula wings (right)",
+        "generic_title": "Fibula wings",
+        "description": "",
+        "location": "The lateral surface and anterior edge of the lateral malleolus where the anterior talofibular and anterior tibiofibular ligaments attach.",
+        "abbreviation": "FWR",
+        "side": "R",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "fibula_mercury_wingsR",
+        "notes": [
+          "The most important feature is the amount of projection beyond the fibula's anterior margin. The other aspects of the feature, described above, are included in the definition because they often are the most apparent characteristic when the bone is first handled."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "absent",
+            "description": "The feature is entirely abset, or the bony growth does not extend 1mm anteriorly beyond the margin of the fibula for a full 3mm in a proximal to distal direction.",
+            "value": "0",
+            "abbreviation": "abs",
+            "images": [
+              {
+                "path": "assets/img/traits/FW-1.jpg",
+                "title": "Absent",
+                "caption": "Lateral (a) and medial (b) surfaces of a left fibula. A few faint striations are present on the lateral surface, but there is no ossification beyond the anterior border. In (b), slight postmortem damage makes the anterior border slightly irregular. (ID# 2547)"
+              }
+            ]
+          },
+          {
+            "order_no": "2",
+            "title": "present",
+            "description": "There is a projection of bone >= 1mm beyond the anterior margin of the fibula for >= 3mm in length (i.e. at least a 1x3mm rectangle). The anterior margin of the projection is typically irregular and its surface has multiple striations paralleling the long axis of the feature. This extension of bone, which continues onto the lateral surface of the fibula, has a smooth, sclerotic appearance.",
+            "value": "1",
+            "abbreviation": "pres",
+            "images": [
+              {
+                "path": "assets/img/traits/FW-2R.jpg",
+                "title": "Present",
+                "caption": "Views of the lateral (top) and medial (bottom) surfaces. On the lateral surface there is obvious sclerotic ossification. The extention and length of the ossification 9at least 1mm extension x 3mm length) can be most easily measured by looking at the medial surface. (ID# 2659)"
+              }
+            ]
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 57,
+        "order_no": "3",
+        "title": "Tibia light weight",
+        "generic_title": "Tibia weight",
+        "description": "",
+        "location": "The entire tibia",
+        "abbreviation": "",
+        "side": "U",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "Tib_LW",
+        "notes": [
+          "This trait should be recorded or, at least, mentally noted, when the bones are first picked up, usually when unpacking the skeleton's box. Handling bones for some time before scoring can result in skewed perceptions of relative bone weight.",
+          "In only rare cases will bone weight be asymmetric. When that occurs, record both sides and make a note on the data collection form."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "normal",
+            "description": "The bone weight falls within what one might expect for an individual of that size. Bones that are borderline, or only slightly lighter than normal, should be scored as normal. This observation is subjective, so err on the side of classifying the bone as normal.",
+            "value": "0",
+            "abbreviation": "norm",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "light",
+            "description": "The bone must be noticeably lighter than expected, but otherwise normal in appearance. A light tibia is often little more than a cortical bone shell.",
+            "value": "1",
+            "abbreviation": "light",
+            "images": []
+          }
+        ],
+        "images": []
+      },
+      {
+        "trait_no": 59,
+        "order_no": "4",
+        "title": "Calcaneus light weight",
+        "generic_title": "Calcaneus weight",
+        "description": "",
+        "location": "The entire calcaneus",
+        "abbreviation": "",
+        "side": "U",
+        "scorable": false,
+        "max_score": 0,
+        "advanced_mode_only": false,
+        "advanced_grouping": "",
+        "db_name": "Calc_LW",
+        "notes": [
+          "This trait should be recorded or, at least, mentally noted, when the bones are first picked up, usually when unpacking the skeleton's box. Handling bones for some time before scoring can result in skewed perceptions of relative bone weight.",
+          "In only rare cases will bone weight be asymmetric. When that occurs, record both sides and make a note on the data collection form."
+        ],
+        "scores": [
+          {
+            "order_no": "1",
+            "title": "normal",
+            "description": "The bone weight falls within what one might expect for an individual of that size. Bones that are borderline, or only slightly lighter than normal, should be scored as normal. This observation is subjective, so err on the side of classifying the bone as normal.",
+            "value": "0",
+            "abbreviation": "norm",
+            "images": []
+          },
+          {
+            "order_no": "2",
+            "title": "light",
+            "description": "The bone must be noticeably lighter than expected. The cortical bone is often extremely fragile and paper-thin.",
+            "value": "1",
+            "abbreviation": "light",
+            "images": []
+          }
+        ],
+        "images": []
       }
     ]
   }
