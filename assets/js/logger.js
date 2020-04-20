@@ -1,4 +1,6 @@
 const el = require('electron-log');
+const axios = require('axios').default;
+
 
 const perf = el.create('performance');
 perf.transports.file.fileName = "performance.log";
@@ -11,6 +13,15 @@ dbg.transports.file.fileName = "debug.log";
 
 function send(l) {
 
+}
+
+function send_analysis(data) {
+	axios.post('http://localhost:81/api.php?method=log', data)
+		.then(function(response) {
+			console.log("ajax response", response);
+		}).catch(function(error) {
+			console.error(error);	
+		});
 }
 
 function view(l) {
@@ -29,6 +40,8 @@ module.exports = {
 	dbg,
 	send,
 	view,
+
+	send_analysis,
 
 	// error,
 	// warn,

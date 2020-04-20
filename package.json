@@ -24,6 +24,7 @@
 		"travis-dist-mac": "electron-builder --macos -p always"
 	},
 	"dependencies": {
+		"axios": "^0.19.2",
 		"bootstrap": "^3.3.7",
 		"command-line-args": "^5.1.1",
 		"electron-context-menu": "^0.15.0",

@@ -1165,6 +1165,41 @@ function run_analysis() {
 				if (store.get("settings.analytics", true)) {
 					log.analysis.info(selections);
 					log.analysis.info(results);
+
+					try {
+						let sample_size = results.match(/(Sample size = )(.*)/i)[2];
+						let estimated_age = results.match(/(Estimated age at death = )(.*)( years)/i)[2];
+						let lower_95_bound = results.match(/(Estimated lower 95% bound = )(.*)( years)/i)[2];
+						let upper_95_bound = results.match(/(Estimated upper 95% bound = )(.*)( years)/i)[2];
+						let std_error = results.match(/(Standard error = )(.*)/i)[2];
+						let corr = results.match(/(Corr\(Age and Pred Age\) = )(.*)/i)[2];
+
+						log.send_analysis({
+							"analysis": {
+								"uuid": store.get("uuid"),
+								"app_version": store.get("version"),
+								"r_version": store.get("system.r_portable_version"),
+								"r_code_version": store.get("system.r_code_version"),
+								"db_version": store.get("system.db_version"),
+								"platform": store.get("system.platform"),
+								"platform_release": store.get("system.platform_release"),
+								"arch": store.get("system.arch"),
+								"time_to_analyze": (t1-t0),
+								"analysis_date": new Date()
+							},
+							"selections": selections,
+							"results": {
+								"sample_size": sample_size,
+								"estimated_age": estimated_age,
+								"lower_95_bound": lower_95_bound,
+								"upper_95_bound": upper_95_bound,
+								"std_error": std_error,
+								"corr": corr
+							}
+						});
+					} catch (err) {
+						console.error(err);
+					}
 				}
 
 				//display output images in Charts tab
