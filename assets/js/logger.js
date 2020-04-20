@@ -16,7 +16,7 @@ function send(l) {
 }
 
 function send_analysis(data) {
-	axios.post('http://localhost:81/api.php?method=log', data)
+	axios.post('http://www.rsquaredsolutions.xyz/ta3/api/api.php?method=log', data)
 		.then(function(response) {
 			console.log("ajax response", response);
 		}).catch(function(error) {
