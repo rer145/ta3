@@ -31,7 +31,7 @@ unhandled({
 				"event_label": "",
 				"event_value": JSON.stringify(error.stack)
 			}, 
-			store.get("settings.opt_in_debug")
+			true
 		);
 		// openNewGitHubIssue({
 		// 	user: 'rer145',
@@ -145,6 +145,18 @@ app.on('activate', async () => {
 	await app.whenReady();
 	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
+
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "main",
+			"event_action": "application-ready",
+			"event_label": "",
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
 
 	mainWindow.webContents.send('application-ready', cla.options);
 })();
@@ -400,6 +412,18 @@ function copy_file(src, dest, replace) {
 
 
 ipcMain.on("download-file", (event, info) => {
+	log.log_debug(
+		"info", 
+		{
+			"event_level": "info",
+			"event_category": "main",
+			"event_action": "download-file",
+			"event_label": "",
+			"event_value": info.url
+		}, 
+		store.get("settings.opt_in_debug")
+	);
+
 	info.properties.onProgress = status => mainWindow.webContents.send("download-progress", status);
 	download(BrowserWindow.getFocusedWindow(), info.url, info.properties)
 		.then(dl => {
