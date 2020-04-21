@@ -1,5 +1,6 @@
 const el = require('electron-log');
 const {is} = require('electron-util');
+const cla = require('./cla');
 const axios = require('axios').default;
 
 const Store = require('electron-store');
@@ -14,13 +15,15 @@ const dbg = el.create('debug');
 dbg.transports.file.fileName = "debug.log";
 
 function log_analysis(payload, optin) {
-	analysis.info(payload);
+	analysis.info(JSON.stringify(payload, null, 0));
 
 	if (optin) {
 		let full_data = {
 			"debug": get_debug_info(),
 			"data": payload
 		};
+		full_data["data"]["analysis"]["analysis_date"] = new Date();
+		console.warn(full_data);
 
 		let url = opt_in_base_url + 'api.php?method=log_analysis';
 		axios.post(url, full_data)
@@ -33,24 +36,25 @@ function log_analysis(payload, optin) {
 }
 
 function log_debug(level, payload, optin) {
+	let payload_min = JSON.stringify(payload, null, 0);
 	switch (level) {
 		case "info":
-			dbg.info(payload);
+			dbg.info(payload_min);
 			break;
 		case "warn":
-			dbg.warn(payload);
+			dbg.warn(payload_min);
 			break;
 		case "error":
-			dbg.error(payload);
+			dbg.error(payload_min);
 			break;
 		case "verbose":
-			dbg.verbose(payload);
+			dbg.verbose(payload_min);
 			break;
 		case "debug":
-			dbg.debug(payload);
+			dbg.debug(payload_min);
 			break;
 		default:
-			dbg.info(payload);
+			dbg.info(payload_min);
 			break;
 	}
 
@@ -59,6 +63,8 @@ function log_debug(level, payload, optin) {
 			"debug": get_debug_info(),
 			"data": payload
 		};
+		full_data["data"]["event_date"] = new Date();
+		console.warn(full_data);
 
 		let url = opt_in_base_url + 'api.php?method=log_debug';
 		axios.post(url, full_data)
@@ -84,7 +90,9 @@ function get_debug_info() {
 		"electron_version": store.get("system.electron_version"),
 		"chrome_version": store.get("system.chrome_version"),
 		"locale": store.get("system.locale"),
-		"locale_country_code": store.get("system.locale_country_code")
+		"locale_country_code": store.get("system.locale_country_code"),
+		"entry_mode": store.get("settings.entry_mode"),
+		"arguments": JSON.stringify(cla.options)
 	};
 }
 

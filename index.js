@@ -22,11 +22,22 @@ const { v4: uuidv4 } = require('uuid');
 
 unhandled({
 	reportButton: error => {
-		openNewGitHubIssue({
-			user: 'rer145',
-			repo: 'mamd-analytical',
-			body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
-		});
+		log.log_debug(
+			"error", 
+			{
+				"event_level": "error",
+				"event_category": "exception",
+				"event_action": "unhandled",
+				"event_label": "",
+				"event_value": JSON.stringify(error.stack)
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+		// openNewGitHubIssue({
+		// 	user: 'rer145',
+		// 	repo: 'mamd-analytical',
+		// 	body: `\`\`\`\n${error.stack}\n\`\`\`\n\n---\n\n${debugInfo()}`
+		// });
 	}
 });
 
@@ -296,6 +307,18 @@ function update_RProfile(rprofile_path, packages_path) {
 	fs.readFile(rprofile_path, function(err, data) {
 		if (err) {
 			console.error(err);
+			log.log_debug(
+				"error", 
+				{
+					"event_level": "error",
+					"event_category": "exception",
+					"event_action": "update_RProfile",
+					"event_label": "fs.readFile",
+					"event_value": JSON.stringify(err)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+
 			return;
 		}
 		
@@ -303,7 +326,20 @@ function update_RProfile(rprofile_path, packages_path) {
 			let toAppend = "\n" + searchText + "\n.libPaths(c('" + packages_path.replace(/\\/g, "/") + "'))\n";
 			
 			fs.appendFile(rprofile_path, toAppend, function(err) {
-				if (err) console.err(err);
+				if (err) {
+					console.err(err);
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "update_RProfile",
+							"event_label": "fs.appendFile",
+							"event_value": JSON.stringify(err)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
+				}
 				//console.log("Rprofile settings updated");
 			});
 		}
@@ -316,6 +352,17 @@ function make_directory(dir) {
 			fs.mkdirSync(dir);
 		} catch (err) {
 			console.log("Unable to create directory: " + err);
+			log.log_debug(
+				"error", 
+				{
+					"event_level": "error",
+					"event_category": "exception",
+					"event_action": "make_directory",
+					"event_label": dir,
+					"event_value": JSON.stringify(err)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
 		}
 	}
 };
@@ -330,7 +377,18 @@ function copy_file(src, dest, replace) {
 		fs.copyFile(src, dest, (err) => {
 			if (err) {
                 console.error("Error copying over " + src + " to " + dest);
-                console.error(err);
+				console.error(err);
+				log.log_debug(
+					"error", 
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "copy_fie",
+						"event_label": { "src": src, "dest": dest, "replace": replace },
+						"event_value": JSON.stringify(err)
+					}, 
+					store.get("settings.opt_in_debug")
+				);
             } else {
                 console.log(src + " was copied to " + dest);
             }

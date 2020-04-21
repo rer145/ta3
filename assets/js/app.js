@@ -1193,8 +1193,7 @@ function run_analysis() {
 
 						log.log_analysis({
 							"analysis": {
-								"time_to_analyze": (t1-t0),
-								"analysis_date": new Date()
+								"time_to_analyze": (t1-t0)
 							},
 							"selections": selections,
 							"results": parsed_output
@@ -1569,6 +1568,7 @@ function disable_button(id) {
 
 ipcRenderer.on('application-ready', (event, args) => {
 	cla_args = args;
+	//console.log(cla_args);
 
 	wire_global_events();
 

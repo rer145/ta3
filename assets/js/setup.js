@@ -46,9 +46,31 @@ function start() {
 							.then(function(response) {
 								resolve();
 							}, function(error) {
+								log.log_debug(
+									"error", 
+									{
+										"event_level": "error",
+										"event_category": "exception",
+										"event_action": "setup.start",
+										"event_label": "install_packages",
+										"event_value": JSON.stringify(error)
+									}, 
+									store.get("settings.opt_in_debug")
+								);
 								reject("Packages install error:", error);
 							});
 					}, function(error) {
+						log.log_debug(
+							"error", 
+							{
+								"event_level": "error",
+								"event_category": "exception",
+								"event_action": "setup.start",
+								"event_label": "install_rportable",
+								"event_value": JSON.stringify(error)
+							}, 
+							store.get("settings.opt_in_debug")
+						);
 						reject("R install error:", error);
 					});
 					
@@ -85,8 +107,17 @@ function install_rportable() {
 				batch_file, 
 				[], 
 				function(error, stdout, stderr) {
-					log.dbg.debug(`Error installing R-Portable: ${error}`);
-					log.dbg.debug(batch_file);
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "install_rportable",
+							"event_label": JSON.stringify(batch_file),
+							"event_value": JSON.stringify(error)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
 
 					console.error(error);
 					end_progress("setup-r", -1, stderr);
@@ -94,9 +125,17 @@ function install_rportable() {
 				}, 
 				function(stdout, stderr) {
 					let t1 = now();
-					if (store.get("settings.analytics", true)) {
-						log.perf.info(`Time to install R-Portable: ${(t1-t0)}`);
-					}
+					log.log_debug(
+						"info", 
+						{
+							"event_level": "info",
+							"event_category": "performance",
+							"event_action": "install_rportable",
+							"event_label": "",
+							"event_value": (t1-t0)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
 
 					console.log(stdout);
 					end_progress("setup-r", 0, "R-Portable (v3.6.2) installation was successful.");
@@ -126,7 +165,17 @@ function install_packages() {
 				store.get("app.rscript_path"), 
 				0o777, 
 				function(error) {
-					log.dbg.error(`Error setting chmod permissions on ${store.get("app.rscript_path")}: ${error}`);
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "install_packages",
+							"event_label": "chmod",
+							"event_value": JSON.stringify(error)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
 					console.error(error);
 					end_progress("setup-packages", -1, error);
 					reject(error);
@@ -146,18 +195,37 @@ function install_packages() {
 				batch_file, 
 				params, 
 				function(error, stdout, stderr) {
-					log.dbg.error(`Error installing packages: ${error}`);
-					log.dbg.debug(batch_file);
-					log.dbg.debug(params);
+					// log.dbg.error(`Error installing packages: ${error}`);
+					// log.dbg.debug(batch_file);
+					// log.dbg.debug(params);
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "install_packages",
+							"event_label": { "batch_file": batch_file, "params": params },
+							"event_value": JSON.stringify(error)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
 					console.error(error);
 					end_progress("setup-packages", -1, stderr);
 					reject(stderr);
 				}, 
 				function(stdout, stderr) {
 					let t1 = now();
-					if (store.get("settings.analytics", true)) {
-						log.perf.info(`Time to install packages: ${(t1-t0)}`);
-					}
+					log.log_debug(
+						"info", 
+						{
+							"event_level": "info",
+							"event_category": "performance",
+							"event_action": "install_packages",
+							"event_label": "",
+							"event_value": (t1-t0)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
 					console.log(stdout);
 					end_progress("setup-packages", 0, "R package installation was successful.");
 					resolve();

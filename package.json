@@ -13,7 +13,7 @@
 		"postinstall": "electron-builder install-app-deps",
 		"test": "npm run lint",
 		"start": "electron .",
-		"start-analysis": "electron . -analysis=\"d:\\Test Path Windows\\TA 3\\scripts\"",
+		"start-analysis": "electron . --analysis=\"d:\\Test Path Windows\\TA 3\\scripts\"",
 		"pack": "electron-builder --dir",
 		"dist": "electron-builder --macos --windows -p always",
 		"dist-win": "electron-builder --windows",
