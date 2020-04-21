@@ -141,16 +141,49 @@ app.on('activate', async () => {
 
 
 function prep_files_and_settings() {
-	// console.log("process args");
-	// console.log(process.argv);
-	// console.log("cla");
-	// console.log(cla.options);
 
-	//const appVersion = require(path.join(app.getAppPath(), "package.json")).version;
-	const appVersion = app.getVersion();
-	//store.set("version", appVersion);
+	let version = app.getVersion();
+	let uuid = store.get("uuid", uuidv4());
 
-	const systemInfo = {
+	let config = {
+		"version": version,
+		"uuid": uuid
+	};
+
+
+
+	let optInAnalysis = store.get("settings.opt_in_analysis", false);
+	let optInDebug = store.get("settings.opt_in_debug", false);
+	let optInAnalysisDate = store.get("settings.opt_in_analysis_date", "");
+	let optInDebugDate = store.get("settings.opt_in_debug_date", "");
+
+	let autoUpdates = store.get("settings.auto_check_for_updates", true);
+	let entryMode = store.get("settings.entry_mode", "basic");
+	
+	let devMode = store.get("settings.dev_mode", false);
+	if (cla.options && cla.options.debug)
+		devMode = true;
+	if (is.development)
+		devMode = true;
+
+	let firstRun = store.get("settings.first_run", true);
+	if (cla.options && cla.options.forceInstall)
+		firstRun = true;
+
+	let settings_config = {
+		"opt_in_analysis": optInAnalysis,
+		"opt_in_debug": optInDebug,
+		"opt_in_analysis_date": optInAnalysisDate,
+		"opt_in_debug_date": optInDebugDate,
+		"auto_check_for_updates": autoUpdates,
+		"first_run": firstRun,
+		"entry_mode": entryMode,
+		"dev_mode": devMode
+	};
+
+
+
+	let system_config = {
 		"node_version": process.versions['node'],
 		"electron_version": process.versions['electron'],
 		"chrome_version": process.versions['chrome'].replace(/\.\d+$/, ''),
@@ -165,90 +198,70 @@ function prep_files_and_settings() {
 	};
 
 
-	let uid = store.get("uuid", uuidv4());
-	let analytics = store.get("settings.analytics", true);
 
-	let firstRun = !store.has("settings.first_run") ? true : store.get("settings.first_run");
-	if (cla.options.forceInstall)
-		firstRun = true;
-
-	//let devMode = store.has("settings.dev_mode");
-	let autoUpdates = !store.has("settings.auto_check_for_updates") ? true : store.get("settings.auto_check_for_updates");
-	let entryMode = !store.has("settings.entry_mode") ? "basic" : store.get("settings.entry_mode");
-	let devMode = !store.has("settings.dev_mode") ? false : store.get("settings.dev_mode");
-
-	// store.set("settings", {
-	// 	"auto_check_for_updates": autoUpdates,
-	// 	"first_run": firstRun,
-	// 	"entry_mode": entryMode,
-	// 	"dev_mode": devMode
-	// });
-
-
-	// user paths
 	let userDataPath = path.join(app.getPath("home"), "TA3");
-	make_directory(userDataPath);
-
 	let userPackagesPath = path.join(userDataPath, "packages");
 	let userAnalysisPath = path.join(userDataPath, "analysis");
+	make_directory(userDataPath);
 	make_directory(userPackagesPath);
 	make_directory(userAnalysisPath);
 
-	// store.set("user", {
-	// 	"userdata_path": userDataPath,
-	// 	"packages_path": userPackagesPath,
-	// 	"analysis_path": userAnalysisPath
-	// });
+	let user_config = {
+		"userdata_path": userDataPath,
+		"packages_path": userPackagesPath,
+		"analysis_path": userAnalysisPath
+	};
 
-	// check if packages is empty, if so, consider it the first_run
 	if (fs.readdirSync(userPackagesPath).length == 0)
-		firstRun = true;
+		settings_config["first_run"] = true;
 
 
-
-	// app paths
+	
 	let resourcesPath = process.resourcesPath;
 	if (cla.options && cla.options.resources && cla.options.resources.length > 0) {
 		resourcesPath = cla.options.resources;
 	} else {
 		if (is.development) {
-			resourcesPath = path.join(__dirname, "build");	
+			resourcesPath = path.join(__dirname, "build");
 		}
 	}
 
 	let RPortablePath = path.join(resourcesPath, "R-Portable", "bin", "RScript.exe");
 	let RProfileFile = path.join(resourcesPath, "R-Portable", "library", "base", "R", "Rprofile");
+
 	let RAnalysisPath = path.join(resourcesPath, "scripts");
-	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0) {
+	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0)
 		RAnalysisPath = cla.options.analysis;
-	}
 	
 	if (is.development) {
 		RPortablePath = path.join(
-			resourcesPath, 
-			"R-Portable", 
+			resourcesPath,
+			"R-Portable",
 			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
-			"bin", 
-			"RScript.exe");
+			"bin",
+			"RScript.exe"
+		);
 
 		RProfileFile = path.join(
 			resourcesPath, 
-			"R-Portable", 
+			"R-Portable",
 			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
-			"library", 
+			"library",
 			"base",
 			"R",
-			"Rprofile");
+			"Rprofile"
+		);
 	}
 
-	// mac only - R-Portable will be copied to user home directory
-	//  unable to execute within asar package
+	// mac only - R-Portable will be copied to user home directory 
+	//   during initial setup process
+	//   Unable to execute when inside asar package
 	if (is.macos) {
 		let RPortable = path.join(userDataPath, "R-Portable");
 		make_directory(RPortable);
 
 		if (fs.readdirSync(RPortable).length == 0)
-			firstRun = true;
+			settings_config['first_run'] = true;
 
 		RPortablePath = path.join(
 			userDataPath,
@@ -258,57 +271,38 @@ function prep_files_and_settings() {
 		);
 	}
 
-
-	// // windows only - copy over installation batch files
-	// if (is.windows) {
-
-	// }
-
-	// store.set("app", {
-	// 	"resources_path": resourcesPath,
-	// 	"rscript_path": RPortablePath,
-	// 	"r_analysis_path": RAnalysisPath
-	// });
-
-
-	let settings = {
-		"version": appVersion,
-		"uuid": uid,
-		"settings": {
-			"analytics": analytics,
-			"auto_check_for_updates": autoUpdates,
-			"first_run": firstRun,
-			"entry_mode": entryMode,
-			"dev_mode": devMode
-		},
-		"system": systemInfo,
-		"user": {
-			"userdata_path": userDataPath,
-			"packages_path": userPackagesPath,
-			"analysis_path": userAnalysisPath
-		},
-		"app": {
-			"resources_path": resourcesPath,
-			"rscript_path": RPortablePath,
-			"r_analysis_path": RAnalysisPath
-		}
+	let app_config = {
+		"resources_path": resourcesPath,
+		"rscript_path": RPortablePath,
+		"r_analysis_path": RAnalysisPath
 	};
-	store.set(settings);
 
 
+
+	config['settings'] = settings_config;
+	config['system'] = system_config;
+	config['user'] = user_config;
+	config['app'] = app_config;
+	store.set(config);
+
+
+	update_RProfile(RProfileFile, userPackagesPath);
+}
+
+function update_RProfile(rprofile_path, packages_path) {
 	// update and copy Rprofile with .libPath() info
 	let searchText = "### Setting TA3 .libPaths() ###";
 
-	fs.readFile(RProfileFile, function(err, data) {
+	fs.readFile(rprofile_path, function(err, data) {
 		if (err) {
 			console.error(err);
 			return;
 		}
 		
 		if (!data.includes(searchText)) {
-			let toAppend = "\n" + searchText + "\n.libPaths(c('" + userPackagesPath.replace(/\\/g, "/") + "'))\n";
+			let toAppend = "\n" + searchText + "\n.libPaths(c('" + packages_path.replace(/\\/g, "/") + "'))\n";
 			
-			fs.appendFile(RProfileFile, toAppend, function(err) {
+			fs.appendFile(rprofile_path, toAppend, function(err) {
 				if (err) console.err(err);
 				//console.log("Rprofile settings updated");
 			});

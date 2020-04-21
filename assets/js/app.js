@@ -39,6 +39,11 @@ $(document).ready(function() {
 	$(".app-name").text(appName);
 });
 
+function app_consent() {
+	$("#data-modal").modal('show');
+	populate_settings();
+}
+
 function app_install() {
 	show_setup_screen();
 	wire_setup_events();
@@ -63,11 +68,74 @@ function load_database() {
 function populate_settings() {
 	var entry_mode = store.get('settings.entry_mode');
 	if (entry_mode.length > 0) {
-		$("#entry_mode_" + entry_mode).attr('checked', 'checked');
+		//$("#entry_mode_" + entry_mode).attr('checked', 'checked');
+		$("input[name=settings_entry_mode][value='" + entry_mode + "']").prop("checked", true);
 	} else {
-		$("#entry_mode_basic").attr('checked', 'checked');
+		//$("#entry_mode_basic").attr('checked', 'checked');
+		$("input[name=settings_entry_mode][value='basic']").prop("checked", true);
 		store.set("settings.entry_mode", "basic");
 	}
+
+	let opt_in_analysis = store.get("settings.opt_in_analysis");
+	let opt_in_analysis_date = store.get("settings.opt_in_analysis_date");
+	let opt_in_debug = store.get("settings.opt_in_debug");
+	let opt_in_debug_date = store.get("settings.opt_in_debug_date");
+
+	$("input[name=settings_opt_in_analysis][value='" + opt_in_analysis + "']").prop("checked", true);
+	$("input[name=settings_opt_in_debug][value='" + opt_in_debug + "']").prop("checked", true);
+
+	if (opt_in_analysis_date.length > 0) {
+		$("#opt_in_analysis_date").find("span").html(opt_in_analysis_date);
+	}
+
+	if (opt_in_debug_date.length > 0) {
+		$("#opt_in_debug_date").find("span").html(opt_in_debug_date);
+	}
+}
+
+function wire_global_events() {
+	$('#settings-modal').on('show.bs.modal', function (e) {
+		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
+		populate_settings();
+	});
+
+	$('#data-modal').on('show.bs.modal', function (e) {
+		populate_settings();
+	});
+
+	$("#rscript_file_input").change(function(e) {
+		var reader = new FileReader();
+		var path = e.currentTarget.files[0].path;
+		if (path.length > 0) {
+			store.set('settings.rscript_path', path);
+			$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
+		}
+	});
+	
+	$("input:radio[name='settings_entry_mode']").change(function(e) {
+		store.set('settings.entry_mode', $(this).val());
+	});
+
+	$("input:radio[name='settings_opt_in_analysis']").change(function(e) {
+		store.set('settings.opt_in_analysis', Boolean($(this).val()));
+		store.set('settings.opt_in_analysis_date', new Date());
+	});
+
+	$("input:radio[name='settings_opt_in_debug']").change(function(e) {
+		store.set('settings.opt_in_debug', Boolean($(this).val()));
+		store.set('settings.opt_in_debug_date', new Date());
+	});
+
+	$("#save-setting-button").click(function(e) {
+		$("#settings-modal").modal('hide');
+		check_config_settings();
+	});
+
+	$("#save-data-button").click(function(e) {
+		store.set("settings.opt_in_analysis_date", new Date());
+		store.set("settings.opt_in_debug_date", new Date());
+		$("#data-modal").modal('hide');
+	});
 }
 
 function wire_setup_events() {
@@ -78,10 +146,6 @@ function wire_setup_events() {
 		let t0 = now();
 		setup.start().then(function(response) {
 			let t1 = now();
-			if (store.get("settings.analytics", true)) {
-				log.perf.info(`Time to Setup: ${(t1-t0)}`);
-			}
-
 			store.set("settings.first_run", false);
 
 			app_init();
@@ -123,30 +187,6 @@ function wire_event_handlers() {
 	$("#settings-modal").on("click", ".rscript-settings-link", function() {
 		store.set('settings.rscript_path', $(this).text());
 		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
-	});
-
-	
-	$('#settings-modal').on('show.bs.modal', function (e) {
-		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
-		populate_settings();
-	});
-
-	$("#rscript_file_input").change(function(e) {
-		var reader = new FileReader();
-		var path = e.currentTarget.files[0].path;
-		if (path.length > 0) {
-			store.set('settings.rscript_path', path);
-			$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
-		}
-	});
-	
-	$("input:radio[name='settings_entry_mode']").change(function(e) {
-		store.set('settings.entry_mode', $(this).val());
-	});
-
-	$("#save-setting-button").click(function(e) {
-		$("#settings-modal").modal('hide');
-		check_config_settings();
 	});
 	
 	$("#save-button").click(function(e) {
@@ -1124,15 +1164,8 @@ function run_analysis() {
 			parameters, 
 			function(error, stdout, stderr) {
 				let t1 = now();
-
-				if (store.get("settings.analytics", true)) {
-					log.perf.error(`Time to Analyze: ${(t1-t0)}`);
-
-					let inputs = fs.readFileSync(path.join(temp_dir, data_file)).toString();
-					log.perf.debug(inputs);
-				}
-
 				console.error(error);
+
 				var resultError = $("<div></div>");
 				resultError.addClass("alert alert-danger")
 					.attr("role", "alert")
@@ -1143,16 +1176,8 @@ function run_analysis() {
 			},
 			function(stdout, stderr) {
 				let t1 = now();
-
-				if (store.get("settings.analytics", true)) {
-					log.perf.info(`Time to Analyze: ${(t1-t0)}`);
-
-					// let inputs = fs.readFileSync(path.join(temp_dir, data_file)).toString();
-					log.perf.debug(selections);
-				}
-
-					
 				console.log(stdout);
+
 				//display output text in Results tab
 				var outputDiv = $("#result-output");
 				var code = $("<pre></pre>");
@@ -1162,41 +1187,18 @@ function run_analysis() {
 				code.append(results);
 				outputDiv.append(code);
 
-				if (store.get("settings.analytics", true)) {
-					log.analysis.info(selections);
-					log.analysis.info(results);
-
+				if (store.get("settings.opt_in_analysis", true)) {
 					try {
-						let sample_size = results.match(/(Sample size = )(.*)/i)[2];
-						let estimated_age = results.match(/(Estimated age at death = )(.*)( years)/i)[2];
-						let lower_95_bound = results.match(/(Estimated lower 95% bound = )(.*)( years)/i)[2];
-						let upper_95_bound = results.match(/(Estimated upper 95% bound = )(.*)( years)/i)[2];
-						let std_error = results.match(/(Standard error = )(.*)/i)[2];
-						let corr = results.match(/(Corr\(Age and Pred Age\) = )(.*)/i)[2];
+						let parsed_output = parse_ta3_output(results);
 
-						log.send_analysis({
+						log.log_analysis({
 							"analysis": {
-								"uuid": store.get("uuid"),
-								"app_version": store.get("version"),
-								"r_version": store.get("system.r_portable_version"),
-								"r_code_version": store.get("system.r_code_version"),
-								"db_version": store.get("system.db_version"),
-								"platform": store.get("system.platform"),
-								"platform_release": store.get("system.platform_release"),
-								"arch": store.get("system.arch"),
 								"time_to_analyze": (t1-t0),
 								"analysis_date": new Date()
 							},
 							"selections": selections,
-							"results": {
-								"sample_size": sample_size,
-								"estimated_age": estimated_age,
-								"lower_95_bound": lower_95_bound,
-								"upper_95_bound": upper_95_bound,
-								"std_error": std_error,
-								"corr": corr
-							}
-						});
+							"results": parsed_output
+						}, store.get("settings.opt_in_analysis"));
 					} catch (err) {
 						console.error(err);
 					}
@@ -1220,6 +1222,30 @@ function run_analysis() {
 		resultError.addClass("alert alert-danger")
 			.attr("role", "alert")
 			.html("There was an error while generating the data file for analysis.");
+	}
+}
+
+function parse_ta3_output(data) {
+	try {
+		return {
+			"sample_size": data.match(/(Sample size = )(.*)/i)[2],
+			"estimated_age": data.match(/(Estimated age at death = )(.*)( years)/i)[2],
+			"lower_95_bound": data.match(/(Estimated lower 95% bound = )(.*)( years)/i)[2],
+			"upper_95_bound": data.match(/(Estimated upper 95% bound = )(.*)( years)/i)[2],
+			"std_error": data.match(/(Standard error = )(.*)/i)[2],
+			"corr": data.match(/(Corr\(Age and Pred Age\) = )(.*)/i)[2]
+		};
+	}
+	catch (error) {
+		console.error(error);
+		return {
+			"sample_size": -1,
+			"estimated_age": -1,
+			"lower_95_bound": -1,
+			"upper_95_bound": -1,
+			"std_error": -1,
+			"corr": -1
+		}
 	}
 }
 
@@ -1376,6 +1402,9 @@ ipcRenderer.on('save-case', (event, arg) => {
 });
 ipcRenderer.on('settings', (event, arg) => {
 	$('#settings-modal').modal('show');
+});
+ipcRenderer.on('data-collection', (event, arg) => {
+	$('#data-modal').modal('show');
 });
 ipcRenderer.on('show-case-info', (event, arg) => {
 	$('#main-tabs a[href="#caseinfo"]').tab('show');
@@ -1541,11 +1570,19 @@ function disable_button(id) {
 ipcRenderer.on('application-ready', (event, args) => {
 	cla_args = args;
 
+	wire_global_events();
+
 	let forceInstall = cla_args.forceInstall;
 	let is_installed = setup.check_installation(forceInstall);
 	if (is_installed) {
 		app_init();
 	} else {
 		app_install();
+	}
+
+	// check consent settings
+	if (store.get("settings.opt_in_analysis_date", "").length == 0 || 
+		store.get("settings.opt_in_debug_date", "").length == 0) {
+			app_consent();
 	}
 });

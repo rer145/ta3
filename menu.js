@@ -22,6 +22,10 @@ const showPreferences = () => {
 	win.getFocusedWindow().webContents.send('settings');
 };
 
+const showDataCollection = () => {
+	win.getFocusedWindow().webContents.send('data-collection');
+};
+
 const showCaseInfo = () => {
 	win.getFocusedWindow().webContents.send('show-case-info');
 };
@@ -106,6 +110,12 @@ ${debugInfo()}`;
 	helpSubmenu.push(
 		{
 			type: 'separator'
+		},
+		{
+			label: 'Data Collection',
+			click() {
+				showDataCollection();
+			}
 		},
 		aboutMenuItem({
 			icon: path.join(__dirname, 'assets', 'img', 'icons', 'icon.png'),

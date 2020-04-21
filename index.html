@@ -407,6 +407,63 @@
 
 
 
+		<div id="data-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Data Collection &amp; Privacy</h4>
+					</div>
+					<div class="modal-body">
+						<form id="data-form">
+							<p>
+								Your privacy is very important to us. No personal or other identifying information is ever collected or transmitted in any manner.
+							</p>
+							<p>
+								We do, however, wish to collect certain information regarding this application and the data collected and resulting analysis. This helps us improve not only the application, but the analysis algorithm as well. By default, these options are <strong><em>disabled</em></strong>, but if you wish, you may enable them below.
+							</p>
+							<div class="form-group">
+								<label for="settings_opt_in_analysis">Data &amp; Analysis Collection</label>
+								<div id="opt_in_analysis_date" class="text-danger"><strong><em>Last Changed: </em></strong><span></span></div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="opt_in_analysis_yes" name="settings_opt_in_analysis" value="true" />
+										I <strong>DO</strong> consent to collecting and transmitting data related to TA3 analysis. This data includes: the scored traits and the resulting analysis output. This data <strong><em>does not include</em></strong> any identifying information related to the case or subject.<br />
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="opt_in_analysis_no" name="settings_opt_in_analysis" value="false" />
+										I </strong>DO NOT</strong> consent to collecting or transmitting any data related to TA3 analysis.
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="settings_opt_in_analysis">Debugging &amp; Troubleshooting</label>
+								<div id="opt_in_debug_date" class="text-danger"><strong><em>Last Changed: </em></strong><span></span></div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="opt_in_debug_yes" name="settings_opt_in_debug" value="true" />
+										I <strong>DO</strong> consent to collecting and transmitting data for the purposes of troubleshooting or debugging the application and analysis. This data <strong><em>does not include</em></strong> any personally identifying information. It may include anonymized data, such as your operating system, application version information, and actions performed within the application. The full set of data collected will be made available for you to view at any time.
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" id="opt_in_debug_no" name="settings_opt_in_debug" value="false" />
+										I <strong>DO NOT</strong> consent to collecting or transmitting any data for the purposes of troubleshooting or debugging the application and analysis.
+									</label>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button id="save-data-button" type="button" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 
 		<div id="settings-modal" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
