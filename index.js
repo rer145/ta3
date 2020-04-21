@@ -170,7 +170,8 @@ function prep_files_and_settings() {
 
 	let config = {
 		"version": version,
-		"uuid": uuid
+		"uuid": uuid,
+		"session": uuidv4()
 	};
 
 

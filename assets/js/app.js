@@ -40,6 +40,18 @@ $(document).ready(function() {
 });
 
 function app_consent() {
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "view",
+			"event_action": "modal",
+			"event_label": "data",
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
+
 	$("#data-modal").modal('show');
 	populate_settings();
 }
@@ -95,43 +107,127 @@ function populate_settings() {
 
 function wire_global_events() {
 	$('#settings-modal').on('show.bs.modal', function (e) {
-		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "modal",
+				"event_label": "settings",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
+		//$("#settings-rscript-path").html(store.get('settings.rscript_path'));
 		populate_settings();
 	});
 
 	$('#data-modal').on('show.bs.modal', function (e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "modal",
+				"event_label": "data",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		populate_settings();
 	});
 
-	$("#rscript_file_input").change(function(e) {
-		var reader = new FileReader();
-		var path = e.currentTarget.files[0].path;
-		if (path.length > 0) {
-			store.set('settings.rscript_path', path);
-			$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
-		}
-	});
+	// $("#rscript_file_input").change(function(e) {
+	// 	var reader = new FileReader();
+	// 	var path = e.currentTarget.files[0].path;
+	// 	if (path.length > 0) {
+	// 		store.set('settings.rscript_path', path);
+	// 		$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
+	// 	}
+	// });
 	
 	$("input:radio[name='settings_entry_mode']").change(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "change-setting",
+				"event_label": "entry_mode",
+				"event_value": $(this).val()
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		store.set('settings.entry_mode', $(this).val());
 	});
 
 	$("input:radio[name='settings_opt_in_analysis']").change(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "change-optin",
+				"event_label": "analysis",
+				"event_value": $(this).val()
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		store.set('settings.opt_in_analysis', Boolean($(this).val()));
 		store.set('settings.opt_in_analysis_date', new Date());
 	});
 
 	$("input:radio[name='settings_opt_in_debug']").change(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "change-optin",
+				"event_label": "debug",
+				"event_value": $(this).val()
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		store.set('settings.opt_in_debug', Boolean($(this).val()));
 		store.set('settings.opt_in_debug_date', new Date());
 	});
 
 	$("#save-setting-button").click(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "save-settings",
+				"event_label": "",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$("#settings-modal").modal('hide');
 		check_config_settings();
 	});
 
 	$("#save-data-button").click(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "save-data",
+				"event_label": "",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		store.set("settings.opt_in_analysis_date", new Date());
 		store.set("settings.opt_in_debug_date", new Date());
 		$("#data-modal").modal('hide');
@@ -142,11 +238,35 @@ function wire_setup_events() {
 	$("#setup-start").on('click', function(e) {
 		e.preventDefault();
 		disable_button("setup-start");
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "setup-start",
+				"event_label": "",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
 		
 		let t0 = now();
 		setup.start().then(function(response) {
 			let t1 = now();
 			store.set("settings.first_run", false);
+
+			log.log_debug(
+				"verbose", 
+				{
+					"event_level": "verbose",
+					"event_category": "performance",
+					"event_action": "setup-start",
+					"event_label": "success",
+					"event_value": (t1-t0)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
 
 			app_init();
 
@@ -158,7 +278,33 @@ function wire_setup_events() {
 				.delay(3000)
 				.slideUp();
 		}, function(error) {
-			store.set("settings.first_run", true);	// set to force install on next run
+			let t1 = now();
+
+			store.set("settings.first_run", true);
+
+			log.log_debug(
+				"verbose", 
+				{
+					"event_level": "verbose",
+					"event_category": "performance",
+					"event_action": "setup-start",
+					"event_label": "error",
+					"event_value": (t1-t0)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+			log.log_debug(
+				"error", 
+				{
+					"event_level": "error",
+					"event_category": "exception",
+					"event_action": "setup-start",
+					"event_label": "",
+					"event_value": JSON.stringify(error)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+
 			console.error(error);
 			$("#setup-error-log pre").html(error);
 			$("#setup-error-log").show();
@@ -170,50 +316,163 @@ function wire_setup_events() {
 function wire_event_handlers() {
 	$("#welcome-new-case").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "welcome-new-case",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		new_case();
 		show_screen('case-screen');
 	});
 
 	$("#welcome-load-case").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "welcome-load-case",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		open_case();
 	});
 
 	$("#load-case").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "load-case",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
 		open_case();
 	});
 
-	$("#settings-modal").on("click", ".rscript-settings-link", function() {
-		store.set('settings.rscript_path', $(this).text());
-		$("#settings-rscript-path").html(store.get('settings.rscript_path'));
-	});
+	// $("#settings-modal").on("click", ".rscript-settings-link", function() {
+	// 	store.set('settings.rscript_path', $(this).text());
+	// 	$("#settings-rscript-path").html(store.get('settings.rscript_path'));
+	// });
 	
 	$("#save-button").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "save-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		save_case();
 	});
 
 	$("#save-analysis-button").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "save-analysis-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		save_case();
 	});
 
 	$("#main-tabs a").click(function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "tab",
+				"event_label": $(e.target).attr("aria-controls"),
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		//console.log($(this).attr("id"));
 		$(this).tab('show');
 	});
 	
 	$(".reset-button").click(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "reset-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		new_case();
 	});
 	
 	$("#analysis-button").click(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "tab",
+				"event_label": "#selections",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$('#main-tabs a[href="#selections"]').tab('show');
 	});
 	
 	$("#analysis-review-button").click(function(e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "tab",
+				"event_label": "#results",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$('#main-tabs a[href="#results"]').tab('show');
 		$('#main-tabs a[href="#results"]').show();
 		//$('#main-tabs a[href="#charts"]').show();
@@ -223,6 +482,18 @@ function wire_event_handlers() {
 	
 	$("#trait-pager").on("click", ".previous", function() {
 		if (!$(this).hasClass("disabled")) {
+			log.log_debug(
+				"verbose", 
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "pager-click",
+					"event_label": "previous",
+					"event_value": current_trait_text
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+
 			current_trait_idx--;
 			var temp = data_get_trait(current_section_idx, current_trait_idx);
 			current_trait_text = temp.db_name;
@@ -233,6 +504,18 @@ function wire_event_handlers() {
 	
 	$("#trait-pager").on("click", ".next", function() {
 		if (!$(this).hasClass("disabled")) {
+			log.log_debug(
+				"verbose", 
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "pager-click",
+					"event_label": "next",
+					"event_value": current_trait_text
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+
 			current_trait_idx++;
 			var temp = data_get_trait(current_section_idx, current_trait_idx);
 			current_trait_text = temp.db_name;
@@ -242,6 +525,30 @@ function wire_event_handlers() {
 	});
 	
 	$("#section-menu").on("click", ".list-group-item", function() {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "tab",
+				"event_label": "#evaluation",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "screen",
+				"event_label": "traits",
+				"event_value": $(this).data("section-id")
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$('#main-tabs a[href="#evaluation"]').tab('show');
 		select_section($(this));
 	});
@@ -250,6 +557,17 @@ function wire_event_handlers() {
 		var btn = $(this);
 		var identifier = String(btn.attr("data-section-text")) + "-" + String(btn.attr("data-trait-text")) + "-" + String(btn.attr("data-score-text"));
 
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "toggle-trait",
+				"event_label": "advanced",
+				"event_value": identifier
+			}, 
+			store.get("settings.opt_in_debug")
+		);
 
 		toggle_score_selection_text(
 			btn.attr("data-section-text"),
@@ -274,6 +592,18 @@ function wire_event_handlers() {
 	$("body").on("keyup", ".adv-text", function() {
 		var input = $(this);
 		var identifier = String(input.attr("data-section-text")) + "-" + String(input.attr("data-trait-text"));
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "score-trait",
+				"event_label": "advanced",
+				"event_value": identifier
+			}, 
+			store.get("settings.opt_in_debug")
+		);
 
 		if (!isNaN(input.val())) {
 			if (Number(input.val()) > Number(input.attr("data-max-score"))) {
@@ -305,6 +635,18 @@ function wire_event_handlers() {
 		// var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
 
 		var identifier = String($(this).attr("data-section-text")) + "-" + String($(this).attr("data-trait-text")) + "-" + String($(this).attr("data-score-text"));
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "toggle-trait",
+				"event_label": "basic",
+				"event_value": identifier
+			}, 
+			store.get("settings.opt_in_debug")
+		);
 
 		var btn = $(this);
 		
@@ -345,6 +687,18 @@ function wire_event_handlers() {
 	});
 	
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "view",
+				"event_action": "tab",
+				"event_label": $(e.target).attr("aria-controls"),
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		if ($(e.target).attr("aria-controls") === "caseinfo") {
 			$("#section-menu .list-group-item").removeClass("active");
 		}
@@ -371,21 +725,73 @@ function wire_event_handlers() {
 
 	$("body").on("click", "#download-update-button", function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "download-update-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		ipcRenderer.send("update-download");
 	});
 
 	$("body").on("click", "#dismiss-download-button", function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "dismiss-download-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$("#generic-alert").hide();
 	});
 
 	$("body").on("click", "#install-update-button", function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "install-update-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		ipcRenderer.send("update-install");
 	});
 
 	$("body").on("click", "#dismiss-install-button", function(e) {
 		e.preventDefault();
+
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "dismiss-install-button",
+				"event_value": ""
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		$("#generic-alert").hide();
 	});
 }
@@ -405,6 +811,18 @@ function check_config_settings() {
 }
 
 function show_screen(id) {
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "view",
+			"event_action": "screen",
+			"event_label": id,
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
+
 	$(".screen").hide();
 
 	if (id.includes('#'))
@@ -480,6 +898,18 @@ function select_section(obj) {
 	var section_idx = $(obj).data("section-id");
 	var section = data_get_section(section_idx);
 	var section_text = section.abbreviation;
+
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "user-action",
+			"event_action": "select-section",
+			"event_label": section_text,
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
 
 	current_traits = section.traits;
 	current_trait_idx = 0;
@@ -1063,11 +1493,35 @@ function generate_csv_file() {
 	}
 
 	try {
+		log.log_debug(
+			"verbose", 
+			{
+				"event_level": "verbose",
+				"event_category": "app-action",
+				"event_action": "write-file",
+				"event_label": "generate_csv_file",
+				"event_value": filename
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		var fullPath = path.join(store.get('user.analysis_path'), filename);
 		//console.log(fullPath);
 		fs.writeFileSync(fullPath, header + '\n' + output + '\n');
 		return filename;
 	} catch(err) { 
+		log.log_debug(
+			"error", 
+			{
+				"event_level": "error",
+				"event_category": "exception",
+				"event_action": "app",
+				"event_label": "generate_csv_file",
+				"event_value": JSON.stringify(err)
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		console.error(err);
 		return "";
 	}
@@ -1113,7 +1567,18 @@ function run_analysis() {
 					store.get("system.r_code_version")
 				], 
 				function(error, stdout, stderr) {
-					log.dbg.debug(`Error running session.R: ${error}`);
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "run_analysis",
+							"event_label": "session.R",
+							"event_value": JSON.stringify(error)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
+
 					console.error(error);
 					console.error(stdout);
 					console.error(stderr);
@@ -1124,7 +1589,20 @@ function run_analysis() {
 					console.log(stderr);
 				}
 			);
-		} catch(ex) { console.error(ex); }
+		} catch(ex) { 
+			log.log_debug(
+				"error", 
+				{
+					"event_level": "error",
+					"event_category": "exception",
+					"event_action": "run_analysis",
+					"event_label": "session.R",
+					"event_value": JSON.stringify(ex)
+				}, 
+				store.get("settings.opt_in_debug")
+			);
+			console.error(ex); 
+		}
 
 		var parameters = [
 			//store.get("app.rscript_path"),
@@ -1164,6 +1642,31 @@ function run_analysis() {
 			parameters, 
 			function(error, stdout, stderr) {
 				let t1 = now();
+
+				log.log_debug(
+					"info", 
+					{
+						"event_level": "info",
+						"event_category": "performance",
+						"event_action": "run_analysis",
+						"event_label": "error",
+						"event_value": (t1-t0)
+					}, 
+					store.get("settings.opt_in_debug")
+				);
+				
+				log.log_debug(
+					"error", 
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "run_analysis",
+						"event_label": "ta3.R",
+						"event_value": JSON.stringify(error)
+					}, 
+					store.get("settings.opt_in_debug")
+				);
+
 				console.error(error);
 
 				var resultError = $("<div></div>");
@@ -1187,20 +1690,18 @@ function run_analysis() {
 				code.append(results);
 				outputDiv.append(code);
 
-				if (store.get("settings.opt_in_analysis", true)) {
-					try {
-						let parsed_output = parse_ta3_output(results);
+				try {
+					let parsed_output = parse_ta3_output(results);
 
-						log.log_analysis({
-							"analysis": {
-								"time_to_analyze": (t1-t0)
-							},
-							"selections": selections,
-							"results": parsed_output
-						}, store.get("settings.opt_in_analysis"));
-					} catch (err) {
-						console.error(err);
-					}
+					log.log_analysis({
+						"analysis": {
+							"time_to_analyze": (t1-t0)
+						},
+						"selections": selections,
+						"results": parsed_output
+					}, store.get("settings.opt_in_analysis"));
+				} catch (err) {
+					console.error(err);
 				}
 
 				//display output images in Charts tab
@@ -1236,6 +1737,18 @@ function parse_ta3_output(data) {
 		};
 	}
 	catch (error) {
+		log.log_debug(
+			"error", 
+			{
+				"event_level": "error",
+				"event_category": "exception",
+				"event_action": "parse_ta3_output",
+				"event_label": "",
+				"event_value": JSON.stringify(error)
+			}, 
+			store.get("settings.opt_in_debug")
+		);
+
 		console.error(error);
 		return {
 			"sample_size": -1,
@@ -1294,7 +1807,21 @@ function open_case() {
 				var filePath = files[0];
 
 				fs.readFile(filePath, 'utf8', (err, data) => {
-					if (err) console.error(err);
+					if (err) {
+						log.log_debug(
+							"error", 
+							{
+								"event_level": "error",
+								"event_category": "exception",
+								"event_action": "open_case",
+								"event_label": "",
+								"event_value": JSON.stringify(err)
+							}, 
+							store.get("settings.opt_in_debug")
+						);
+
+						console.error(err);
+					}
 
 					var json = JSON.parse(data);
 
@@ -1343,9 +1870,23 @@ function save_case() {
 			]
 		};
 		dialog.showSaveDialog(null, options, (p) => {
-			console.log(p);
+			//console.log(p);
 			fs.writeFile(p, output, function(err) {
-				if (err) console.error(err);
+				if (err) {
+					log.log_debug(
+						"error", 
+						{
+							"event_level": "error",
+							"event_category": "exception",
+							"event_action": "save_case",
+							"event_label": "",
+							"event_value": JSON.stringify(err)
+						}, 
+						store.get("settings.opt_in_debug")
+					);
+
+					console.error(err);
+				}
 
 				console.log("File Saved");
 				window.current_file = p;
@@ -1355,7 +1896,20 @@ function save_case() {
 		});
 	} else {
 		fs.writeFile(window.current_file, output, function(err) {
-			if (err) console.error(err);
+			if (err) {
+				log.log_debug(
+					"error", 
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "save_case",
+						"event_label": "",
+						"event_value": JSON.stringify(err)
+					}, 
+					store.get("settings.opt_in_debug")
+				);
+				console.error(err);
+			}
 
 			console.log("File Saved");
 			window.is_dirty = false;
@@ -1381,6 +1935,18 @@ function update_file_status() {
 
 
 ipcRenderer.on('user-guide', (event, arg) => {
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "app-action",
+			"event_action": "user-guide",
+			"event_label": "",
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
+
 	if (is.macos) {
 		$("#toc-mac-warning").show();
 		$("#toc-mac-version").text(os.release());
@@ -1388,6 +1954,18 @@ ipcRenderer.on('user-guide', (event, arg) => {
 		$("#toc-mac-warning").hide();
 	}
 	
+	log.log_debug(
+		"verbose", 
+		{
+			"event_level": "verbose",
+			"event_category": "view",
+			"event_action": "modal",
+			"event_label": "user-guide",
+			"event_value": ""
+		}, 
+		store.get("settings.opt_in_debug")
+	);
+
 	$("#user-guide-modal").modal('show');
 });
 ipcRenderer.on('new-case', (event, arg) => {

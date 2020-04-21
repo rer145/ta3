@@ -4,7 +4,7 @@ const { autoUpdater } = require('electron-updater');
 const win = require('electron').BrowserWindow;
 const { ipcMain } = require("electron");
 
-const log = require('./assets/js/logger');
+const log = require('./logger');
 const Store = require('electron-store');
 const store = new Store();
 

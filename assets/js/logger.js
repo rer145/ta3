@@ -79,6 +79,7 @@ function log_debug(level, payload, optin) {
 function get_debug_info() {
 	return {
 		"uuid": store.get("uuid"),
+		"session": store.get("session"),
 		"app_version": store.get("version"),
 		"r_version": store.get("system.r_portable_version"),
 		"r_code_version": store.get("system.r_code_version"),

@@ -4,7 +4,7 @@ const sp = require('sudo-prompt');
 const cp = require('child_process');
 const fs = require('fs');
 
-const log = require('./assets/js/logger');
+const log = require('./logger');
 const Store = require('electron-store');
 const store = new Store();
 
