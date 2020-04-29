@@ -8,7 +8,7 @@
 		<!-- <link rel="stylesheet" href="assets/css/bootstrap-toc.min.css" /> -->
 	</head>
 	<body>
-		
+
 		<div class="container-fluid">
 
 			<div id="generic-alert" class="alert" role="alert"></div>
@@ -25,10 +25,35 @@
 					<div class="col-xs-8 col-xs-offset-2">
 						<div class="panel panel-default">
 							<div class="panel-body">
+								<div id="setup-assets" class="setup-item">
+									<div class="row">
+										<div class="col-xs-10 text-left">
+											<span class="setup-item-name">1) Download asset files <span class="setup-item-assets"></span>
+										</div>
+										<div class="col-xs-2 text-right">
+											<span class="setup-item-status">0 of 9</span>
+										</div>
+									</div>
+									<div class="pb row">
+										<div class="col-xs-12">
+											<div class="progress">
+												<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+													<span class="sr-only">0% Complete</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="err row" style="display:none;">
+										<div class="col-xs-12">
+											<pre></pre>
+										</div>
+									</div>
+								</div>
+
 								<div id="setup-r" class="setup-item">
 									<div class="row">
 										<div class="col-xs-10 text-left">
-											<span class="setup-item-name">1) R (v3.6.2)</span>
+											<span class="setup-item-name">2) R (v3.6.2)</span>
 										</div>
 										<div class="col-xs-2 text-right">
 											<span class="setup-item-status"></span>
@@ -53,9 +78,9 @@
 								<div id="setup-packages" class="setup-item">
 									<div class="row">
 										<div class="col-xs-10 text-left">
-											<span class="setup-item-name">2) Required R packages <span class="setup-item-package"></span>
+											<span class="setup-item-name">3) Required R packages <span class="setup-item-package"></span>
 										</div>
-										<div class="col--xs-2 text-right">
+										<div class="col-xs-2 text-right">
 											<span class="setup-item-status">0 of 5</span>
 										</div>
 									</div>
@@ -88,7 +113,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
@@ -96,6 +121,53 @@
 				<div class="row">
 					<div class="col-xs-8 col-xs-offset-2 text-center">
 						<button id="setup-start" class="btn btn-lg btn-success">Get Started</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="asset-screen" class="screen" style="display:none;">
+				<div class="row">
+					<div class="col-xs-8 col-xs-offset-2 text-center">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div id="setup-assets" class="setup-item">
+									<div class="row">
+										<div class="col-xs-12 text-left">
+											<div id="asset-alert" class="alert alert-info" role="alert">
+												The application needs to download one or more asset files in order to properly function.<br /><br />
+												<a id="install-asset-update-button" href="#" class="btn btn-primary">Download Now</a> <a id="dismiss-asset-update-button" href="#" class="alert-link pull-right">Dismiss</a>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="row">
+												<div class="col-xs-10 text-left">
+													<span class="setup-item-name">Downloading asset files <span class="setup-item-assets"></span>
+												</div>
+												<div class="col-xs-2 text-right">
+													<span class="setup-item-status">0 of 9</span>
+												</div>
+											</div>
+											<div class="pb row">
+												<div class="col-xs-12">
+													<div class="progress">
+														<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+															<span class="sr-only">0% Complete</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="err row" style="display:none;">
+												<div class="col-xs-12">
+													<pre></pre>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -160,7 +232,7 @@
 				<div id="offline-error-message" class="row" style="display:none;">
 					<div class="col-xs-12">
 						<div class="alert alert-warning" role="alert">
-							You are currently working offline. 
+							You are currently working offline.
 						</div>
 					</div>
 				</div>
@@ -183,7 +255,7 @@
 							<button id="settings-button" class="settings-button btn btn-warning" data-toggle="modal" data-target="#settings-modal">Settings</button>
 						</p>
 					</div>
-	
+
 					<div id="col-content" class="col-xs-9">
 						<ul id="main-tabs" class="nav nav-tabs" role="tablist">
 							<li role="presentation">
@@ -202,9 +274,9 @@
 								<a href="#charts" aria-controls="charts" role="tab" data-toggle="tab">Plots</a>
 							</li>
 						</ul>
-	
+
 						<div class="tab-content">
-							
+
 							<div role="tabpanel" class="tab-pane" id="caseinfo">
 								<fieldset>
 									<div class="form-group">
@@ -233,7 +305,7 @@
 									<button id="save-analysis-button" type="button" class="btn btn-primary" data-dismiss="modal">Save Analysis</button>
 								</p> -->
 							</div>
-	
+
 							<div role="tabpanel" class="tab-pane active" id="evaluation">
 								<div id="evaluation-content-empty" style="display:none;">
 									<h3>Select a section from the left to access the trait scoring.</h3>
@@ -245,9 +317,9 @@
 											<li class="next"><a href="#">Next <span aria-hidden="true">&rarr;</span></a></li>
 										</ul>
 									</nav>
-	
+
 									<div id="trait-content">
-	
+
 										<div id="trait-score-basic" class="entry-mode">
 											<div class="container-fluid">
 												<div class="row trait-header">
@@ -270,7 +342,7 @@
 												</div>
 											</div>
 										</div>
-	
+
 										<div id="trait-score-advanced"  class="entry-mode">
 											<div class="container-fluid">
 												<div id="advanced-mode-list"></div>
@@ -295,26 +367,26 @@
 												</div> -->
 											</div>
 										</div>
-	
+
 										<!-- <div id="trait-score-expert" class="entry-mode">
 											Expert mode
 										</div> -->
 									</div>
 								</div>
 							</div>
-	
+
 							<div role="tabpanel" class="tab-pane" id="selections">
 								<h2>Current Case Selections</h2>
 								<div id="current-selections"></div>
-								
+
 								<hr />
-	
+
 								<div class="text-center center-block">
-									<button id="analysis-review-button" class="btn btn-lg btn-primary analysis-button">Run Analysis</button> 
+									<button id="analysis-review-button" class="btn btn-lg btn-primary analysis-button">Run Analysis</button>
 									<button id="reset-button" class="reset-button btn btn-lg btn-danger">Reset</button>
 								</div>
 							</div>
-	
+
 							<div role="tabpanel" class="tab-pane" id="results">
 								<div id="result-status"></div>
 								<div id="result-loading">
@@ -325,11 +397,11 @@
 								<div id="result-debug"></div>
 								<div id="result-output"></div>
 							</div>
-	
+
 							<div role="tabpanel" class="tab-pane" id="charts">
 								<div id="result-images"></div>
 							</div>
-	
+
 						</div>
 					</div>
 				</div>
@@ -520,7 +592,7 @@
 
 		<div id="trait-score-template" class="template" style="display:none;">
 			<h3>
-				<span class="trait-score-title"></span> 
+				<span class="trait-score-title"></span>
 				<!-- <span class="trait-score-description glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="tooltip" data-placement="top" title=""></span> -->
 			</h3>
 			<p class="center-block text-center">
@@ -538,7 +610,7 @@
 				</a>
 			</div>
 		</div>
-	
+
 		<div id="selections-template" class="template" style="display:none;">
 			<div class="table-responsive table-hover table-striped">
 				<table class="table table-condensed">
@@ -552,7 +624,7 @@
 							<th>Section</th>
 							<th>Trait</th>
 							<th>Score</th>
-						</tr>		
+						</tr>
 					</thead>
 					<tbody></tbody>
 				</table>

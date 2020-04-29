@@ -16,6 +16,7 @@ const store = new Store();
 const cla = require('./assets/js/cla');
 const log = require('./assets/js/logger');
 const updater = require('./assets/js/updater');
+const updater_assets = require('./assets/js/updater_assets');
 
 const appName = app.getName();
 
@@ -51,34 +52,17 @@ const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:
 
 const helpSubmenu = [
 	{
-		label: 'User Guide',
+		label: 'Data Collection Form',
 		click(menuItem, focusedWindow, event) {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "help",
-					"event_value": "user-guide"
-				}, 
-				store.get("settings.opt_in_debug")
-			);
-			win.getFocusedWindow().webContents.send('user-guide');
-		}
-	},
-	{
-		label: 'Trait Manual',
-		click(menuItem, focusedWindow, event) {
-			log.log_debug(
-				"info", 
-				{
-					"event_level": "info",
-					"event_category": "menu",
-					"event_action": "click",
-					"event_label": "help",
-					"event_value": "trait-manual"
-				}, 
+					"event_value": "collection-form"
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -91,7 +75,61 @@ const helpSubmenu = [
 				transparent: false,
 				icon: path.join(__dirname, "/assets/img/icons/icon.png")
 			  });
-			  pdfWin.loadURL(path.join(__dirname, "/assets/trait-manual.pdf"));
+			  pdfWin.loadURL(path.join(store.get("user.assets_path"), "/pdf/collection-form.pdf"));
+		}
+	},
+	{
+		label: 'User Guide',
+		click(menuItem, focusedWindow, event) {
+			log.log_debug(
+				"info",
+				{
+					"event_level": "info",
+					"event_category": "menu",
+					"event_action": "click",
+					"event_label": "help",
+					"event_value": "user-guide"
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			const PDFWindow = require('electron-pdf-window');
+			const pdfWin = new PDFWindow({
+				width: 800,
+				height: 600,
+				title: app.getName() + " - Trait Manual",
+				backgroundColor: '#ffffff',
+				transparent: false,
+				icon: path.join(__dirname, "/assets/img/icons/icon.png")
+			  });
+			  pdfWin.loadURL(path.join(store.get("user.assets_path"), "/pdf/user-guide.pdf"));
+		}
+	},
+	{
+		label: 'Trait Manual',
+		click(menuItem, focusedWindow, event) {
+			log.log_debug(
+				"info",
+				{
+					"event_level": "info",
+					"event_category": "menu",
+					"event_action": "click",
+					"event_label": "help",
+					"event_value": "trait-manual"
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			const PDFWindow = require('electron-pdf-window');
+			const pdfWin = new PDFWindow({
+				width: 800,
+				height: 600,
+				title: app.getName() + " - Trait Manual",
+				backgroundColor: '#ffffff',
+				transparent: false,
+				icon: path.join(__dirname, "/assets/img/icons/icon.png")
+			  });
+			  pdfWin.loadURL(path.join(store.get("user.assets_path"), "/pdf/trait-manual.pdf"));
 		}
 	},
 	{ type: 'separator' },
@@ -107,14 +145,14 @@ const helpSubmenu = [
 		label: 'Report an Issue…',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "help",
 					"event_value": "report-issue"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -137,21 +175,39 @@ ${debugInfo()}`;
 	},
 	{ type: 'separator' },
 	{
-		label: 'Check for Updates',
+		label: 'Check for App Updates',
 		click(menuItem, focusedWindow, event) {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "help",
-					"event_value": "check-for-updates"
-				}, 
+					"event_value": "check-for-app-updates"
+				},
 				store.get("settings.opt_in_debug")
 			);
 
 			updater.checkForUpdates(menuItem, focusedWindow, event);
+		}
+	},
+	{
+		label: 'Check for Asset Updates',
+		click(menuItem, focusedWindow, event) {
+			log.log_debug(
+				"info",
+				{
+					"event_level": "info",
+					"event_category": "menu",
+					"event_action": "click",
+					"event_label": "help",
+					"event_value": "check-for-asset-updates"
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			updater_assets.checkForUpdates();
 		}
 	}
 ];
@@ -165,14 +221,14 @@ ${debugInfo()}`;
 			label: 'Data Collection and Privacy',
 			click() {
 				log.log_debug(
-					"info", 
+					"info",
 					{
 						"event_level": "info",
 						"event_category": "menu",
 						"event_action": "click",
 						"event_label": "help",
 						"event_value": "data-privacy"
-					}, 
+					},
 					store.get("settings.opt_in_debug")
 				);
 				showDataCollection();
@@ -191,14 +247,14 @@ const analysisMenu = [
 		label: 'View Case Info',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "view-case-info"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -209,14 +265,14 @@ const analysisMenu = [
 		label: 'View Selections',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "view-selections"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			showSelections();
@@ -226,14 +282,14 @@ const analysisMenu = [
 		label: 'Run Analysis',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "run-analysis"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			runAnalysis();
@@ -243,14 +299,14 @@ const analysisMenu = [
 		label: 'View Results',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "view-results"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			showResults();
@@ -263,14 +319,14 @@ const analysisMenu = [
 		checked: store.get('settings.entry_mode') == 'basic',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "entry-mode-basic"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			store.set('settings.entry_mode', 'basic');
@@ -282,14 +338,14 @@ const analysisMenu = [
 		checked: store.get('settings.entry_mode') == 'advanced',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "analysis",
 					"event_value": "entry-mode-advanced"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			store.set('settings.entry_mode', 'advanced');
@@ -318,14 +374,14 @@ const debugSubmenu = [
 		label: 'Force Reload',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "force-reload"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			app.relaunch();
@@ -337,14 +393,14 @@ const debugSubmenu = [
 		label: 'Developer Tools',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "developer-tools"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			win.getFocusedWindow().toggleDevTools()
@@ -356,14 +412,14 @@ const debugSubmenu = [
 		label: 'Show App Data',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "show-app-data"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			shell.openItem(app.getPath('userData'));
@@ -373,14 +429,14 @@ const debugSubmenu = [
 		label: 'Delete App Data',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "delete-app-data"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			shell.moveItemToTrash(app.getPath('userData'));
@@ -401,14 +457,14 @@ const debugSubmenu = [
 		label: 'Delete Settings',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "delete-settings"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			store.clear();
@@ -420,14 +476,14 @@ const debugSubmenu = [
 		label: 'Run Installer',
 		click() {
 			log.log_debug(
-				"info", 
+				"info",
 				{
 					"event_level": "info",
 					"event_category": "menu",
 					"event_action": "click",
 					"event_label": "debug",
 					"event_value": "run-installer"
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			store.set("settings.first_run", true);
@@ -457,14 +513,14 @@ const macosTemplate = [
 				label: 'Settings',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "mac",
 							"event_value": "settings"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					showPreferences();
@@ -487,14 +543,14 @@ const macosTemplate = [
 				label: 'New',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "new"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('new-case');
@@ -505,14 +561,14 @@ const macosTemplate = [
 				label: 'Open',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "open"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('open-case');
@@ -523,14 +579,14 @@ const macosTemplate = [
 				label: 'Save',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "save"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('save-case');
@@ -544,14 +600,14 @@ const macosTemplate = [
 				label: 'Settings',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "settings"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					showPreferences();
@@ -606,14 +662,14 @@ const otherTemplate = [
 				label: 'New',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "new"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('new-case');
@@ -624,14 +680,14 @@ const otherTemplate = [
 				label: 'Open',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "open"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('open-case');
@@ -642,14 +698,14 @@ const otherTemplate = [
 				label: 'Save',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "save"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					win.getFocusedWindow().webContents.send('save-case');
@@ -663,14 +719,14 @@ const otherTemplate = [
 				label: 'Settings',
 				click() {
 					log.log_debug(
-						"info", 
+						"info",
 						{
 							"event_level": "info",
 							"event_category": "menu",
 							"event_action": "click",
 							"event_label": "file",
 							"event_value": "settings"
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 					showPreferences();

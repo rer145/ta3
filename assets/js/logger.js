@@ -6,7 +6,7 @@ const axios = require('axios').default;
 const Store = require('electron-store');
 const store = new Store();
 
-const opt_in_base_url = is.development ? "http://localhost:81/" : "http://www.rsquaredsolutions.xyz/ta3/api/";
+const opt_in_base_url = is.development ? "http://localhost:81/api/" : "https://ta3info.com/api/";
 
 const analysis = el.create('analysis');
 analysis.transports.file.fileName = "analysis.log";
@@ -23,14 +23,17 @@ function log_analysis(payload, optin) {
 			"data": payload
 		};
 		full_data["data"]["analysis"]["analysis_date"] = new Date();
-		//console.warn(full_data);
+		console.warn(full_data);
 
-		let url = opt_in_base_url + 'api.php?method=log_analysis';
+		let url = opt_in_base_url + 'log/analysis';
+		if (is.development)
+			url = url + ".php";
+
 		axios.post(url, full_data)
 			.then(function(response) {
 				//console.log(response);
 			}).catch(function(error) {
-				console.error(error);	
+				console.error(error);
 			});
 	}
 }
@@ -66,12 +69,15 @@ function log_debug(level, payload, optin) {
 		full_data["data"]["event_date"] = new Date();
 		//console.warn(full_data);
 
-		let url = opt_in_base_url + 'api.php?method=log_debug';
+		let url = opt_in_base_url + 'log/debug';
+		if (is.development)
+			url = url + ".php";
+
 		axios.post(url, full_data)
 			.then(function(response) {
 				//console.log(response);
 			}).catch(function(error) {
-				console.error(error);	
+				console.error(error);
 			});
 	}
 }

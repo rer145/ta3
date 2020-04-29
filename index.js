@@ -23,14 +23,14 @@ const { v4: uuidv4 } = require('uuid');
 unhandled({
 	reportButton: error => {
 		log.log_debug(
-			"error", 
+			"error",
 			{
 				"event_level": "error",
 				"event_category": "exception",
 				"event_action": "unhandled",
 				"event_label": "",
 				"event_value": JSON.stringify(error.stack)
-			}, 
+			},
 			true
 		);
 		// openNewGitHubIssue({
@@ -147,14 +147,14 @@ app.on('activate', async () => {
 	mainWindow = await createMainWindow();
 
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "main",
 			"event_action": "application-ready",
 			"event_label": "",
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -183,7 +183,7 @@ function prep_files_and_settings() {
 
 	let autoUpdates = store.get("settings.auto_check_for_updates", true);
 	let entryMode = store.get("settings.entry_mode", "basic");
-	
+
 	let devMode = store.get("settings.dev_mode", false);
 	if (cla.options && cla.options.debug)
 		devMode = true;
@@ -226,21 +226,27 @@ function prep_files_and_settings() {
 	let userDataPath = path.join(app.getPath("home"), "TA3");
 	let userPackagesPath = path.join(userDataPath, "packages");
 	let userAnalysisPath = path.join(userDataPath, "analysis");
+	let userAssetsPath = path.join(userDataPath, "assets");
 	make_directory(userDataPath);
 	make_directory(userPackagesPath);
 	make_directory(userAnalysisPath);
+	make_directory(userAssetsPath);
+	make_directory(path.join(userAssetsPath, "analysis"));
+	make_directory(path.join(userAssetsPath, "pdf"));
+	make_directory(path.join(userAssetsPath, "database"));
 
 	let user_config = {
 		"userdata_path": userDataPath,
 		"packages_path": userPackagesPath,
-		"analysis_path": userAnalysisPath
+		"analysis_path": userAnalysisPath,
+		"assets_path": userAssetsPath
 	};
 
 	if (fs.readdirSync(userPackagesPath).length == 0)
 		settings_config["first_run"] = true;
 
 
-	
+
 	let resourcesPath = process.resourcesPath;
 	if (cla.options && cla.options.resources && cla.options.resources.length > 0) {
 		resourcesPath = cla.options.resources;
@@ -253,10 +259,10 @@ function prep_files_and_settings() {
 	let RPortablePath = path.join(resourcesPath, "R-Portable", "bin", "RScript.exe");
 	let RProfileFile = path.join(resourcesPath, "R-Portable", "library", "base", "R", "Rprofile");
 
-	let RAnalysisPath = path.join(resourcesPath, "scripts");
+	let RAnalysisPath = path.join(userAssetsPath, "analysis");
 	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0)
 		RAnalysisPath = cla.options.analysis;
-	
+
 	if (is.development) {
 		RPortablePath = path.join(
 			resourcesPath,
@@ -267,7 +273,7 @@ function prep_files_and_settings() {
 		);
 
 		RProfileFile = path.join(
-			resourcesPath, 
+			resourcesPath,
 			"R-Portable",
 			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
 			"library",
@@ -277,7 +283,7 @@ function prep_files_and_settings() {
 		);
 	}
 
-	// mac only - R-Portable will be copied to user home directory 
+	// mac only - R-Portable will be copied to user home directory
 	//   during initial setup process
 	//   Unable to execute when inside asar package
 	if (is.macos) {
@@ -302,11 +308,34 @@ function prep_files_and_settings() {
 	};
 
 
-
 	config['settings'] = settings_config;
 	config['system'] = system_config;
 	config['user'] = user_config;
 	config['app'] = app_config;
+
+	if (!store.has("versions")) {
+		let version_config = {
+			"analysis": {
+				"install": { "file": "install.R", "version": store.get("versions.analysis.install.version", "0.0.0") },
+				"analysis": { "file": "ta3.R", "version": store.get("versions.analysis.analysis.version", "0.0.0") },
+				"case_scores": { "file": "TA3_Case_Scores.Rda", "version": store.get("versions.analysis.case_scores.version", "0.0.0") },
+				"bum": { "file": "TA3BUM.Rda", "version": store.get("versions.analysis.bum.version", "0.0.0") },
+				"oum": { "file": "TA3OUM.Rda", "version": store.get("versions.analysis.oum.version", "0.0.0") }
+			},
+			"pdf": {
+				"trait_manual": { "file": "trait-manual.pdf", "version": store.get("versions.pdf.trait_manual.version", "0.0.0") },
+				"collection_form": { "file": "collection-form.pdf", "version": store.get("versions.pdf.collection_form.version", "0.0.0") },
+				"user_guide": { "file": "user-guide.pdf", "version": store.get("versions.pdf.user_guide.version", "0.0.0") }
+			},
+			"application": version,
+			"r_portable": store.get("versions.r_portable", "0.0.0"),
+			"database": store.get("versions.database", "0.0.0")
+		};
+		config['versions'] = version_config;
+	} else {
+		config['versions'] = store.get("versions");
+	}
+
 	store.set(config);
 
 
@@ -321,35 +350,35 @@ function update_RProfile(rprofile_path, packages_path) {
 		if (err) {
 			console.error(err);
 			log.log_debug(
-				"error", 
+				"error",
 				{
 					"event_level": "error",
 					"event_category": "exception",
 					"event_action": "update_RProfile",
 					"event_label": "fs.readFile",
 					"event_value": JSON.stringify(err)
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
 			return;
 		}
-		
+
 		if (!data.includes(searchText)) {
 			let toAppend = "\n" + searchText + "\n.libPaths(c('" + packages_path.replace(/\\/g, "/") + "'))\n";
-			
+
 			fs.appendFile(rprofile_path, toAppend, function(err) {
 				if (err) {
 					console.err(err);
 					log.log_debug(
-						"error", 
+						"error",
 						{
 							"event_level": "error",
 							"event_category": "exception",
 							"event_action": "update_RProfile",
 							"event_label": "fs.appendFile",
 							"event_value": JSON.stringify(err)
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 				}
@@ -360,20 +389,20 @@ function update_RProfile(rprofile_path, packages_path) {
 }
 
 function make_directory(dir) {
-	if (!fs.existsSync(dir)){ 
+	if (!fs.existsSync(dir)){
 		try {
 			fs.mkdirSync(dir);
 		} catch (err) {
 			console.log("Unable to create directory: " + err);
 			log.log_debug(
-				"error", 
+				"error",
 				{
 					"event_level": "error",
 					"event_category": "exception",
 					"event_action": "make_directory",
 					"event_label": dir,
 					"event_value": JSON.stringify(err)
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 		}
@@ -392,14 +421,14 @@ function copy_file(src, dest, replace) {
                 console.error("Error copying over " + src + " to " + dest);
 				console.error(err);
 				log.log_debug(
-					"error", 
+					"error",
 					{
 						"event_level": "error",
 						"event_category": "exception",
 						"event_action": "copy_fie",
 						"event_label": { "src": src, "dest": dest, "replace": replace },
 						"event_value": JSON.stringify(err)
-					}, 
+					},
 					store.get("settings.opt_in_debug")
 				);
             } else {
@@ -414,14 +443,14 @@ function copy_file(src, dest, replace) {
 
 ipcMain.on("download-file", (event, info) => {
 	log.log_debug(
-		"info", 
+		"info",
 		{
 			"event_level": "info",
 			"event_category": "main",
 			"event_action": "download-file",
 			"event_label": "",
 			"event_value": info.url
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 

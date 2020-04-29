@@ -21,6 +21,7 @@ const setup = require('./assets/js/setup');
 
 const now = require('performance-now');
 const log = require('./assets/js/logger');
+//const updater_assets = require('./assets/js/updater_assets');
 
 var cla_args = {};
 
@@ -32,6 +33,8 @@ var selections = [];
 var current_trait_text = -1;
 var current_section_text = -1;
 
+let files_to_update = [];
+
 const appName = "Transition Analysis 3";
 
 $(document).ready(function() {
@@ -41,14 +44,14 @@ $(document).ready(function() {
 
 function app_consent() {
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "view",
 			"event_action": "modal",
 			"event_label": "data",
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -63,17 +66,17 @@ function app_install() {
 
 function app_init() {
 	show_welcome_screen();
-	
+
 	window.appdb = load_database();
 	window.current_file = "";
 	window.is_dirty = false;
-	
+
 	populate_settings();
 	wire_event_handlers();
 }
 
 function load_database() {
-	var db = JSON.parse(fs.readFileSync(path.join(__dirname, "/assets/db/db.min.json")).toString());
+	var db = JSON.parse(fs.readFileSync(path.join(store.get("user.assets_path"), "/database/db.min.json")).toString());
 	return db;
 }
 
@@ -108,14 +111,14 @@ function populate_settings() {
 function wire_global_events() {
 	$('#settings-modal').on('show.bs.modal', function (e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "modal",
 				"event_label": "settings",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -125,14 +128,14 @@ function wire_global_events() {
 
 	$('#data-modal').on('show.bs.modal', function (e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "modal",
 				"event_label": "data",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -147,17 +150,17 @@ function wire_global_events() {
 	// 		$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
 	// 	}
 	// });
-	
+
 	$("input:radio[name='settings_entry_mode']").change(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "change-setting",
 				"event_label": "entry_mode",
 				"event_value": $(this).val()
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -166,14 +169,14 @@ function wire_global_events() {
 
 	$("input:radio[name='settings_opt_in_analysis']").change(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "change-optin",
 				"event_label": "analysis",
 				"event_value": $(this).val()
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -183,14 +186,14 @@ function wire_global_events() {
 
 	$("input:radio[name='settings_opt_in_debug']").change(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "change-optin",
 				"event_label": "debug",
 				"event_value": $(this).val()
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -200,14 +203,14 @@ function wire_global_events() {
 
 	$("#save-setting-button").click(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "save-settings",
 				"event_label": "",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -217,14 +220,14 @@ function wire_global_events() {
 
 	$("#save-data-button").click(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "save-data",
 				"event_label": "",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -240,31 +243,31 @@ function wire_setup_events() {
 		disable_button("setup-start");
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "setup-start",
 				"event_label": "",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
-		
+
 		let t0 = now();
 		setup.start().then(function(response) {
 			let t1 = now();
 			store.set("settings.first_run", false);
 
 			log.log_debug(
-				"verbose", 
+				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "performance",
 					"event_action": "setup-start",
 					"event_label": "success",
 					"event_value": (t1-t0)
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -283,25 +286,25 @@ function wire_setup_events() {
 			store.set("settings.first_run", true);
 
 			log.log_debug(
-				"verbose", 
+				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "performance",
 					"event_action": "setup-start",
 					"event_label": "error",
 					"event_value": (t1-t0)
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 			log.log_debug(
-				"error", 
+				"error",
 				{
 					"event_level": "error",
 					"event_category": "exception",
 					"event_action": "setup-start",
 					"event_label": "",
 					"event_value": JSON.stringify(error)
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -318,14 +321,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "welcome-new-case",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -337,14 +340,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "welcome-load-case",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -355,14 +358,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "load-case",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 		open_case();
@@ -372,19 +375,19 @@ function wire_event_handlers() {
 	// 	store.set('settings.rscript_path', $(this).text());
 	// 	$("#settings-rscript-path").html(store.get('settings.rscript_path'));
 	// });
-	
+
 	$("#save-button").click(function(e) {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "save-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -395,14 +398,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "save-analysis-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -413,84 +416,84 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "tab",
 				"event_label": $(e.target).attr("aria-controls"),
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		//console.log($(this).attr("id"));
 		$(this).tab('show');
 	});
-	
+
 	$(".reset-button").click(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "reset-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		new_case();
 	});
-	
+
 	$("#analysis-button").click(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "tab",
 				"event_label": "#selections",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		$('#main-tabs a[href="#selections"]').tab('show');
 	});
-	
+
 	$("#analysis-review-button").click(function(e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "tab",
 				"event_label": "#results",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		$('#main-tabs a[href="#results"]').tab('show');
 		$('#main-tabs a[href="#results"]').show();
 		//$('#main-tabs a[href="#charts"]').show();
-	
+
 		run_analysis();
 	});
-	
+
 	$("#trait-pager").on("click", ".previous", function() {
 		if (!$(this).hasClass("disabled")) {
 			log.log_debug(
-				"verbose", 
+				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "user-action",
 					"event_action": "pager-click",
 					"event_label": "previous",
 					"event_value": current_trait_text
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -501,18 +504,18 @@ function wire_event_handlers() {
 			populate_trait_prompt(current_traits[current_trait_idx]);
 		}
 	});
-	
+
 	$("#trait-pager").on("click", ".next", function() {
 		if (!$(this).hasClass("disabled")) {
 			log.log_debug(
-				"verbose", 
+				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "user-action",
 					"event_action": "pager-click",
 					"event_label": "next",
 					"event_value": current_trait_text
-				}, 
+				},
 				store.get("settings.opt_in_debug")
 			);
 
@@ -523,49 +526,49 @@ function wire_event_handlers() {
 			populate_trait_prompt(current_traits[current_trait_idx]);
 		}
 	});
-	
+
 	$("#section-menu").on("click", ".list-group-item", function() {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "tab",
 				"event_label": "#evaluation",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "screen",
 				"event_label": "traits",
 				"event_value": $(this).data("section-id")
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		$('#main-tabs a[href="#evaluation"]').tab('show');
 		select_section($(this));
 	});
-	
+
 	$("body").on("click", ".adv-radio", function() {
 		var btn = $(this);
 		var identifier = String(btn.attr("data-section-text")) + "-" + String(btn.attr("data-trait-text")) + "-" + String(btn.attr("data-score-text"));
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "toggle-trait",
 				"event_label": "advanced",
 				"event_value": identifier
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -594,14 +597,14 @@ function wire_event_handlers() {
 		var identifier = String(input.attr("data-section-text")) + "-" + String(input.attr("data-trait-text"));
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "score-trait",
 				"event_label": "advanced",
 				"event_value": identifier
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -630,26 +633,26 @@ function wire_event_handlers() {
 		window.is_dirty = true;
 		update_file_status();
 	});
-	
+
 	$("body").on("click", ".trait-score-button", function() {
 		// var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
 
 		var identifier = String($(this).attr("data-section-text")) + "-" + String($(this).attr("data-trait-text")) + "-" + String($(this).attr("data-score-text"));
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "toggle-trait",
 				"event_label": "basic",
 				"event_value": identifier
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		var btn = $(this);
-		
+
 		// toggle_score_selection(
 		// 	$(this).attr("data-section-idx"),
 		// 	$(this).attr("data-trait-idx"),
@@ -660,9 +663,9 @@ function wire_event_handlers() {
 			$(this).attr("data-trait-text"),
 			$(this).attr("data-score-text")
 		);
-	
+
 		//toggle_trait_score_selection(identifier, $(this));
-	
+
 		$.each($(".trait-score"), function(k,v) {
 			if ($(this).data("identifier") !== identifier) {
 				$(this).parent().removeClass("selected");
@@ -685,39 +688,39 @@ function wire_event_handlers() {
 			}
 		});
 	});
-	
+
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "view",
 				"event_action": "tab",
 				"event_label": $(e.target).attr("aria-controls"),
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		if ($(e.target).attr("aria-controls") === "caseinfo") {
 			$("#section-menu .list-group-item").removeClass("active");
 		}
-		
+
 		if ($(e.target).attr("aria-controls") === "evaluation") {
 			$("#section-menu .list-group-item").removeClass("active");
 			$("#evaluation-content-empty").show();
 			$("#evaluation-content").hide();
 		}
-	
+
 		if ($(e.target).attr("aria-controls") === "selections") {
 			$("#section-menu .list-group-item").removeClass("active");
 			show_current_selections_text();
 		}
-	
+
 		if ($(e.target).attr("aria-controls") === "results") {
 			$("#section-menu .list-group-item").removeClass("active");
 		}
-	
+
 		if ($(e.target).attr("aria-controls") === "charts") {
 			$("#section-menu .list-group-item").removeClass("active");
 		}
@@ -727,14 +730,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "download-update-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -745,32 +748,69 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "dismiss-download-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
 		$("#generic-alert").hide();
 	});
 
+	$("body").on("click", "#install-asset-update-button", function(e) {
+		e.preventDefault();
+
+		log.log_debug(
+			"verbose",
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "install-asset-update-button",
+				"event_value": ""
+			},
+			store.get("settings.opt_in_debug")
+		);
+
+
+		ipcRenderer.send("update-asset-install", files_to_update);
+	});
+
+	$("body").on("click", "#dismiss-asset-update-button", function(e) {
+		e.preventDefault();
+
+		log.log_debug(
+			"verbose",
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "dismiss-asset-update-button",
+				"event_value": ""
+			},
+			store.get("settings.opt_in_debug")
+		);
+
+		show_welcome_screen();
+	});
+
 	$("body").on("click", "#install-update-button", function(e) {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "install-update-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -781,14 +821,14 @@ function wire_event_handlers() {
 		e.preventDefault();
 
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "user-action",
 				"event_action": "button-click",
 				"event_label": "dismiss-install-button",
 				"event_value": ""
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -802,7 +842,7 @@ function check_config_settings() {
 	if (temp.length > 0) {
 		is_configured = true;
 	}
-	
+
 	if (!is_configured) {
 		$("#config-error-message").show();
 	} else {
@@ -812,14 +852,14 @@ function check_config_settings() {
 
 function show_screen(id) {
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "view",
 			"event_action": "screen",
 			"event_label": id,
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -837,6 +877,12 @@ function show_setup_screen() {
 
 function show_welcome_screen() {
 	show_screen('welcome-screen');
+}
+
+function show_asset_screen(updates) {
+	$("#asset-screen .setup-item-status").html("0 of " + updates.length);
+	files_to_update = updates;
+	show_screen('asset-screen');
 }
 
 function init_case_screen() {
@@ -900,14 +946,14 @@ function select_section(obj) {
 	var section_text = section.abbreviation;
 
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "user-action",
 			"event_action": "select-section",
 			"event_label": section_text,
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -920,7 +966,7 @@ function select_section(obj) {
 	$("#section-menu .list-group-item").removeClass("active");
 	$(obj).addClass("active");
 	$("#trait-pager .previous").addClass("disabled");
-	
+
 	display_entry_mode();
 
 	$("#evaluation-content-empty").hide();
@@ -960,7 +1006,7 @@ function populate_advanced_mode(section) {
 
 	var cols = data["columns"];
 	var num_cols = cols.length;
-	
+
 	// HEADER ROW
 	var header_row = $("<div></div>");
 	header_row.addClass("row").addClass("adv-row").addClass("adv-row-header");
@@ -969,7 +1015,7 @@ function populate_advanced_mode(section) {
 	if (num_cols == 3) width = 3;
 	if (num_cols == 2) width = 4;
 	var col_width = "col-xs-" + width;
-	
+
 	header_row.append($("<div></div>").addClass(col_width).text(data["name"]));
 
 	for (var i = 0; i < cols.length; i++) {
@@ -1020,7 +1066,7 @@ function populate_advanced_mode(section) {
 								.attr("data-max-score", trait.max_score);
 							var label = $("<label></label>");
 							label.attr("for", "scorable-" + trait.db_name)
-								.addClass("control-label")	
+								.addClass("control-label")
 								.addClass("small")
 								.html("(Max: " + trait.max_score + ")");
 
@@ -1067,7 +1113,7 @@ function populate_advanced_mode(section) {
 									//input.attr("checked", "checked");
 									btn.addClass("active");
 								}
-								
+
 								// var label = $("<label></label>");
 								// label.attr("for", "adv-trait-" + i.toString() + "-" + j.toString() + "-" + k.toString())
 								// 	.html(trait.scores[k].abbreviation);
@@ -1091,14 +1137,14 @@ function populate_advanced_mode(section) {
 
 function populate_trait_prompt(trait) {
 	$("#trait-content #trait-title").html(trait.title);
-	
+
 	if (trait.description.length > 0) {
 		$("#trait-content #trait-description").show();
 		$("#trait-content #trait-description").html(trait.description);
 	} else {
 		$("#trait-content #trait-description").hide();
 	}
-	
+
 	$("#trait-content #trait-images").empty();
 	if (trait.images.length > 0) {
 		$.each(trait.images, function(k, v) {
@@ -1109,7 +1155,7 @@ function populate_trait_prompt(trait) {
 				.addClass("trait-thumbnail")
 				.attr("height", 100)
 				.attr("width", 100);
-			
+
 			$("#trait-content #trait-images").append(img);
 		});
 	} else {
@@ -1143,7 +1189,7 @@ function populate_trait_prompt(trait) {
 					size = 4;
 					break;
 			}
-			
+
 			var col = $("<div></div>");
 			col.addClass("col-xs-" + size)
 				.addClass("answer-col")
@@ -1223,7 +1269,7 @@ function populate_trait_prompt(trait) {
 				carousel.hide();
 				scoreNode.append($("<p>No images available.</p>"));
 			}
-	
+
 			col.append(scoreNode);
 			div.append(col);
 		}
@@ -1238,7 +1284,7 @@ function hide_pager_buttons() {
 function update_pager_buttons() {
 	$("#trait-pager .previous").show();
 	$("#trait-pager .next").show();
-	
+
 	if (current_trait_idx === 0) {
 		$("#trait-pager .previous").addClass("disabled");
 	} else {
@@ -1255,14 +1301,14 @@ function update_pager_buttons() {
 
 function toggle_score_selection(section_idx, trait_idx, score_idx) {
 	var selection = {
-		"section": section_idx, 
+		"section": section_idx,
 		"trait": trait_idx,
 		"score": score_idx
 	};
 
 	var idx = find_item_in_selections(
-		selection.section, 
-		selection.trait, 
+		selection.section,
+		selection.trait,
 		selection.score
 	);
 
@@ -1273,18 +1319,18 @@ function toggle_score_selection(section_idx, trait_idx, score_idx) {
 	} else {
 		//remove anything with same section and trait idx
 		for (var i = 0; i < selections.length; i++) {
-			if (String(selections[i].section) === String(section_idx) && 
+			if (String(selections[i].section) === String(section_idx) &&
 				String(selections[i].trait) === String(trait_idx)) {
 					selections.splice(i, 1);
 				}
 		}
-		
+
 		selections.push(selection);
 	}
 
 	window.is_dirty = true;
 	update_file_status();
-	
+
 	//console.log(selections);
 }
 
@@ -1315,7 +1361,7 @@ function toggle_score_selection_text(section, trait, score, is_scorable) {
 			selections.splice(idx, 1);
 		} else {
 			for (var i = 0; i < selections.length; i++) {
-				if (selections[i].section === section && 
+				if (selections[i].section === section &&
 					selections[i].trait === trait) {
 						selections.splice(i, 1);
 					}
@@ -1331,8 +1377,8 @@ function toggle_score_selection_text(section, trait, score, is_scorable) {
 
 function find_item_in_selections(section_idx, trait_idx, score_idx) {
 	for (var i = 0; i < selections.length; i++) {
-		if (String(selections[i].section) === String(section_idx) && 
-			String(selections[i].trait) === String(trait_idx) && 
+		if (String(selections[i].section) === String(section_idx) &&
+			String(selections[i].trait) === String(trait_idx) &&
 			String(selections[i].score) === String(score_idx)) {
 				return i;
 			}
@@ -1343,15 +1389,15 @@ function find_item_in_selections(section_idx, trait_idx, score_idx) {
 function find_item_in_selections_text(section, trait, score) {
 	if (score != undefined) {
 		for (var i = 0; i < selections.length; i++) {
-			if (selections[i].section === section && 
-				selections[i].trait === trait && 
+			if (selections[i].section === section &&
+				selections[i].trait === trait &&
 				selections[i].score === score) {
 					return i;
 				}
 		}
 	} else {
 		for (var i = 0; i < selections.length; i++) {
-			if (selections[i].section === section && 
+			if (selections[i].section === section &&
 				selections[i].trait === trait) {
 					return i;
 				}
@@ -1442,7 +1488,7 @@ function show_current_selections_text() {
 function generate_csv_file() {
 	//var filename = generate_random_id(10) + '.csv';
 	var filename = "TA3_Input.csv";
-	
+
 	//loop through selections and create file and save to disk
 	var output = '';
 	var header = '';
@@ -1452,7 +1498,7 @@ function generate_csv_file() {
 		var traits = sections[i].traits;
 		for (var j = 0; j < traits.length; j++) {
 			header += traits[j].db_name + ',';
-			
+
 			var is_trait_entered = false;
 			var trait_entered_idx = -1;
 
@@ -1494,14 +1540,14 @@ function generate_csv_file() {
 
 	try {
 		log.log_debug(
-			"verbose", 
+			"verbose",
 			{
 				"event_level": "verbose",
 				"event_category": "app-action",
 				"event_action": "write-file",
 				"event_label": "generate_csv_file",
 				"event_value": filename
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -1509,16 +1555,16 @@ function generate_csv_file() {
 		//console.log(fullPath);
 		fs.writeFileSync(fullPath, header + '\n' + output + '\n');
 		return filename;
-	} catch(err) { 
+	} catch(err) {
 		log.log_debug(
-			"error", 
+			"error",
 			{
 				"event_level": "error",
 				"event_category": "exception",
 				"event_action": "app",
 				"event_label": "generate_csv_file",
 				"event_value": JSON.stringify(err)
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -1554,59 +1600,59 @@ function run_analysis() {
 		let batch_file = store.get("app.rscript_path");
 
 		// run debugging session information script
-		try {
-			exec.execFile(
-				batch_file, 
-				[
-					//store.get("app.rscript_path"),
-					path.join(scripts_dir, "session.R"), 
-					temp_dir,
-					scripts_dir,
-					pkg_dir,
-					store.get("version"),
-					store.get("system.r_code_version")
-				], 
-				function(error, stdout, stderr) {
-					log.log_debug(
-						"error", 
-						{
-							"event_level": "error",
-							"event_category": "exception",
-							"event_action": "run_analysis",
-							"event_label": "session.R",
-							"event_value": JSON.stringify(error)
-						}, 
-						store.get("settings.opt_in_debug")
-					);
+		// try {
+		// 	exec.execFile(
+		// 		batch_file,
+		// 		[
+		// 			//store.get("app.rscript_path"),
+		// 			path.join(scripts_dir, "session.R"),
+		// 			temp_dir,
+		// 			scripts_dir,
+		// 			pkg_dir,
+		// 			store.get("version"),
+		// 			store.get("system.r_code_version")
+		// 		],
+		// 		function(error, stdout, stderr) {
+		// 			log.log_debug(
+		// 				"error",
+		// 				{
+		// 					"event_level": "error",
+		// 					"event_category": "exception",
+		// 					"event_action": "run_analysis",
+		// 					"event_label": "session.R",
+		// 					"event_value": JSON.stringify(error)
+		// 				},
+		// 				store.get("settings.opt_in_debug")
+		// 			);
 
-					console.error(error);
-					console.error(stdout);
-					console.error(stderr);
-					return;
-				},
-				function(stdout, stderr) {
-					console.log(stdout);
-					console.log(stderr);
-				}
-			);
-		} catch(ex) { 
-			log.log_debug(
-				"error", 
-				{
-					"event_level": "error",
-					"event_category": "exception",
-					"event_action": "run_analysis",
-					"event_label": "session.R",
-					"event_value": JSON.stringify(ex)
-				}, 
-				store.get("settings.opt_in_debug")
-			);
-			console.error(ex); 
-		}
+		// 			console.error(error);
+		// 			console.error(stdout);
+		// 			console.error(stderr);
+		// 			return;
+		// 		},
+		// 		function(stdout, stderr) {
+		// 			console.log(stdout);
+		// 			console.log(stderr);
+		// 		}
+		// 	);
+		// } catch(ex) {
+		// 	log.log_debug(
+		// 		"error",
+		// 		{
+		// 			"event_level": "error",
+		// 			"event_category": "exception",
+		// 			"event_action": "run_analysis",
+		// 			"event_label": "session.R",
+		// 			"event_value": JSON.stringify(ex)
+		// 		},
+		// 		store.get("settings.opt_in_debug")
+		// 	);
+		// 	console.error(ex);
+		// }
 
 		var parameters = [
 			//store.get("app.rscript_path"),
-			path.join(scripts_dir, "ta3.R"), 
+			path.join(scripts_dir, "ta3.R"),
 			temp_dir,
 			scripts_dir,
 			pkg_dir,
@@ -1638,32 +1684,32 @@ function run_analysis() {
 
 		let t0 = now();
 		exec.execFile(
-			batch_file, 
-			parameters, 
+			batch_file,
+			parameters,
 			function(error, stdout, stderr) {
 				let t1 = now();
 
 				log.log_debug(
-					"info", 
+					"info",
 					{
 						"event_level": "info",
 						"event_category": "performance",
 						"event_action": "run_analysis",
 						"event_label": "error",
 						"event_value": (t1-t0)
-					}, 
+					},
 					store.get("settings.opt_in_debug")
 				);
-				
+
 				log.log_debug(
-					"error", 
+					"error",
 					{
 						"event_level": "error",
 						"event_category": "exception",
 						"event_action": "run_analysis",
 						"event_label": "ta3.R",
 						"event_value": JSON.stringify(error)
-					}, 
+					},
 					store.get("settings.opt_in_debug")
 				);
 
@@ -1706,11 +1752,11 @@ function run_analysis() {
 
 				//display output images in Charts tab
 				//console.log("loading plot: " + "file://" + path.join(temp_dir, "output1.png"));
-				
+
 				show_output_image(path.join(temp_dir, "output1.png"), imageDiv);
 				resultStatus.empty();
 				//resultDebug.empty();
-				
+
 				loadingDiv.hide();
 				resultDebug.hide();
 
@@ -1738,14 +1784,14 @@ function parse_ta3_output(data) {
 	}
 	catch (error) {
 		log.log_debug(
-			"error", 
+			"error",
 			{
 				"event_level": "error",
 				"event_category": "exception",
 				"event_action": "parse_ta3_output",
 				"event_label": "",
 				"event_value": JSON.stringify(error)
-			}, 
+			},
 			store.get("settings.opt_in_debug")
 		);
 
@@ -1809,14 +1855,14 @@ function open_case() {
 				fs.readFile(filePath, 'utf8', (err, data) => {
 					if (err) {
 						log.log_debug(
-							"error", 
+							"error",
 							{
 								"event_level": "error",
 								"event_category": "exception",
 								"event_action": "open_case",
 								"event_label": "",
 								"event_value": JSON.stringify(err)
-							}, 
+							},
 							store.get("settings.opt_in_debug")
 						);
 
@@ -1874,14 +1920,14 @@ function save_case() {
 			fs.writeFile(p, output, function(err) {
 				if (err) {
 					log.log_debug(
-						"error", 
+						"error",
 						{
 							"event_level": "error",
 							"event_category": "exception",
 							"event_action": "save_case",
 							"event_label": "",
 							"event_value": JSON.stringify(err)
-						}, 
+						},
 						store.get("settings.opt_in_debug")
 					);
 
@@ -1898,14 +1944,14 @@ function save_case() {
 		fs.writeFile(window.current_file, output, function(err) {
 			if (err) {
 				log.log_debug(
-					"error", 
+					"error",
 					{
 						"event_level": "error",
 						"event_category": "exception",
 						"event_action": "save_case",
 						"event_label": "",
 						"event_value": JSON.stringify(err)
-					}, 
+					},
 					store.get("settings.opt_in_debug")
 				);
 				console.error(err);
@@ -1921,13 +1967,13 @@ function save_case() {
 function update_file_status() {
 	if (window.current_file == "") {
 		$("#current_file_name").text("(untitled.ta3)");
-		$("#current_file_status").text("");	
+		$("#current_file_status").text("");
 	} else {
 		$("#current_file_name").text("(" + path.basename(window.current_file) + ")");
 		if (window.is_dirty)
-			$("#current_file_status").text("*");	
+			$("#current_file_status").text("*");
 		else
-			$("#current_file_status").text("");	
+			$("#current_file_status").text("");
 	}
 }
 
@@ -1936,14 +1982,14 @@ function update_file_status() {
 
 ipcRenderer.on('user-guide', (event, arg) => {
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "app-action",
 			"event_action": "user-guide",
 			"event_label": "",
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -1953,16 +1999,16 @@ ipcRenderer.on('user-guide', (event, arg) => {
 	} else {
 		$("#toc-mac-warning").hide();
 	}
-	
+
 	log.log_debug(
-		"verbose", 
+		"verbose",
 		{
 			"event_level": "verbose",
 			"event_category": "view",
 			"event_action": "modal",
 			"event_label": "user-guide",
 			"event_value": ""
-		}, 
+		},
 		store.get("settings.opt_in_debug")
 	);
 
@@ -2062,6 +2108,12 @@ ipcRenderer.on('update-downloaded', (event, arg) => {
 
 
 
+ipcRenderer.on('asset-update-new', (event, arg) => {
+	show_asset_screen(arg);
+});
+
+
+
 
 
 
@@ -2144,6 +2196,87 @@ function disable_button(id) {
 }
 
 
+ipcRenderer.on('update-asset-progress', (event, arg) => {
+	update_progress(arg.id, arg.idx, arg.total);
+});
+
+ipcRenderer.on('end-asset-progress', (event, arg) => {
+	end_progress(arg.id, arg.code, arg.msg);
+
+	if (arg.code != 0) {
+		console.error(arg.msg);
+	} else {
+		show_welcome_screen();
+	}
+});
+
+
+function update_progress(id, idx, total) {
+	let percentage = Math.round((idx/total)*100, 1);
+
+	$("#" + id + " .setup-item-status").html(`${idx} of ${total}`);
+	$("#" + id + " .progress-bar")
+		.attr("aria-valuenow", percentage)
+		.css("width", percentage + "%")
+		.addClass("progress-bar-warning")
+		.addClass("progress-bar-striped")
+		.addClass("active");
+}
+
+function reset_progress(id) {
+	$("#" + id + " .setup-item-status").html("");
+
+	$("#" + id + " .progress-bar")
+		.attr("aria-valuenow", 0)
+		.css("width", "0%")
+		.removeClass("progress-bar-warning")
+		.removeClass("progress-bar-success")
+		.removeClass("progress-bar-striped")
+		.removeClass("active");
+}
+
+function start_progress(id) {
+	$("#" + id + " .progress-bar")
+		.attr("aria-valuenow", 50)
+		.css("width", "50%")
+		.addClass("progress-bar-warning")
+		.addClass("progress-bar-striped")
+		.addClass("active");
+}
+
+function end_progress(id, code, msg) {
+	if (code === 0) {
+		$("#" + id + " .setup-item-status").html("OK");
+
+		$("#" + id + " .progress-bar")
+			.attr("aria-valuenow", 100)
+			.css("width", "100%")
+			.removeClass("progress-bar-warning")
+			.addClass("progress-bar-success")
+			.removeClass("progress-bar-striped")
+			.removeClass("active");
+	} else {
+		$("#" + id + " .setup-item-status").html("FAILED!");
+
+		$("#" + id + " .progress-bar")
+			.attr("aria-valuenow", 100)
+			.css("width", "100%")
+			.removeClass("progress-bar-success")
+			.addClass("progress-bar-danger")
+			.removeClass("progress-bar-striped")
+			.removeClass("active");
+
+		$("#" + id + " .err pre").html(msg);
+		$("#" + id + " .err").show();
+	}
+}
+
+
+
+
+
+
+
 ipcRenderer.on('application-ready', (event, args) => {
 	cla_args = args;
 	//console.log(cla_args);
@@ -2158,8 +2291,10 @@ ipcRenderer.on('application-ready', (event, args) => {
 		app_install();
 	}
 
+	ipcRenderer.send('check-asset-update');
+
 	// check consent settings
-	if (store.get("settings.opt_in_analysis_date", "").length == 0 || 
+	if (store.get("settings.opt_in_analysis_date", "").length == 0 ||
 		store.get("settings.opt_in_debug_date", "").length == 0) {
 			app_consent();
 	}

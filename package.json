@@ -1,7 +1,7 @@
 {
 	"name": "ta3",
 	"productName": "Transition Analysis 3",
-	"version": "0.7.1",
+	"version": "0.8.0",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
 	"repository": "rer145/ta3",
@@ -24,6 +24,7 @@
 		"travis-dist-mac": "electron-builder --macos -p always"
 	},
 	"dependencies": {
+		"async": "^3.2.0",
 		"axios": "^0.19.2",
 		"bootstrap": "^3.3.7",
 		"command-line-args": "^5.1.1",
@@ -39,10 +40,12 @@
 		"electron-window-state": "^5.0.3",
 		"find": "^0.3.0",
 		"fs": "0.0.1-security",
+		"https": "^1.0.0",
 		"jquery": "^3.3.1",
 		"os": "^0.1.1",
 		"performance-now": "^2.1.0",
 		"popper.js": "^1.16.0",
+		"semver": "^7.3.2",
 		"sudo-prompt": "^9.0.0",
 		"tether": "^1.4.7",
 		"uuid": "^7.0.3"
@@ -75,10 +78,6 @@
 					"to": "R-Portable"
 				},
 				{
-					"from": "./build/scripts",
-					"to": "scripts"
-				},
-				{
 					"from": "./build/setup",
 					"to": "setup"
 				},
@@ -96,10 +95,6 @@
 				{
 					"from": "./build/R-Portable/R-Portable-Mac",
 					"to": "R-Portable"
-				},
-				{
-					"from": "./build/scripts",
-					"to": "scripts"
 				}
 			]
 		},
