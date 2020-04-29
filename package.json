@@ -17,10 +17,12 @@
 		"pack": "electron-builder --dir",
 		"dist": "electron-builder --macos --windows -p always",
 		"dist-win": "electron-builder --windows",
+		"dist-win-p": "electron-builder --windows portable",
 		"dist-mac": "electron-builder --macos",
 		"travis-pack": "electron-builder --dir",
 		"travis-dist": "electron-builder --macos --windows -p always",
 		"travis-dist-win": "electron-builder --windows -p always",
+		"travis-dist-win-p": "electron-builder --windows portable -p always",
 		"travis-dist-mac": "electron-builder --macos -p always"
 	},
 	"dependencies": {
