@@ -87,6 +87,10 @@
 				}
 			]
 		},
+		"nsis": {
+			"oneClick": false,
+			"perMachine": true
+		},
 		"mac": {
 			"category": "public.app-category.education",
 			"darkModeSupport": false,
