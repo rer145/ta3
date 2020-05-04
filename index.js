@@ -20,6 +20,9 @@ const cla = require('./assets/js/cla');
 const log = require('./assets/js/logger');
 const { v4: uuidv4 } = require('uuid');
 
+// const setup = require('./assets/js/setup');
+ const updater_assets = require('./assets/js/updater_assets');
+
 unhandled({
 	reportButton: error => {
 		log.log_debug(
@@ -145,6 +148,12 @@ app.on('activate', async () => {
 	await app.whenReady();
 	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
+
+
+	// console.log('forced install', cla.options.forceInstall);
+	// console.log('setup install', setup.check_installation(false));
+	console.log('asset update', updater_assets.checkForUpdates());
+
 
 	log.log_debug(
 		"verbose",

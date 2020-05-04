@@ -67,10 +67,6 @@ function app_install() {
 function app_init() {
 	show_welcome_screen();
 
-	window.appdb = load_database();
-	window.current_file = "";
-	window.is_dirty = false;
-
 	populate_settings();
 	wire_event_handlers();
 }
@@ -109,6 +105,44 @@ function populate_settings() {
 }
 
 function wire_global_events() {
+
+	$("body").on("click", "#install-asset-update-button", function(e) {
+		e.preventDefault();
+
+		log.log_debug(
+			"verbose",
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "install-asset-update-button",
+				"event_value": ""
+			},
+			store.get("settings.opt_in_debug")
+		);
+
+
+		ipcRenderer.send("update-asset-install", files_to_update);
+	});
+
+	$("body").on("click", "#dismiss-asset-update-button", function(e) {
+		e.preventDefault();
+
+		log.log_debug(
+			"verbose",
+			{
+				"event_level": "verbose",
+				"event_category": "user-action",
+				"event_action": "button-click",
+				"event_label": "dismiss-asset-update-button",
+				"event_value": ""
+			},
+			store.get("settings.opt_in_debug")
+		);
+
+		show_welcome_screen();
+	});
+
 	$('#settings-modal').on('show.bs.modal', function (e) {
 		log.log_debug(
 			"verbose",
@@ -762,42 +796,6 @@ function wire_event_handlers() {
 		$("#generic-alert").hide();
 	});
 
-	$("body").on("click", "#install-asset-update-button", function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "install-asset-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-
-		ipcRenderer.send("update-asset-install", files_to_update);
-	});
-
-	$("body").on("click", "#dismiss-asset-update-button", function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "dismiss-asset-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		show_welcome_screen();
-	});
 
 	$("body").on("click", "#install-update-button", function(e) {
 		e.preventDefault();
@@ -876,6 +874,10 @@ function show_setup_screen() {
 }
 
 function show_welcome_screen() {
+	window.appdb = load_database();
+	window.current_file = "";
+	window.is_dirty = false;
+
 	show_screen('welcome-screen');
 }
 
@@ -2206,7 +2208,8 @@ ipcRenderer.on('end-asset-progress', (event, arg) => {
 	if (arg.code != 0) {
 		console.error(arg.msg);
 	} else {
-		show_welcome_screen();
+		app_init();
+		//show_welcome_screen();
 	}
 });
 

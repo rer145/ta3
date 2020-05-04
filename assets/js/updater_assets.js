@@ -73,10 +73,14 @@ function checkForUpdates() {
 				updates.push({ "versions_key": "versions.database", "path": "database/db.min.json", "latest": latest_versions.database });
 
 
-			if (updates.length > 0)
+			if (updates.length > 0) {
 				win.getFocusedWindow().webContents.send('asset-update-new', updates);
+				return true;
+			}
+			return false;
 		}).catch(function(error) {
 			console.error(error);
+			return false;
 		});
 }
 
