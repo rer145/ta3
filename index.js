@@ -149,12 +149,6 @@ app.on('activate', async () => {
 	Menu.setApplicationMenu(menu);
 	mainWindow = await createMainWindow();
 
-
-	// console.log('forced install', cla.options.forceInstall);
-	// console.log('setup install', setup.check_installation(false));
-	console.log('asset update', updater_assets.checkForUpdates());
-
-
 	log.log_debug(
 		"verbose",
 		{

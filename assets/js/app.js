@@ -2286,19 +2286,20 @@ ipcRenderer.on('application-ready', (event, args) => {
 
 	wire_global_events();
 
-	let forceInstall = cla_args.forceInstall;
-	let is_installed = setup.check_installation(forceInstall);
-	if (is_installed) {
-		app_init();
-	} else {
-		app_install();
-	}
-
-	ipcRenderer.send('check-asset-update');
-
 	// check consent settings
 	if (store.get("settings.opt_in_analysis_date", "").length == 0 ||
 		store.get("settings.opt_in_debug_date", "").length == 0) {
 			app_consent();
 	}
+
+
+	let forceInstall = cla_args.forceInstall;
+	let is_installed = setup.check_installation(forceInstall);
+	if (is_installed) {
+		ipcRenderer.send('check-asset-update');
+		app_init();
+	} else {
+		app_install();
+	}
+
 });
