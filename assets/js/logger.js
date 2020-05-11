@@ -23,7 +23,7 @@ function log_analysis(payload, optin) {
 			"data": payload
 		};
 		full_data["data"]["analysis"]["analysis_date"] = new Date();
-		console.warn(full_data);
+		//console.warn(full_data);
 
 		let url = opt_in_base_url + 'log/analysis';
 		if (is.development)
@@ -88,7 +88,7 @@ function get_debug_info() {
 		"session": store.get("session"),
 		"app_version": store.get("version"),
 		"r_version": store.get("system.r_portable_version"),
-		"r_code_version": store.get("system.r_code_version"),
+		"r_code_version": store.get("versions.analysis.analysis.version"),
 		"db_version": store.get("system.db_version"),
 		"platform": store.get("system.platform"),
 		"platform_release": store.get("system.platform_release"),

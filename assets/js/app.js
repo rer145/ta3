@@ -1659,7 +1659,7 @@ function run_analysis() {
 			scripts_dir,
 			pkg_dir,
 			store.get("version"),
-			store.get("system.r_code_version")
+			store.get("versions.analysis.analysis.version")
 		];
 
 		var resultPending = $("<div></div>");
@@ -2208,8 +2208,9 @@ ipcRenderer.on('end-asset-progress', (event, arg) => {
 	if (arg.code != 0) {
 		console.error(arg.msg);
 	} else {
-		app_init();
-		//show_welcome_screen();
+		//app_init();
+		show_welcome_screen();
+		populate_settings();
 	}
 });
 
