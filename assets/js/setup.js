@@ -160,15 +160,15 @@ function install_assets(partial_items) {
 				if (partial_items != null && partial_items != undefined) {
 					items = partial_items;
 				} else {
-					let versions = store.get("versions");
-					items.push({ "versions_key": "versions.analysis.install", "path": "analysis/" + versions.analysis.install.file, "latest": latest_versions.analysis.install.version });
-					items.push({ "versions_key": "versions.analysis.analysis", "path": "analysis/" + versions.analysis.analysis.file, "latest": latest_versions.analysis.analysis.version });
-					items.push({ "versions_key": "versions.analysis.case_scores", "path": "analysis/" + versions.analysis.case_scores.file, "latest": latest_versions.analysis.case_scores.version });
-					items.push({ "versions_key": "versions.analysis.bum", "path": "analysis/" + versions.analysis.bum.file, "latest": latest_versions.analysis.bum.version });
-					items.push({ "versions_key": "versions.analysis.oum", "path": "analysis/" + versions.analysis.oum.file, "latest": latest_versions.analysis.oum.version });
-					items.push({ "versions_key": "versions.pdf.trait_manual", "path": "pdf/" + versions.pdf.trait_manual.file, "latest": latest_versions.pdf.trait_manual.version });
-					items.push({ "versions_key": "versions.pdf.collection_form", "path": "pdf/" + versions.pdf.collection_form.file, "latest": latest_versions.pdf.collection_form.version });
-					items.push({ "versions_key": "versions.pdf.user_guide", "path": "pdf/" + versions.pdf.user_guide.file, "latest": latest_versions.pdf.user_guide.version });
+					//let versions = store.get("versions");
+					items.push({ "versions_key": "versions.analysis.install", "path": "analysis/" + latest_versions.analysis.install.file, "latest": latest_versions.analysis.install.version });
+					items.push({ "versions_key": "versions.analysis.analysis", "path": "analysis/" + latest_versions.analysis.analysis.file, "latest": latest_versions.analysis.analysis.version });
+					items.push({ "versions_key": "versions.analysis.case_scores", "path": "analysis/" + latest_versions.analysis.case_scores.file, "latest": latest_versions.analysis.case_scores.version });
+					items.push({ "versions_key": "versions.analysis.bum", "path": "analysis/" + latest_versions.analysis.bum.file, "latest": latest_versions.analysis.bum.version });
+					items.push({ "versions_key": "versions.analysis.oum", "path": "analysis/" + latest_versions.analysis.oum.file, "latest": latest_versions.analysis.oum.version });
+					items.push({ "versions_key": "versions.pdf.trait_manual", "path": "pdf/" + latest_versions.pdf.trait_manual.file, "latest": latest_versions.pdf.trait_manual.version });
+					items.push({ "versions_key": "versions.pdf.collection_form", "path": "pdf/" + latest_versions.pdf.collection_form.file, "latest": latest_versions.pdf.collection_form.version });
+					items.push({ "versions_key": "versions.pdf.user_guide", "path": "pdf/" + latest_versions.pdf.user_guide.file, "latest": latest_versions.pdf.user_guide.version });
 					items.push({ "versions_key": "versions.database", "path": "database/db.min.json", "latest": latest_versions.database });
 				}
 
