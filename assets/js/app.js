@@ -425,7 +425,7 @@ function wire_event_handlers() {
 			store.get("settings.opt_in_debug")
 		);
 
-		save_case();
+		save_case(false);
 	});
 
 	$("#save-analysis-button").click(function(e) {
@@ -443,7 +443,7 @@ function wire_event_handlers() {
 			store.get("settings.opt_in_debug")
 		);
 
-		save_case();
+		save_case(false);
 	});
 
 	$("#main-tabs a").click(function(e) {
@@ -1894,7 +1894,7 @@ function open_case() {
 	});
 }
 
-function save_case() {
+function save_case(isSaveAs) {
 	// TODO: add results to file and encode for json
 	var output = '{"traits":' + JSON.stringify(selections) + ',';
 	output += '"properties":{"case_number":' + JSON.stringify($("#case_number_input").val()) + ',';
@@ -1908,6 +1908,11 @@ function save_case() {
 	output += '}';
 
 	console.log(output);
+
+	if (isSaveAs)
+	{
+		window.current_file = "";
+	}
 
 	if (window.current_file == "") {
 		var options = {
@@ -2023,7 +2028,10 @@ ipcRenderer.on('open-case', (event, arg) => {
 	open_case();
 });
 ipcRenderer.on('save-case', (event, arg) => {
-	save_case();
+	save_case(false);
+});
+ipcRenderer.on('saveas-case', (event, arg) => {
+	save_case(true);
 });
 ipcRenderer.on('settings', (event, arg) => {
 	$('#settings-modal').modal('show');

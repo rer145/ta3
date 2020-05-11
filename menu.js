@@ -502,7 +502,7 @@ const macosTemplate = [
 	// 		click() {
 	// 			showPreferences();
 	// 		},
-	// 		accelerator: 'CmdOrCtrl+Shift+S'
+	// 		accelerator: 'CmdOrCtrl+Shift+P'
 	// 	}
 	// ]),
 	{
@@ -525,7 +525,7 @@ const macosTemplate = [
 					);
 					showPreferences();
 				},
-				accelerator: 'CmdOrCtrl+Shift+S'
+				accelerator: 'CmdOrCtrl+Shift+P'
 			},
 			{ type: 'separator' },
 			{ role: 'services', submenu: [] },
@@ -594,6 +594,24 @@ const macosTemplate = [
 				accelerator: 'CmdOrCtrl+S'
 			},
 			{
+				label: 'Save As...',
+				click() {
+					log.log_debug(
+						"info",
+						{
+							"event_level": "info",
+							"event_category": "menu",
+							"event_action": "click",
+							"event_label": "file",
+							"event_value": "saveas"
+						},
+						store.get("settings.opt_in_debug")
+					);
+					win.getFocusedWindow().webContents.send('saveas-case');
+				},
+				accelerator: 'Shift+CmdOrCtrl+S'
+			},
+			{
 				type: 'separator'
 			},
 			{
@@ -612,7 +630,7 @@ const macosTemplate = [
 					);
 					showPreferences();
 				},
-				accelerator: 'CmdOrCtrl+Shift+S'
+				accelerator: 'CmdOrCtrl+Shift+P'
 			},
 			{
 				type: 'separator'
@@ -713,6 +731,24 @@ const otherTemplate = [
 				accelerator: 'CmdOrCtrl+S'
 			},
 			{
+				label: 'Save As...',
+				click() {
+					log.log_debug(
+						"info",
+						{
+							"event_level": "info",
+							"event_category": "menu",
+							"event_action": "click",
+							"event_label": "file",
+							"event_value": "saveas"
+						},
+						store.get("settings.opt_in_debug")
+					);
+					win.getFocusedWindow().webContents.send('saveas-case');
+				},
+				accelerator: 'Shift+CmdOrCtrl+S'
+			},
+			{
 				type: 'separator'
 			},
 			{
@@ -731,7 +767,7 @@ const otherTemplate = [
 					);
 					showPreferences();
 				},
-				accelerator: 'CmdOrCtrl+Shift+S'
+				accelerator: 'CmdOrCtrl+Shift+P'
 			},
 			{
 				type: 'separator'
