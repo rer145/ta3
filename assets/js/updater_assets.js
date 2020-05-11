@@ -36,41 +36,77 @@ function checkForUpdates() {
 
 			// HACK: figure out way to loop through
 			let updates = [];
-			if (semver.gt(latest_versions.analysis.install.version, current_versions.analysis.install.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.install.file)))
+			try {
+				if (semver.gt(latest_versions.analysis.install.version, current_versions.analysis.install.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.install.file)))
+					updates.push({ "versions_key": "versions.analysis.install", "path": "analysis/" + latest_versions.analysis.install.file, "latest": latest_versions.analysis.install });
+			} catch {
 				updates.push({ "versions_key": "versions.analysis.install", "path": "analysis/" + latest_versions.analysis.install.file, "latest": latest_versions.analysis.install });
+			}
 
-			if (semver.gt(latest_versions.analysis.analysis.version, current_versions.analysis.analysis.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.analysis.file)))
+			try {
+				if (semver.gt(latest_versions.analysis.analysis.version, current_versions.analysis.analysis.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.analysis.file)))
+					updates.push({ "versions_key": "versions.analysis.analysis", "path": "analysis/" + latest_versions.analysis.analysis.file, "latest": latest_versions.analysis.analysis });
+			} catch {
 				updates.push({ "versions_key": "versions.analysis.analysis", "path": "analysis/" + latest_versions.analysis.analysis.file, "latest": latest_versions.analysis.analysis });
+			}
 
-			if (semver.gt(latest_versions.analysis.case_scores.version, current_versions.analysis.case_scores.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.case_scores.file)))
+			try {
+				if (semver.gt(latest_versions.analysis.case_scores.version, current_versions.analysis.case_scores.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.case_scores.file)))
+					updates.push({ "versions_key": "versions.analysis.case_scores", "path": "analysis/" + latest_versions.analysis.case_scores.file, "latest": latest_versions.analysis.case_scores });
+			} catch {
 				updates.push({ "versions_key": "versions.analysis.case_scores", "path": "analysis/" + latest_versions.analysis.case_scores.file, "latest": latest_versions.analysis.case_scores });
+			}
 
-			if (semver.gt(latest_versions.analysis.bum.version, current_versions.analysis.bum.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.bum.file)))
+			try {
+				if (semver.gt(latest_versions.analysis.bum.version, current_versions.analysis.bum.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.bum.file)))
+					updates.push({ "versions_key": "versions.analysis.bum", "path": "analysis/" + latest_versions.analysis.bum.file, "latest": latest_versions.analysis.bum });
+			} catch {
 				updates.push({ "versions_key": "versions.analysis.bum", "path": "analysis/" + latest_versions.analysis.bum.file, "latest": latest_versions.analysis.bum });
+			}
 
-			if (semver.gt(latest_versions.analysis.oum.version, current_versions.analysis.oum.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.oum.file)))
+			try {
+				if (semver.gt(latest_versions.analysis.oum.version, current_versions.analysis.oum.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "analysis", latest_versions.analysis.oum.file)))
+					updates.push({ "versions_key": "versions.analysis.oum", "path": "analysis/" + latest_versions.analysis.oum.file, "latest": latest_versions.analysis.oum });
+			} catch {
 				updates.push({ "versions_key": "versions.analysis.oum", "path": "analysis/" + latest_versions.analysis.oum.file, "latest": latest_versions.analysis.oum });
+			}
 
-			if (semver.gt(latest_versions.pdf.trait_manual.version, current_versions.pdf.trait_manual.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.trait_manual.file)))
+			try {
+				if (semver.gt(latest_versions.pdf.trait_manual.version, current_versions.pdf.trait_manual.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.trait_manual.file)))
+					updates.push({ "versions_key": "versions.pdf.trait_manual", "path": "pdf/" + latest_versions.pdf.trait_manual.file, "latest": latest_versions.pdf.trait_manual });
+			} catch {
 				updates.push({ "versions_key": "versions.pdf.trait_manual", "path": "pdf/" + latest_versions.pdf.trait_manual.file, "latest": latest_versions.pdf.trait_manual });
+			}
 
-			if (semver.gt(latest_versions.pdf.collection_form.version, current_versions.pdf.collection_form.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.collection_form.file)))
+			try {
+				if (semver.gt(latest_versions.pdf.collection_form.version, current_versions.pdf.collection_form.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.collection_form.file)))
+					updates.push({ "versions_key": "versions.pdf.collection_form", "path": "pdf/" + latest_versions.pdf.collection_form.file, "latest": latest_versions.pdf.collection_form });
+			} catch {
 				updates.push({ "versions_key": "versions.pdf.collection_form", "path": "pdf/" + latest_versions.pdf.collection_form.file, "latest": latest_versions.pdf.collection_form });
+			}
 
-			if (semver.gt(latest_versions.pdf.user_guide.version, current_versions.pdf.user_guide.version) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.user_guide.file)))
+			try {
+				if (semver.gt(latest_versions.pdf.user_guide.version, current_versions.pdf.user_guide.version) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "pdf", latest_versions.pdf.user_guide.file)))
+					updates.push({ "versions_key": "versions.pdf.user_guide", "path": "pdf/" + latest_versions.pdf.user_guide.file, "latest": latest_versions.pdf.user_guide });
+			} catch {
 				updates.push({ "versions_key": "versions.pdf.user_guide", "path": "pdf/" + latest_versions.pdf.user_guide.file, "latest": latest_versions.pdf.user_guide });
+			}
 
-			if (semver.gt(latest_versions.database, current_versions.database) ||
-				!fs.existsSync(path.join(store.get("user.assets_path"), "database", "db.min.json")))
+			try {
+				if (semver.gt(latest_versions.database, current_versions.database) ||
+					!fs.existsSync(path.join(store.get("user.assets_path"), "database", "db.min.json")))
+					updates.push({ "versions_key": "versions.database", "path": "database/db.min.json", "latest": latest_versions.database });
+			} catch {
 				updates.push({ "versions_key": "versions.database", "path": "database/db.min.json", "latest": latest_versions.database });
+			}
 
 
 			if (updates.length > 0) {
