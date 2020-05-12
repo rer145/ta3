@@ -90,6 +90,8 @@ function get_debug_info() {
 		"r_version": store.get("system.r_portable_version"),
 		"r_code_version": store.get("versions.analysis.analysis.version"),
 		"db_version": store.get("system.db_version"),
+		"ta3bum_version": store.get("versions.analysis.bum.version"),
+		"ta3oum_version": store.get("versions.analysis.oum.version"),
 		"platform": store.get("system.platform"),
 		"platform_release": store.get("system.platform_release"),
 		"arch": store.get("system.arch"),
