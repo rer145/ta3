@@ -1659,7 +1659,9 @@ function run_analysis() {
 			scripts_dir,
 			pkg_dir,
 			store.get("version"),
-			store.get("versions.analysis.analysis.version")
+			store.get("versions.analysis.analysis.version"),
+			store.get("versions.analysis.bum.version"),
+			store.get("versions.analysis.oum.version")
 		];
 
 		var resultPending = $("<div></div>");
