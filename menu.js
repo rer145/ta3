@@ -191,25 +191,26 @@ ${debugInfo()}`;
 
 			updater.checkForUpdates(menuItem, focusedWindow, event);
 		}
-	},
-	{
-		label: 'Check for Asset Updates',
-		click(menuItem, focusedWindow, event) {
-			log.log_debug(
-				"info",
-				{
-					"event_level": "info",
-					"event_category": "menu",
-					"event_action": "click",
-					"event_label": "help",
-					"event_value": "check-for-asset-updates"
-				},
-				store.get("settings.opt_in_debug")
-			);
-
-			updater_assets.checkForUpdates();
-		}
 	}
+	// ,
+	// {
+	// 	label: 'Check for Asset Updates',
+	// 	click(menuItem, focusedWindow, event) {
+	// 		log.log_debug(
+	// 			"info",
+	// 			{
+	// 				"event_level": "info",
+	// 				"event_category": "menu",
+	// 				"event_action": "click",
+	// 				"event_label": "help",
+	// 				"event_value": "check-for-asset-updates"
+	// 			},
+	// 			store.get("settings.opt_in_debug")
+	// 		);
+
+	// 		updater_assets.checkForUpdates();
+	// 	}
+	// }
 ];
 
 //if (!is.macos) {
