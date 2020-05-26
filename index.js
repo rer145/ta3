@@ -219,9 +219,7 @@ function prep_files_and_settings() {
 		"platform_release": os.release(),
 		"locale": app.getLocale(),
 		"locale_country_code": app.getLocaleCountryCode(),
-		"r_portable_version": '3.6.2',
-		"r_code_version": '0.4.5',
-		"db_version": '1.0.0'
+		"r_portable_version": '3.6.2'
 	};
 
 

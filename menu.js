@@ -48,7 +48,7 @@ const showResults = () => {
 // 	win.getFocusedWindow().webContents.send('verify-r-settings');
 // };
 
-const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${store.get("version")}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("system.r_code_version")}\nDatabase: ${store.get("system.db_version")}`;
+const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${app.getVersion()}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("versions.analysis.analysis.version")}\nTA3BUM: ${store.get("versions.analysis.bum.version")}\nTA3OUM: ${store.get("versions.analysis.oum.version")}\nDatabase: ${store.get("versions.database")}`;
 
 const helpSubmenu = [
 	{
