@@ -35,6 +35,10 @@ var current_section_text = -1;
 
 let files_to_update = [];
 
+let has_wired_global_events = false;
+let has_wired_setup_events = false;
+let has_wired_app_events = false;
+
 const appName = "Transition Analysis 3";
 
 $(document).ready(function() {
@@ -105,733 +109,744 @@ function populate_settings() {
 }
 
 function wire_global_events() {
+	if (!has_wired_global_events) {
+		$("body").on("click", "#install-asset-update-button", function(e) {
+			e.preventDefault();
 
-	$("body").on("click", "#install-asset-update-button", function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "install-asset-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "install-asset-update-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
 
-		ipcRenderer.send("update-asset-install", files_to_update);
-	});
+			ipcRenderer.send("update-asset-install", files_to_update);
+		});
 
-	$("body").on("click", "#dismiss-asset-update-button", function(e) {
-		e.preventDefault();
+		$("body").on("click", "#dismiss-asset-update-button", function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "dismiss-asset-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "dismiss-asset-update-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		show_welcome_screen();
-	});
+			show_welcome_screen();
+		});
 
-	$('#settings-modal').on('show.bs.modal', function (e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "modal",
-				"event_label": "settings",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$('#settings-modal').on('show.bs.modal', function (e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "modal",
+					"event_label": "settings",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		//$("#settings-rscript-path").html(store.get('settings.rscript_path'));
-		populate_settings();
-	});
+			//$("#settings-rscript-path").html(store.get('settings.rscript_path'));
+			populate_settings();
+		});
 
-	$('#data-modal').on('show.bs.modal', function (e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "modal",
-				"event_label": "data",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$('#data-modal').on('show.bs.modal', function (e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "modal",
+					"event_label": "data",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		populate_settings();
-	});
+			populate_settings();
+		});
 
-	// $("#rscript_file_input").change(function(e) {
-	// 	var reader = new FileReader();
-	// 	var path = e.currentTarget.files[0].path;
-	// 	if (path.length > 0) {
-	// 		store.set('settings.rscript_path', path);
-	// 		$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
-	// 	}
-	// });
+		// $("#rscript_file_input").change(function(e) {
+		// 	var reader = new FileReader();
+		// 	var path = e.currentTarget.files[0].path;
+		// 	if (path.length > 0) {
+		// 		store.set('settings.rscript_path', path);
+		// 		$("#settings-rscript-path").html(store.get('settings.rscript_path', ''));
+		// 	}
+		// });
 
-	$("input:radio[name='settings_entry_mode']").change(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "change-setting",
-				"event_label": "entry_mode",
-				"event_value": $(this).val()
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("input:radio[name='settings_entry_mode']").change(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "change-setting",
+					"event_label": "entry_mode",
+					"event_value": $(this).val()
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		store.set('settings.entry_mode', $(this).val());
-	});
+			store.set('settings.entry_mode', $(this).val());
+		});
 
-	$("input:radio[name='settings_opt_in_analysis']").change(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "change-optin",
-				"event_label": "analysis",
-				"event_value": $(this).val()
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("input:radio[name='settings_opt_in_analysis']").change(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "change-optin",
+					"event_label": "analysis",
+					"event_value": $(this).val()
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		store.set('settings.opt_in_analysis', Boolean($(this).val()));
-		store.set('settings.opt_in_analysis_date', new Date());
-	});
+			store.set('settings.opt_in_analysis', Boolean($(this).val()));
+			store.set('settings.opt_in_analysis_date', new Date());
+		});
 
-	$("input:radio[name='settings_opt_in_debug']").change(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "change-optin",
-				"event_label": "debug",
-				"event_value": $(this).val()
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("input:radio[name='settings_opt_in_debug']").change(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "change-optin",
+					"event_label": "debug",
+					"event_value": $(this).val()
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		store.set('settings.opt_in_debug', Boolean($(this).val()));
-		store.set('settings.opt_in_debug_date', new Date());
-	});
+			store.set('settings.opt_in_debug', Boolean($(this).val()));
+			store.set('settings.opt_in_debug_date', new Date());
+		});
 
-	$("#save-setting-button").click(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "save-settings",
-				"event_label": "",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("#save-setting-button").click(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "save-settings",
+					"event_label": "",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		$("#settings-modal").modal('hide');
-		check_config_settings();
-	});
+			$("#settings-modal").modal('hide');
+			check_config_settings();
+		});
 
-	$("#save-data-button").click(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "save-data",
-				"event_label": "",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("#save-data-button").click(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "save-data",
+					"event_label": "",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		store.set("settings.opt_in_analysis_date", new Date());
-		store.set("settings.opt_in_debug_date", new Date());
-		$("#data-modal").modal('hide');
-	});
+			store.set("settings.opt_in_analysis_date", new Date());
+			store.set("settings.opt_in_debug_date", new Date());
+			$("#data-modal").modal('hide');
+		});
+
+		has_wired_global_events = true;
+	}
 }
 
 function wire_setup_events() {
-	$("#setup-start").on('click', function(e) {
-		e.preventDefault();
-		disable_button("setup-start");
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "setup-start",
-				"event_label": "",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		let t0 = now();
-		setup.start().then(function(response) {
-			let t1 = now();
-			store.set("settings.first_run", false);
+	if (!has_wired_setup_events) {
+		$("#setup-start").on('click', function(e) {
+			e.preventDefault();
+			disable_button("setup-start");
 
 			log.log_debug(
 				"verbose",
 				{
 					"event_level": "verbose",
-					"event_category": "performance",
-					"event_action": "setup-start",
-					"event_label": "success",
-					"event_value": (t1-t0)
-				},
-				store.get("settings.opt_in_debug")
-			);
-
-			app_init();
-
-			$("#generic-alert").removeClass()
-				.addClass("alert")
-				.addClass("alert-success")
-				.html("Transition Anaysis 3 is now ready to use!")
-				.show()
-				.delay(3000)
-				.slideUp();
-		}, function(error) {
-			let t1 = now();
-
-			store.set("settings.first_run", true);
-
-			log.log_debug(
-				"verbose",
-				{
-					"event_level": "verbose",
-					"event_category": "performance",
-					"event_action": "setup-start",
-					"event_label": "error",
-					"event_value": (t1-t0)
-				},
-				store.get("settings.opt_in_debug")
-			);
-			log.log_debug(
-				"error",
-				{
-					"event_level": "error",
-					"event_category": "exception",
+					"event_category": "user-action",
 					"event_action": "setup-start",
 					"event_label": "",
-					"event_value": JSON.stringify(error)
+					"event_value": ""
 				},
 				store.get("settings.opt_in_debug")
 			);
 
-			console.error(error);
-			$("#setup-error-log pre").html(error);
-			$("#setup-error-log").show();
-			enable_button("setup-start");
+			let t0 = now();
+			setup.start().then(function(response) {
+				let t1 = now();
+				store.set("settings.first_run", false);
+
+				log.log_debug(
+					"verbose",
+					{
+						"event_level": "verbose",
+						"event_category": "performance",
+						"event_action": "setup-start",
+						"event_label": "success",
+						"event_value": (t1-t0)
+					},
+					store.get("settings.opt_in_debug")
+				);
+
+				app_init();
+
+				$("#generic-alert").removeClass()
+					.addClass("alert")
+					.addClass("alert-success")
+					.html("Transition Anaysis 3 is now ready to use!")
+					.show()
+					.delay(3000)
+					.slideUp();
+			}, function(error) {
+				let t1 = now();
+
+				store.set("settings.first_run", true);
+
+				log.log_debug(
+					"verbose",
+					{
+						"event_level": "verbose",
+						"event_category": "performance",
+						"event_action": "setup-start",
+						"event_label": "error",
+						"event_value": (t1-t0)
+					},
+					store.get("settings.opt_in_debug")
+				);
+				log.log_debug(
+					"error",
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "setup-start",
+						"event_label": "",
+						"event_value": JSON.stringify(error)
+					},
+					store.get("settings.opt_in_debug")
+				);
+
+				console.error(error);
+				$("#setup-error-log pre").html(error);
+				$("#setup-error-log").show();
+				enable_button("setup-start");
+			});
 		});
-	});
+
+		has_wired_setup_events = true;
+	}
 }
 
 function wire_event_handlers() {
-	$("#welcome-new-case").click(function(e) {
-		e.preventDefault();
+	if (!has_wired_app_events) {
+		$("#welcome-new-case").click(function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "welcome-new-case",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		new_case();
-		show_screen('case-screen');
-	});
-
-	$("#welcome-load-case").click(function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "welcome-load-case",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		open_case();
-	});
-
-	$("#load-case").click(function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "load-case",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-		open_case();
-	});
-
-	// $("#settings-modal").on("click", ".rscript-settings-link", function() {
-	// 	store.set('settings.rscript_path', $(this).text());
-	// 	$("#settings-rscript-path").html(store.get('settings.rscript_path'));
-	// });
-
-	$("#save-button").click(function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "save-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		save_case(false);
-	});
-
-	$("#save-analysis-button").click(function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "save-analysis-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		save_case(false);
-	});
-
-	$("#main-tabs a").click(function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "tab",
-				"event_label": $(e.target).attr("aria-controls"),
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		//console.log($(this).attr("id"));
-		$(this).tab('show');
-	});
-
-	$(".reset-button").click(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "reset-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		new_case();
-	});
-
-	$("#analysis-button").click(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "tab",
-				"event_label": "#selections",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		$('#main-tabs a[href="#selections"]').tab('show');
-	});
-
-	$("#analysis-review-button").click(function(e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "tab",
-				"event_label": "#results",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		$('#main-tabs a[href="#results"]').tab('show');
-		$('#main-tabs a[href="#results"]').show();
-		//$('#main-tabs a[href="#charts"]').show();
-
-		run_analysis();
-	});
-
-	$("#trait-pager").on("click", ".previous", function() {
-		if (!$(this).hasClass("disabled")) {
 			log.log_debug(
 				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "user-action",
-					"event_action": "pager-click",
-					"event_label": "previous",
-					"event_value": current_trait_text
+					"event_action": "button-click",
+					"event_label": "welcome-new-case",
+					"event_value": ""
 				},
 				store.get("settings.opt_in_debug")
 			);
 
-			current_trait_idx--;
-			var temp = data_get_trait(current_section_idx, current_trait_idx);
-			current_trait_text = temp.db_name;
-			update_pager_buttons();
-			populate_trait_prompt(current_traits[current_trait_idx]);
-		}
-	});
+			new_case();
+			show_screen('case-screen');
+		});
 
-	$("#trait-pager").on("click", ".next", function() {
-		if (!$(this).hasClass("disabled")) {
+		$("#welcome-load-case").click(function(e) {
+			e.preventDefault();
+
 			log.log_debug(
 				"verbose",
 				{
 					"event_level": "verbose",
 					"event_category": "user-action",
-					"event_action": "pager-click",
-					"event_label": "next",
-					"event_value": current_trait_text
+					"event_action": "button-click",
+					"event_label": "welcome-load-case",
+					"event_value": ""
 				},
 				store.get("settings.opt_in_debug")
 			);
 
-			current_trait_idx++;
-			var temp = data_get_trait(current_section_idx, current_trait_idx);
-			current_trait_text = temp.db_name;
-			update_pager_buttons();
-			populate_trait_prompt(current_traits[current_trait_idx]);
-		}
-	});
+			open_case();
+		});
 
-	$("#section-menu").on("click", ".list-group-item", function() {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "tab",
-				"event_label": "#evaluation",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("#load-case").click(function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "screen",
-				"event_label": "traits",
-				"event_value": $(this).data("section-id")
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "load-case",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+			open_case();
+		});
 
-		$('#main-tabs a[href="#evaluation"]').tab('show');
-		select_section($(this));
-	});
+		// $("#settings-modal").on("click", ".rscript-settings-link", function() {
+		// 	store.set('settings.rscript_path', $(this).text());
+		// 	$("#settings-rscript-path").html(store.get('settings.rscript_path'));
+		// });
 
-	$("body").on("click", ".adv-radio", function() {
-		var btn = $(this);
-		var identifier = String(btn.attr("data-section-text")) + "-" + String(btn.attr("data-trait-text")) + "-" + String(btn.attr("data-score-text"));
+		$("#save-button").click(function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "toggle-trait",
-				"event_label": "advanced",
-				"event_value": identifier
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "save-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		toggle_score_selection_text(
-			btn.attr("data-section-text"),
-			btn.attr("data-trait-text"),
-			btn.attr("data-score-text")
-		);
+			save_case(false);
+		});
 
-		var group = $("body").find("div.btn-group[data-trait-text=" + String(btn.attr("data-trait-text")) + "]");
-		$.each($(".adv-radio", group), function(k,v) {
-			if ($(this).data("identifier") !== identifier) {
-				$(this).removeClass("active");
-			} else {
-				if ($(this).hasClass("active")) {
-					$(this).removeClass("active");
-				} else {
-					$(this).addClass("active");
-				}
+		$("#save-analysis-button").click(function(e) {
+			e.preventDefault();
+
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "save-analysis-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			save_case(false);
+		});
+
+		$("#main-tabs a").click(function(e) {
+			e.preventDefault();
+
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "tab",
+					"event_label": $(e.target).attr("aria-controls"),
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			//console.log($(this).attr("id"));
+			$(this).tab('show');
+		});
+
+		$(".reset-button").click(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "reset-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			new_case();
+		});
+
+		$("#analysis-button").click(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "tab",
+					"event_label": "#selections",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			$('#main-tabs a[href="#selections"]').tab('show');
+		});
+
+		$("#analysis-review-button").click(function(e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "tab",
+					"event_label": "#results",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			$('#main-tabs a[href="#results"]').tab('show');
+			$('#main-tabs a[href="#results"]').show();
+			//$('#main-tabs a[href="#charts"]').show();
+
+			run_analysis();
+		});
+
+		$("#trait-pager").on("click", ".previous", function() {
+			if (!$(this).hasClass("disabled")) {
+				log.log_debug(
+					"verbose",
+					{
+						"event_level": "verbose",
+						"event_category": "user-action",
+						"event_action": "pager-click",
+						"event_label": "previous",
+						"event_value": current_trait_text
+					},
+					store.get("settings.opt_in_debug")
+				);
+
+				current_trait_idx--;
+				var temp = data_get_trait(current_section_idx, current_trait_idx);
+				current_trait_text = temp.db_name;
+				update_pager_buttons();
+				populate_trait_prompt(current_traits[current_trait_idx]);
 			}
 		});
-	});
 
-	$("body").on("keyup", ".adv-text", function() {
-		var input = $(this);
-		var identifier = String(input.attr("data-section-text")) + "-" + String(input.attr("data-trait-text"));
+		$("#trait-pager").on("click", ".next", function() {
+			if (!$(this).hasClass("disabled")) {
+				log.log_debug(
+					"verbose",
+					{
+						"event_level": "verbose",
+						"event_category": "user-action",
+						"event_action": "pager-click",
+						"event_label": "next",
+						"event_value": current_trait_text
+					},
+					store.get("settings.opt_in_debug")
+				);
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "score-trait",
-				"event_label": "advanced",
-				"event_value": identifier
-			},
-			store.get("settings.opt_in_debug")
-		);
+				current_trait_idx++;
+				var temp = data_get_trait(current_section_idx, current_trait_idx);
+				current_trait_text = temp.db_name;
+				update_pager_buttons();
+				populate_trait_prompt(current_traits[current_trait_idx]);
+			}
+		});
 
-		if (!isNaN(input.val())) {
-			if (Number(input.val()) > Number(input.attr("data-max-score"))) {
-				input.addClass("invalid");
-				//input.val("");
-				input.blur();
+		$("#section-menu").on("click", ".list-group-item", function() {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "tab",
+					"event_label": "#evaluation",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "screen",
+					"event_label": "traits",
+					"event_value": $(this).data("section-id")
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			$('#main-tabs a[href="#evaluation"]').tab('show');
+			select_section($(this));
+		});
+
+		$("body").on("click", ".adv-radio", function() {
+			var btn = $(this);
+			var identifier = String(btn.attr("data-section-text")) + "-" + String(btn.attr("data-trait-text")) + "-" + String(btn.attr("data-score-text"));
+
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "toggle-trait",
+					"event_label": "advanced",
+					"event_value": identifier
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			toggle_score_selection_text(
+				btn.attr("data-section-text"),
+				btn.attr("data-trait-text"),
+				btn.attr("data-score-text")
+			);
+
+			var group = $("body").find("div.btn-group[data-trait-text=" + String(btn.attr("data-trait-text")) + "]");
+			$.each($(".adv-radio", group), function(k,v) {
+				if ($(this).data("identifier") !== identifier) {
+					$(this).removeClass("active");
+				} else {
+					if ($(this).hasClass("active")) {
+						$(this).removeClass("active");
+					} else {
+						$(this).addClass("active");
+					}
+				}
+			});
+		});
+
+		$("body").on("keyup", ".adv-text", function() {
+			var input = $(this);
+			var identifier = String(input.attr("data-section-text")) + "-" + String(input.attr("data-trait-text"));
+
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "score-trait",
+					"event_label": "advanced",
+					"event_value": identifier
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			if (!isNaN(input.val())) {
+				if (Number(input.val()) > Number(input.attr("data-max-score"))) {
+					input.addClass("invalid");
+					//input.val("");
+					input.blur();
+				} else {
+					input.removeClass("invalid");
+					toggle_score_selection_text(
+						input.attr("data-section-text"),
+						input.attr("data-trait-text"),
+						input.val(),
+						true
+					);
+				}
 			} else {
 				input.removeClass("invalid");
-				toggle_score_selection_text(
-					input.attr("data-section-text"),
-					input.attr("data-trait-text"),
-					input.val(),
-					true
-				);
+				input.val("");
 			}
-		} else {
-			input.removeClass("invalid");
-			input.val("");
-		}
-	});
+		});
 
-	$("body").on('change', '.dirtyable', function() {
-		console.log('changed');
-		window.is_dirty = true;
-		update_file_status();
-	});
+		$("body").on('change', '.dirtyable', function() {
+			console.log('changed');
+			window.is_dirty = true;
+			update_file_status();
+		});
 
-	$("body").on("click", ".trait-score-button", function() {
-		// var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
+		$("body").on("click", ".trait-score-button", function() {
+			// var identifier = String($(this).attr("data-section-idx")) + "-" + String($(this).attr("data-trait-idx")) + "-" + String($(this).attr("data-score-idx"));
 
-		var identifier = String($(this).attr("data-section-text")) + "-" + String($(this).attr("data-trait-text")) + "-" + String($(this).attr("data-score-text"));
+			var identifier = String($(this).attr("data-section-text")) + "-" + String($(this).attr("data-trait-text")) + "-" + String($(this).attr("data-score-text"));
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "toggle-trait",
-				"event_label": "basic",
-				"event_value": identifier
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "toggle-trait",
+					"event_label": "basic",
+					"event_value": identifier
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		var btn = $(this);
+			var btn = $(this);
 
-		// toggle_score_selection(
-		// 	$(this).attr("data-section-idx"),
-		// 	$(this).attr("data-trait-idx"),
-		// 	$(this).attr("data-score-idx")
-		// );
-		toggle_score_selection_text(
-			$(this).attr("data-section-text"),
-			$(this).attr("data-trait-text"),
-			$(this).attr("data-score-text")
-		);
+			// toggle_score_selection(
+			// 	$(this).attr("data-section-idx"),
+			// 	$(this).attr("data-trait-idx"),
+			// 	$(this).attr("data-score-idx")
+			// );
+			toggle_score_selection_text(
+				$(this).attr("data-section-text"),
+				$(this).attr("data-trait-text"),
+				$(this).attr("data-score-text")
+			);
 
-		//toggle_trait_score_selection(identifier, $(this));
+			//toggle_trait_score_selection(identifier, $(this));
 
-		$.each($(".trait-score"), function(k,v) {
-			if ($(this).data("identifier") !== identifier) {
-				$(this).parent().removeClass("selected");
-				$(this).find(".trait-score-button")
-					.removeClass("btn-warning")
-					.addClass("btn-success")
-					.text("Select");
-			} else {
-				if ($(this).parent().hasClass("selected")) {
+			$.each($(".trait-score"), function(k,v) {
+				if ($(this).data("identifier") !== identifier) {
 					$(this).parent().removeClass("selected");
-					btn.removeClass("btn-warning")
+					$(this).find(".trait-score-button")
+						.removeClass("btn-warning")
 						.addClass("btn-success")
 						.text("Select");
 				} else {
-					$(this).parent().addClass("selected");
-					btn.addClass("btn-warning")
-						.removeClass("btn-success")
-						.text("Deselect");
+					if ($(this).parent().hasClass("selected")) {
+						$(this).parent().removeClass("selected");
+						btn.removeClass("btn-warning")
+							.addClass("btn-success")
+							.text("Select");
+					} else {
+						$(this).parent().addClass("selected");
+						btn.addClass("btn-warning")
+							.removeClass("btn-success")
+							.text("Deselect");
+					}
 				}
+			});
+		});
+
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "view",
+					"event_action": "tab",
+					"event_label": $(e.target).attr("aria-controls"),
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			if ($(e.target).attr("aria-controls") === "caseinfo") {
+				$("#section-menu .list-group-item").removeClass("active");
+			}
+
+			if ($(e.target).attr("aria-controls") === "evaluation") {
+				$("#section-menu .list-group-item").removeClass("active");
+				$("#evaluation-content-empty").show();
+				$("#evaluation-content").hide();
+			}
+
+			if ($(e.target).attr("aria-controls") === "selections") {
+				$("#section-menu .list-group-item").removeClass("active");
+				show_current_selections_text();
+			}
+
+			if ($(e.target).attr("aria-controls") === "results") {
+				$("#section-menu .list-group-item").removeClass("active");
+			}
+
+			if ($(e.target).attr("aria-controls") === "charts") {
+				$("#section-menu .list-group-item").removeClass("active");
 			}
 		});
-	});
 
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "view",
-				"event_action": "tab",
-				"event_label": $(e.target).attr("aria-controls"),
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+		$("body").on("click", "#download-update-button", function(e) {
+			e.preventDefault();
 
-		if ($(e.target).attr("aria-controls") === "caseinfo") {
-			$("#section-menu .list-group-item").removeClass("active");
-		}
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "download-update-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		if ($(e.target).attr("aria-controls") === "evaluation") {
-			$("#section-menu .list-group-item").removeClass("active");
-			$("#evaluation-content-empty").show();
-			$("#evaluation-content").hide();
-		}
+			ipcRenderer.send("update-download");
+		});
 
-		if ($(e.target).attr("aria-controls") === "selections") {
-			$("#section-menu .list-group-item").removeClass("active");
-			show_current_selections_text();
-		}
+		$("body").on("click", "#dismiss-download-button", function(e) {
+			e.preventDefault();
 
-		if ($(e.target).attr("aria-controls") === "results") {
-			$("#section-menu .list-group-item").removeClass("active");
-		}
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "dismiss-download-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		if ($(e.target).attr("aria-controls") === "charts") {
-			$("#section-menu .list-group-item").removeClass("active");
-		}
-	});
-
-	$("body").on("click", "#download-update-button", function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "download-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		ipcRenderer.send("update-download");
-	});
-
-	$("body").on("click", "#dismiss-download-button", function(e) {
-		e.preventDefault();
-
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "dismiss-download-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
-
-		$("#generic-alert").hide();
-	});
+			$("#generic-alert").hide();
+		});
 
 
-	$("body").on("click", "#install-update-button", function(e) {
-		e.preventDefault();
+		$("body").on("click", "#install-update-button", function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "install-update-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "install-update-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		ipcRenderer.send("update-install");
-	});
+			ipcRenderer.send("update-install");
+		});
 
-	$("body").on("click", "#dismiss-install-button", function(e) {
-		e.preventDefault();
+		$("body").on("click", "#dismiss-install-button", function(e) {
+			e.preventDefault();
 
-		log.log_debug(
-			"verbose",
-			{
-				"event_level": "verbose",
-				"event_category": "user-action",
-				"event_action": "button-click",
-				"event_label": "dismiss-install-button",
-				"event_value": ""
-			},
-			store.get("settings.opt_in_debug")
-		);
+			log.log_debug(
+				"verbose",
+				{
+					"event_level": "verbose",
+					"event_category": "user-action",
+					"event_action": "button-click",
+					"event_label": "dismiss-install-button",
+					"event_value": ""
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-		$("#generic-alert").hide();
-	});
+			$("#generic-alert").hide();
+		});
+
+		has_wired_app_events = true;
+	}
 }
 
 function check_config_settings() {
@@ -2296,6 +2311,8 @@ ipcRenderer.on('application-ready', (event, args) => {
 	//console.log(cla_args);
 
 	wire_global_events();
+	wire_setup_events();
+	wire_event_handlers();
 
 	// check consent settings
 	if (store.get("settings.opt_in_analysis_date", "").length == 0 ||
