@@ -52,6 +52,23 @@ contextMenu({
 	showSaveImageAs: true
 });
 
+// contextMenu({
+// 	prepend: (defaultActions, params, browserWindow) => [
+// 		{
+// 			label: 'Save',
+// 			visible: params.mediaType === 'image',
+// 			click(menuItem) {
+// 				download(win, params.srcURL, {saveAs: true});
+// 			}
+// 		}
+// 	],
+// 	showSaveImage: false,
+// 	showSaveImageAs: false,
+// 	showCopyImage: false,
+// 	showCopyImageAddress: false
+// });
+
+
 // Note: Must match `build.appId` in package.json
 app.setAppUserModelId('edu.psu.TA3');
 
