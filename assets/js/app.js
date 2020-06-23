@@ -218,7 +218,8 @@ function wire_global_events() {
 				store.get("settings.opt_in_debug")
 			);
 
-			store.set('settings.opt_in_analysis', Boolean($(this).val()));
+			//store.set('settings.opt_in_analysis', Boolean($(this).val()));
+			store.set('settings.opt_in_analysis', ($(this).val() == "true"));
 			store.set('settings.opt_in_analysis_date', new Date());
 		});
 
@@ -235,7 +236,8 @@ function wire_global_events() {
 				store.get("settings.opt_in_debug")
 			);
 
-			store.set('settings.opt_in_debug', Boolean($(this).val()));
+			//store.set('settings.opt_in_debug', Boolean($(this).val()));
+			store.set('settings.opt_in_debug', ($(this).val() == "true"));
 			store.set('settings.opt_in_debug_date', new Date());
 		});
 
