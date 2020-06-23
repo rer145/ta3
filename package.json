@@ -72,6 +72,7 @@
 			}
 		],
 		"win": {
+			"target": ["nsis", "portable"],
 			"icon": "build/icon.png",
 			"verifyUpdateCodeSignature": false,
 			"extraResources": [
@@ -88,6 +89,9 @@
 					"to": "analyze.bat"
 				}
 			]
+		},
+		"portable": {
+			"artifactName": "Transition Analysis 3 Portable.exe"
 		},
 		"mac": {
 			"category": "public.app-category.education",

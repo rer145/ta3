@@ -11,7 +11,7 @@ git:
 before_install:
   - echo -e "machine github.com\n login $CI_USER_TOKEN" > ~/.netrc
   - git submodule update --init --recursive
-  
+
 deploy:
     provider: releases
     skip_cleanup: false
@@ -20,5 +20,6 @@ deploy:
     file:
       - "dist/ta3-*-mac.zip"
       - "dist/ta3-setup-*.exe"
+      - "dist/ta3-portable.exe"
     on:
       tags: true
