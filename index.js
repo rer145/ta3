@@ -1,7 +1,7 @@
 'use strict';
 const os = require('os');
 const path = require('path');
-const {app, BrowserWindow, Menu, ipcMain} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, dialog} = require('electron');
 /// const {autoUpdater} = require('electron-updater');
 const {is} = require('electron-util');
 const unhandled = require('electron-unhandled');
@@ -120,6 +120,13 @@ const createMainWindow = async () => {
 	win.webContents.on('did-finish-load', () => {
 		win.webContents.setZoomFactor(1);
 	});
+
+	// win.on('close', (e) => {
+	// 	if (win){
+	// 		e.preventDefault();
+	// 		win.webContents.send('application-quit', cla.options);
+	// 	}
+	// });
 
 	win.on('closed', () => {
 		// Dereference the window
@@ -478,3 +485,11 @@ ipcMain.on("download-file", (event, info) => {
 			mainWindow.webContents.send("download-complete", dl.getSavePath());
 		});
 });
+
+
+// ipcMain.on('application-closed', _ => {
+// 	mainWindow = undefined;
+// 	if (process.platform !== 'darwin') {
+// 		app.quit();
+// 	}
+// });

@@ -7,7 +7,7 @@ window.Bootstrap = require('bootstrap');
 const fs = require('fs');
 const find = require('find');
 const path = require('path');
-const {app, ipcRenderer, shell} = require('electron');
+const {app, ipcRenderer, shell, ipcMain} = require('electron');
 const { BrowserWindow } = require('electron').remote;
 const {dialog} = require('electron').remote;
 const {is} = require('electron-util');
@@ -2305,7 +2305,13 @@ function end_progress(id, code, msg) {
 
 
 
-
+// ipcRenderer.on('application-quit', (event, args) => {
+// 	console.log("dirty", window.is_dirty);
+// 	if (window.is_dirty) {
+// 		setTimeout(console.error("DIRTY FILE!"), 4000);
+// 	}
+// 	ipcRenderer.send('application-closed');
+// });
 
 
 ipcRenderer.on('application-ready', (event, args) => {
