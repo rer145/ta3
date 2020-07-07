@@ -53,7 +53,7 @@
 		"uuid": "^7.0.3"
 	},
 	"devDependencies": {
-		"electron": "^6.0.7",
+		"electron": "^9.1.0",
 		"electron-builder": "^21.2.0"
 	},
 	"build": {
