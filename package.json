@@ -9,23 +9,18 @@
 		"name": "Ron Richardson",
 		"email": "ron.richardson@gmail.com"
 	},
+	"main": "./index.js",
 	"scripts": {
-		"postinstall": "electron-builder install-app-deps",
-		"test": "npm run lint",
-		"start": "electron .",
-		"start-analysis": "electron . --analysis=\"d:\\Test Path Windows\\TA 3\\scripts\"",
-		"pack": "electron-builder --dir",
-		"dist": "electron-builder --macos --windows -p always",
-		"dist-win": "electron-builder --windows",
-		"dist-win-p": "electron-builder --windows portable",
-		"dist-mac": "electron-builder --macos",
-		"travis-pack": "electron-builder --dir",
-		"travis-dist": "electron-builder --macos --windows -p always",
-		"travis-dist-win": "electron-builder --windows -p always",
-		"travis-dist-win-p": "electron-builder --windows portable -p always",
-		"travis-dist-mac": "electron-builder --macos -p always"
+		"start": "electron-forge start",
+		"package": "electron-forge package",
+		"make": "electron-forge make",
+		"publish": "electron-forge publish"
+	},
+	"config": {
+		"forge": "./forge.config.js"
 	},
 	"dependencies": {
+		"adm-zip": "^0.4.16",
 		"async": "^3.2.0",
 		"axios": "^0.19.2",
 		"bootstrap": "^3.3.7",
@@ -35,6 +30,7 @@
 		"electron-dl": "^2.0.0",
 		"electron-log": "^4.1.1",
 		"electron-pdf-window": "^1.0.12",
+		"electron-squirrel-startup": "^1.0.0",
 		"electron-store": "^4.0.0",
 		"electron-unhandled": "^3.0.0",
 		"electron-updater": "^4.0.6",
@@ -42,6 +38,7 @@
 		"electron-window-state": "^5.0.3",
 		"find": "^0.3.0",
 		"fs": "0.0.1-security",
+		"fs-extra": "^9.0.1",
 		"https": "^1.0.0",
 		"jquery": "^3.3.1",
 		"os": "^0.1.1",
@@ -50,9 +47,15 @@
 		"semver": "^7.3.2",
 		"sudo-prompt": "^9.0.0",
 		"tether": "^1.4.7",
+		"update-electron-app": "^1.5.0",
 		"uuid": "^7.0.3"
 	},
 	"devDependencies": {
+		"@electron-forge/cli": "^6.0.0-beta.52",
+		"@electron-forge/maker-deb": "^6.0.0-beta.52",
+		"@electron-forge/maker-rpm": "^6.0.0-beta.52",
+		"@electron-forge/maker-squirrel": "^6.0.0-beta.52",
+		"@electron-forge/maker-zip": "^6.0.0-beta.52",
 		"electron": "^6.0.7",
 		"electron-builder": "^21.2.0"
 	},
@@ -72,7 +75,10 @@
 			}
 		],
 		"win": {
-			"target": ["nsis", "portable"],
+			"target": [
+				"nsis",
+				"portable"
+			],
 			"icon": "build/icon.png",
 			"verifyUpdateCodeSignature": false,
 			"extraResources": [

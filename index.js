@@ -189,7 +189,6 @@ app.on('activate', async () => {
 })();
 
 
-
 function prep_files_and_settings() {
 
 	let version = app.getVersion();
@@ -248,7 +247,8 @@ function prep_files_and_settings() {
 
 
 
-	let userDataPath = path.join(app.getPath("home"), "TA3");
+	//let userDataPath = path.join(app.getPath("home"), "TA3");
+	let userDataPath = path.join(__dirname, "runtime");
 	let userPackagesPath = path.join(userDataPath, "packages");
 	let userAnalysisPath = path.join(userDataPath, "analysis");
 	let userAssetsPath = path.join(userDataPath, "assets");
@@ -280,6 +280,7 @@ function prep_files_and_settings() {
 			resourcesPath = path.join(__dirname, "build");
 		}
 	}
+	resourcesPath = path.join(__dirname, "runtime");
 
 	let RPortablePath = path.join(resourcesPath, "R-Portable", "bin", "RScript.exe");
 	let RProfileFile = path.join(resourcesPath, "R-Portable", "library", "base", "R", "Rprofile");
@@ -288,25 +289,25 @@ function prep_files_and_settings() {
 	if (cla.options && cla.options.analysis && cla.options.analysis.length > 0)
 		RAnalysisPath = cla.options.analysis;
 
-	if (is.development) {
-		RPortablePath = path.join(
-			resourcesPath,
-			"R-Portable",
-			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
-			"bin",
-			"RScript.exe"
-		);
+	// if (is.development) {
+	// 	RPortablePath = path.join(
+	// 		resourcesPath,
+	// 		"R-Portable",
+	// 		is.macos ? "R-Portable-Mac" : "R-Portable-Win",
+	// 		"bin",
+	// 		"RScript.exe"
+	// 	);
 
-		RProfileFile = path.join(
-			resourcesPath,
-			"R-Portable",
-			is.macos ? "R-Portable-Mac" : "R-Portable-Win",
-			"library",
-			"base",
-			"R",
-			"Rprofile"
-		);
-	}
+	// 	RProfileFile = path.join(
+	// 		resourcesPath,
+	// 		"R-Portable",
+	// 		is.macos ? "R-Portable-Mac" : "R-Portable-Win",
+	// 		"library",
+	// 		"base",
+	// 		"R",
+	// 		"Rprofile"
+	// 	);
+	// }
 
 	// mac only - R-Portable will be copied to user home directory
 	//   during initial setup process
@@ -333,6 +334,7 @@ function prep_files_and_settings() {
 	};
 
 
+	settings_config['first_run'] = false;	// portable only
 	config['settings'] = settings_config;
 	config['system'] = system_config;
 	config['user'] = user_config;
@@ -364,7 +366,7 @@ function prep_files_and_settings() {
 	store.set(config);
 
 
-	update_RProfile(RProfileFile, userPackagesPath);
+	//update_RProfile(RProfileFile, userPackagesPath);
 }
 
 function update_RProfile(rprofile_path, packages_path) {
@@ -462,8 +464,6 @@ function copy_file(src, dest, replace) {
 		});
 	}
 };
-
-
 
 
 ipcMain.on("download-file", (event, info) => {

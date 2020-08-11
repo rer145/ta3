@@ -76,6 +76,7 @@ function app_init() {
 }
 
 function load_database() {
+	console.log(process.argv);
 	var db = JSON.parse(fs.readFileSync(path.join(store.get("user.assets_path"), "/database/db.min.json")).toString());
 	return db;
 }

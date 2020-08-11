@@ -247,7 +247,8 @@ function downloadAndInstall(items) {
 }
 
 ipcMain.on('check-asset-update', () => {
-	checkForUpdates();
+	if (store.get("user.assets_path").indexOf('runtime') == -1)
+		checkForUpdates();
 });
 
 ipcMain.on('update-asset-install', (event, arg) => {
