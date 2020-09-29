@@ -17,6 +17,19 @@ function make_directory(dir) {
 	}
 };
 
+function empty_directory(dir) {
+	if (!fs.existsSync(dir)){
+		try {
+			let files = fs.readdirSync(dir);
+			for (var file in files) {
+				fs.unlinkSync(path.join(dir, file));
+			}
+		} catch (err) {
+			console.log("Unable to empty directory: " + err);
+		}
+	}
+};
+
 function update_RProfile(rprofile_path, packages_path) {
 	// update and copy Rprofile with .libPath() info
 	let searchText = "### Setting TA3 .libPaths() ###";
@@ -57,6 +70,8 @@ module.exports = {
 		icon: path.resolve(__dirname, 'assets', 'img', 'icons', 'icon'),
 		appBundleId: 'edu.psu.TA3',
 		appCategoryType: 'public.app-category.education',
+		electronVersion: '6.0.7',
+		overwrite: true,
 		win32metadata: {
 			CompanyName: 'Ron Richardson',
 			OriginalFilename: 'ta3'
@@ -68,7 +83,7 @@ module.exports = {
 			/\/build\/R-Portable(\/?)/,
 			/\/build\/setup(\/?)/,
 			/\/build\/(.*)\.zip/,
-			// /\/dist(\/?)/
+			/\/dist(\/?)/
 		]
 	},
 	makers: [
@@ -137,6 +152,8 @@ module.exports = {
 
 			let z_packages = new AdmZip(path.join(__dirname, "build", "packages.zip"));
 			z_packages.extractAllTo(path.join(dest_root, "packages"));
+
+			empty_directory(path.join(dest_root, "analysis"));
 		}
 	}
 };
