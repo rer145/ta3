@@ -72,6 +72,7 @@ module.exports = {
 		appCategoryType: 'public.app-category.education',
 		electronVersion: '6.0.7',
 		overwrite: true,
+		prune: false,
 		win32metadata: {
 			CompanyName: 'Ron Richardson',
 			OriginalFilename: 'ta3'
@@ -82,8 +83,7 @@ module.exports = {
 			// /\/assets(\/?)/,
 			/\/build\/R-Portable(\/?)/,
 			/\/build\/setup(\/?)/,
-			/\/build\/(.*)\.zip/,
-			/\/dist(\/?)/
+			/\/build\/(.*)\.zip/
 		]
 	},
 	makers: [
