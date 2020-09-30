@@ -4,3 +4,4 @@ yarn.lock
 .DS_Store
 /out
 /runtime
+packages.zip
