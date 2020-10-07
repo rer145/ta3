@@ -1895,42 +1895,52 @@ function new_case() {
 }
 
 function open_case_from_path(filePath) {
-	new_case();
-	fs.readFile(filePath, 'utf8', (err, data) => {
-		if (err) {
-			log.log_debug(
-				"error",
-				{
-					"event_level": "error",
-					"event_category": "exception",
-					"event_action": "open_case",
-					"event_label": "",
-					"event_value": JSON.stringify(err)
-				},
-				store.get("settings.opt_in_debug")
-			);
+	if (path.extname(filePath) != '.ta3') {
+		$("#generic-alert").removeClass()
+			.addClass("alert")
+			.addClass("alert-danger")
+			.html("<strong>Error</strong><br />This application can only open files with the .ta3 extension.")
+			.show()
+			.delay(6000)
+			.slideUp(200, function() { $(this).hide(); });
+	} else {
+		new_case();
+		fs.readFile(filePath, 'utf8', (err, data) => {
+			if (err) {
+				log.log_debug(
+					"error",
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "open_case",
+						"event_label": "",
+						"event_value": JSON.stringify(err)
+					},
+					store.get("settings.opt_in_debug")
+				);
 
-			console.error(err);
-		}
+				console.error(err);
+			}
 
-		var json = JSON.parse(data);
+			var json = JSON.parse(data);
 
-		// TODO: do work
-		$("#case_number_input").val(json['properties']['case_number']);
-		$("#designation_input").val(json['properties']['designation']);
-		$("#recorder_input").val(json['properties']['recorder']);
-		$("#date_input").val(json['properties']['observation_date']);
-		$("#notes_input").val(json['properties']['notes']);
-		selections = json['traits'];
+			// TODO: do work
+			$("#case_number_input").val(json['properties']['case_number']);
+			$("#designation_input").val(json['properties']['designation']);
+			$("#recorder_input").val(json['properties']['recorder']);
+			$("#date_input").val(json['properties']['observation_date']);
+			$("#notes_input").val(json['properties']['notes']);
+			selections = json['traits'];
 
-		window.current_file = filePath;
+			window.current_file = filePath;
 
-		//show_current_selections();
-		$('#main-tabs a[href="#selections"]').tab('show');
-		$('#main-tabs a[href="#selections"]').show();
+			//show_current_selections();
+			$('#main-tabs a[href="#selections"]').tab('show');
+			$('#main-tabs a[href="#selections"]').show();
 
-		update_file_status();
-	});
+			update_file_status();
+		});
+	}
 }
 
 function open_cases_from_paths(filePaths) {
