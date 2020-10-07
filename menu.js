@@ -173,25 +173,25 @@ ${debugInfo()}`;
 			});
 		}
 	},
-	{ type: 'separator' },
-	{
-		label: 'Check for App Updates',
-		click(menuItem, focusedWindow, event) {
-			log.log_debug(
-				"info",
-				{
-					"event_level": "info",
-					"event_category": "menu",
-					"event_action": "click",
-					"event_label": "help",
-					"event_value": "check-for-app-updates"
-				},
-				store.get("settings.opt_in_debug")
-			);
+	// { type: 'separator' },
+	// {
+	// 	label: 'Check for App Updates',
+	// 	click(menuItem, focusedWindow, event) {
+	// 		log.log_debug(
+	// 			"info",
+	// 			{
+	// 				"event_level": "info",
+	// 				"event_category": "menu",
+	// 				"event_action": "click",
+	// 				"event_label": "help",
+	// 				"event_value": "check-for-app-updates"
+	// 			},
+	// 			store.get("settings.opt_in_debug")
+	// 		);
 
-			updater.checkForUpdates(menuItem, focusedWindow, event);
-		}
-	}
+	// 		updater.checkForUpdates(menuItem, focusedWindow, event);
+	// 	}
+	// }
 	// ,
 	// {
 	// 	label: 'Check for Asset Updates',

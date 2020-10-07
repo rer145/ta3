@@ -44,7 +44,40 @@ const appName = "Transition Analysis 3";
 $(document).ready(function() {
 	$("#current-version").text(store.get('version'));
 	$(".app-name").text(appName);
+
+	$(document).on('dragover', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$(document).on('dragenter', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$(document).on('drop', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		let paths = [];
+		if (e.originalEvent && e.originalEvent.dataTransfer) {
+			for (var i = 0; i < e.originalEvent.dataTransfer.files.length; i++) {
+				paths.push(e.originalEvent.dataTransfer.files[i].path);
+			}
+		}
+
+		if (paths.length == 1)
+			open_case_from_path(paths[0]);
+		else
+			open_cases_from_paths(paths);
+	});
 });
+
+// document.addEventListener('drop', (e) => {
+// 	e.preventDefault();
+// 	e.stopPropagation();
+// 	console.log(e);
+// });
 
 function app_consent() {
 	log.log_debug(
@@ -73,10 +106,11 @@ function app_init() {
 
 	populate_settings();
 	wire_event_handlers();
+
+	console.log(process.argv);
 }
 
 function load_database() {
-	console.log(process.argv);
 	var db = JSON.parse(fs.readFileSync(path.join(store.get("user.assets_path"), "/database/db.min.json")).toString());
 	return db;
 }
@@ -1860,6 +1894,50 @@ function new_case() {
 	// check settings for which view to show
 }
 
+function open_case_from_path(filePath) {
+	new_case();
+	fs.readFile(filePath, 'utf8', (err, data) => {
+		if (err) {
+			log.log_debug(
+				"error",
+				{
+					"event_level": "error",
+					"event_category": "exception",
+					"event_action": "open_case",
+					"event_label": "",
+					"event_value": JSON.stringify(err)
+				},
+				store.get("settings.opt_in_debug")
+			);
+
+			console.error(err);
+		}
+
+		var json = JSON.parse(data);
+
+		// TODO: do work
+		$("#case_number_input").val(json['properties']['case_number']);
+		$("#designation_input").val(json['properties']['designation']);
+		$("#recorder_input").val(json['properties']['recorder']);
+		$("#date_input").val(json['properties']['observation_date']);
+		$("#notes_input").val(json['properties']['notes']);
+		selections = json['traits'];
+
+		window.current_file = filePath;
+
+		//show_current_selections();
+		$('#main-tabs a[href="#selections"]').tab('show');
+		$('#main-tabs a[href="#selections"]').show();
+
+		update_file_status();
+	});
+}
+
+function open_cases_from_paths(filePaths) {
+	if (filePaths.length > 0)
+		open_case_from_path(filePaths[0]);
+}
+
 function open_case() {
 	dialog.showOpenDialog({
 		properties: ['openFile'],
@@ -1871,44 +1949,9 @@ function open_case() {
 	}, function(files) {
 		if (files != undefined) {
 			if (files.length == 1) {
-				new_case();
+				//new_case();
 				var filePath = files[0];
-
-				fs.readFile(filePath, 'utf8', (err, data) => {
-					if (err) {
-						log.log_debug(
-							"error",
-							{
-								"event_level": "error",
-								"event_category": "exception",
-								"event_action": "open_case",
-								"event_label": "",
-								"event_value": JSON.stringify(err)
-							},
-							store.get("settings.opt_in_debug")
-						);
-
-						console.error(err);
-					}
-
-					var json = JSON.parse(data);
-
-					// TODO: do work
-					$("#case_number_input").val(json['properties']['case_number']);
-					$("#designation_input").val(json['properties']['designation']);
-					$("#recorder_input").val(json['properties']['recorder']);
-					$("#date_input").val(json['properties']['observation_date']);
-					$("#notes_input").val(json['properties']['notes']);
-					selections = json['traits'];
-
-					window.current_file = filePath;
-
-					//show_current_selections();
-					$('#main-tabs a[href="#selections"]').tab('show');
-					$('#main-tabs a[href="#selections"]').show();
-
-					update_file_status();
-				});
+				open_case_from_path(filePath);
 			}
 		}
 	});
