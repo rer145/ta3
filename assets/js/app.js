@@ -1101,6 +1101,9 @@ function populate_advanced_mode(section) {
 
 					if (trait != undefined) {
 						var trait_col = $("<div></div>").addClass(col_width);
+						if (trait.hasOwnProperty("sub_heading")) {
+							trait_col.append($("<strong></strong>").addClass("center-block").html(trait.sub_heading));
+						}
 // 						<div class="btn-group" role="group" aria-label="...">
 //   <button type="button" class="btn btn-default">Left</button>
 //   <button type="button" class="btn btn-default">Middle</button>
@@ -1967,6 +1970,23 @@ function open_case() {
 	});
 }
 
+function open_case_bulk() {
+	dialog.showOpenDialog({
+		properties: ['openFile', 'multiSelections'],
+		title: 'Open TA3 Case File(s)',
+		buttonLabel: 'Open TA3 File(s)',
+		filters: [
+			{name: appName, extensions: ['ta3']}
+		]
+	}, function(files) {
+		if (files != undefined) {
+			if (files.length > 0) {
+				open_cases_from_paths(files);
+			}
+		}
+	});
+}
+
 function save_case(isSaveAs) {
 	// TODO: add results to file and encode for json
 	var output = '{"traits":' + JSON.stringify(selections) + ',';
@@ -2099,6 +2119,9 @@ ipcRenderer.on('new-case', (event, arg) => {
 });
 ipcRenderer.on('open-case', (event, arg) => {
 	open_case();
+});
+ipcRenderer.on('bulk-open-case', (event, arg) => {
+	open_case_bulk();
 });
 ipcRenderer.on('save-case', (event, arg) => {
 	save_case(false);
