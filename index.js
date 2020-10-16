@@ -111,6 +111,10 @@ const createMainWindow = async () => {
 		}
 	});
 
+	if (is.development || cla.options.debug || store.get("settings.dev_mode")) {
+		win.toggleDevTools();
+	}
+
 	mainWindowState.manage(win);
 
 	win.on('ready-to-show', () => {

@@ -107,8 +107,8 @@ function app_init() {
 	populate_settings();
 	wire_event_handlers();
 
-	// console.log(cla_args);
-	// console.log(process.argv);
+	console.log(cla_args);
+	console.log(process.argv);
 
 	if (cla_args.hasOwnProperty("case")) {
 		open_file_and_run(cla_args.case);
@@ -1903,17 +1903,16 @@ function new_case() {
 }
 
 function open_file_and_run(filePath) {
-	open_case_from_path(filePath);
-	setTimeout(function() {
+	open_case_from_path(filePath, function() {
 		if (cla_args.hasOwnProperty("analyze")) {
 			$('#main-tabs a[href="#results"]').tab('show');
 			$('#main-tabs a[href="#results"]').show();
 			run_analysis();
 		}
-	}, 10);
+	});
 }
 
-function open_case_from_path(filePath) {
+function open_case_from_path(filePath, callback) {
 	if (path.extname(filePath) != '.ta3') {
 		$("#generic-alert").removeClass()
 			.addClass("alert")
@@ -1958,6 +1957,10 @@ function open_case_from_path(filePath) {
 			$('#main-tabs a[href="#selections"]').show();
 
 			update_file_status();
+
+			if (callback) {
+				callback();
+			}
 		});
 	}
 }
