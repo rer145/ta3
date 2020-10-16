@@ -107,7 +107,12 @@ function app_init() {
 	populate_settings();
 	wire_event_handlers();
 
-	console.log(process.argv);
+	// console.log(cla_args);
+	// console.log(process.argv);
+
+	if (cla_args.hasOwnProperty("case")) {
+		open_file_and_run(cla_args.case);
+	}
 }
 
 function load_database() {
@@ -1897,6 +1902,17 @@ function new_case() {
 	// check settings for which view to show
 }
 
+function open_file_and_run(filePath) {
+	open_case_from_path(filePath);
+	setTimeout(function() {
+		if (cla_args.hasOwnProperty("analyze")) {
+			$('#main-tabs a[href="#results"]').tab('show');
+			$('#main-tabs a[href="#results"]').show();
+			run_analysis();
+		}
+	}, 10);
+}
+
 function open_case_from_path(filePath) {
 	if (path.extname(filePath) != '.ta3') {
 		$("#generic-alert").removeClass()
@@ -2393,7 +2409,6 @@ function end_progress(id, code, msg) {
 
 ipcRenderer.on('application-ready', (event, args) => {
 	cla_args = args;
-	//console.log(cla_args);
 
 	wire_global_events();
 	wire_setup_events();

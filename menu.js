@@ -713,24 +713,24 @@ const otherTemplate = [
 				},
 				accelerator: 'CmdOrCtrl+O'
 			},
-			{
-				label: 'Bulk Open',
-				click() {
-					log.log_debug(
-						"info",
-						{
-							"event_level": "info",
-							"event_category": "menu",
-							"event_action": "click",
-							"event_label": "file",
-							"event_value": "bulk_open"
-						},
-						store.get("settings.opt_in_debug")
-					);
-					win.getFocusedWindow().webContents.send('bulk-open-case');
-				},
-				accelerator: 'Shift+CmdOrCtrl+O'
-			},
+			// {
+			// 	label: 'Bulk Open',
+			// 	click() {
+			// 		log.log_debug(
+			// 			"info",
+			// 			{
+			// 				"event_level": "info",
+			// 				"event_category": "menu",
+			// 				"event_action": "click",
+			// 				"event_label": "file",
+			// 				"event_value": "bulk_open"
+			// 			},
+			// 			store.get("settings.opt_in_debug")
+			// 		);
+			// 		win.getFocusedWindow().webContents.send('bulk-open-case');
+			// 	},
+			// 	accelerator: 'Shift+CmdOrCtrl+O'
+			// },
 			{
 				label: 'Save',
 				click() {

@@ -1,7 +1,7 @@
 {
 	"name": "ta3",
 	"productName": "Transition Analysis 3",
-	"version": "0.8.2",
+	"version": "0.8.3",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
 	"repository": "rer145/ta3",
@@ -12,6 +12,8 @@
 	"main": "./index.js",
 	"scripts": {
 		"start": "electron-forge start",
+		"start:load": "electron-forge start -- --case=d:\\test.ta3",
+		"start:analyze": "electron-forge start -- --case=d:\\test.ta3 --analyze",
 		"package": "electron-forge package",
 		"make": "electron-forge make",
 		"publish": "electron-forge publish"
