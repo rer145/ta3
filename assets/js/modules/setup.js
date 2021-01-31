@@ -9,7 +9,7 @@ const axios = require('axios').default;
 const now = require('performance-now');
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 const exec = require('./exec');
 const log = require('./logger');

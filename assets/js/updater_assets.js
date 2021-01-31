@@ -13,7 +13,7 @@ const async = require('async');
 const now = require('performance-now');
 const log = require('./logger');
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "..", "..", "runtime") });
 
 
 function checkForUpdates() {
@@ -247,8 +247,10 @@ function downloadAndInstall(items) {
 }
 
 ipcMain.on('check-asset-update', () => {
-	if (store.get("user.assets_path").indexOf('runtime') == -1)
-		checkForUpdates();
+	if (store.get("user.assets_path")) {
+		if (store.get("user.assets_path").indexOf('runtime') == -1)
+			checkForUpdates();
+	}
 });
 
 ipcMain.on('update-asset-install', (event, arg) => {

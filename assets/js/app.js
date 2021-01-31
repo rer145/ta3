@@ -14,7 +14,7 @@ const {is} = require('electron-util');
 const os = require('os');
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 var exec = require('./assets/js/exec');
 const setup = require('./assets/js/setup');
@@ -107,8 +107,8 @@ function app_init() {
 	populate_settings();
 	wire_event_handlers();
 
-	console.log(cla_args);
-	console.log(process.argv);
+	//console.log(cla_args);
+	//console.log(process.argv);
 
 	if (cla_args.hasOwnProperty("case")) {
 		open_file_and_run(cla_args.case);

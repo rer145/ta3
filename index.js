@@ -14,7 +14,7 @@ const menu = require('./menu');
 const fs = require('fs');
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 const cla = require('./assets/js/cla');
 const log = require('./assets/js/logger');
@@ -89,7 +89,8 @@ let mainWindow;
 const createMainWindow = async () => {
 	let mainWindowState = windowStateKeeper({
 		defaultWidth: 1024,
-		defaultHeight: 768
+		defaultHeight: 768,
+		path: path.join(__dirname, "runtime")
 	  });
 
 	const win = new BrowserWindow({
@@ -345,22 +346,25 @@ function prep_files_and_settings() {
 	config['app'] = app_config;
 
 	if (!store.has("versions")) {
+		let latest_text = fs.readFileSync(path.join(__dirname, "runtime", "assets", "latest.json"));
+		let latest_json = JSON.parse(latest_text);
+
 		let version_config = {
 			"analysis": {
-				"install": { "file": "install.R", "version": store.get("versions.analysis.install.version", "0.0.0") },
-				"analysis": { "file": "ta3.R", "version": store.get("versions.analysis.analysis.version", "0.0.0") },
-				"case_scores": { "file": "TA3_Case_Scores.Rda", "version": store.get("versions.analysis.case_scores.version", "0.0.0") },
-				"bum": { "file": "TA3BUM.Rda", "version": store.get("versions.analysis.bum.version", "0.0.0") },
-				"oum": { "file": "TA3OUM.Rda", "version": store.get("versions.analysis.oum.version", "0.0.0") }
+				"install": { "file": "install.R", "version": store.get("versions.analysis.install.version", latest_json.analysis.install.version) },
+				"analysis": { "file": "ta3.R", "version": store.get("versions.analysis.analysis.version", latest_json.analysis.analysis.version) },
+				"case_scores": { "file": "TA3_Case_Scores.Rda", "version": store.get("versions.analysis.case_scores.version", latest_json.analysis.case_scores.version) },
+				"bum": { "file": "TA3BUM.Rda", "version": store.get("versions.analysis.bum.version", latest_json.analysis.bum.version) },
+				"oum": { "file": "TA3OUM.Rda", "version": store.get("versions.analysis.oum.version", latest_json.analysis.oum.version) }
 			},
 			"pdf": {
-				"trait_manual": { "file": "trait-manual.pdf", "version": store.get("versions.pdf.trait_manual.version", "0.0.0") },
-				"collection_form": { "file": "collection-form.pdf", "version": store.get("versions.pdf.collection_form.version", "0.0.0") },
-				"user_guide": { "file": "user-guide.pdf", "version": store.get("versions.pdf.user_guide.version", "0.0.0") }
+				"trait_manual": { "file": "trait-manual.pdf", "version": store.get("versions.pdf.trait_manual.version", latest_json.pdf.trait_manual.version) },
+				"collection_form": { "file": "collection-form.pdf", "version": store.get("versions.pdf.collection_form.version", latest_json.pdf.collection_form.version) },
+				"user_guide": { "file": "user-guide.pdf", "version": store.get("versions.pdf.user_guide.version", latest_json.pdf.user_guide.version) }
 			},
 			"application": version,
-			"r_portable": store.get("versions.r_portable", "0.0.0"),
-			"database": store.get("versions.database", "0.0.0")
+			"r_portable": store.get("versions.r_portable", latest_json.r_portable),
+			"database": store.get("versions.database", latest_json.database)
 		};
 		config['versions'] = version_config;
 	} else {

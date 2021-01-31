@@ -11,7 +11,7 @@ const {
 	debugInfo
 } = require('electron-util');
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 const cla = require('./assets/js/cla');
 const log = require('./assets/js/logger');

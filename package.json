@@ -1,7 +1,8 @@
 {
+	"private": true,
 	"name": "ta3",
 	"productName": "Transition Analysis 3",
-	"version": "0.8.3",
+	"version": "0.8.4",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
 	"repository": "rer145/ta3",
@@ -11,122 +12,73 @@
 	},
 	"main": "./index.js",
 	"scripts": {
+		"postinstall": "electron-builder install-app-deps",
 		"start": "electron-forge start",
 		"start:load": "electron-forge start -- --case=d:\\test.ta3",
 		"start:analyze": "electron-forge start -- --case=d:\\test.ta3 --analyze",
 		"package": "electron-forge package",
+		"package:win-x64-p": "cross-env PORTABLE=true electron-forge package --platform=win32 --arch=x64",
+		"package:win-arm-p": "cross-env PORTABLE=true electron-forge package --platform=win32 --arch=arm64",
+		"package:win-x64": "electron-forge package --platform=win32 --arch=x64",
+		"package:win-arm": "electron-forge package --platform=win32 --arch=arm64",
+		"release:win-x64": "electron-builder --win --x64 --publish never --prepackaged \"out/Transition Analysis 3-win32-x64\"",
+		"release:win-arm": "electron-builder --win --ia32 --publish never --prepackaged \"out/Transition Analysis 3-win32-arm64\"",
 		"make": "electron-forge make",
-		"publish": "electron-forge publish"
+		"publish": "electron-forge publish",
+
+		"prebuild:clean": "node ./build/prebuild/01-cleanfs.js",
+		"prebuild:copy": "node ./build/prebuild/02-copy.js",
+		"build:win-x64-portable-slim": "npm run prebuild:clean",
+		"build:win-x64-portable": "npm run prebuild:clean && npm run prebuild:copy",
+
+		"win-x64-installed": "npm run package:win-x64 && npm run release:win-x64",
+		"win-x64-portable": "electron-forge make",
+		"win-x64": "npm run win-x64-portable && npm run release:win-x64"
 	},
 	"config": {
 		"forge": "./forge.config.js"
 	},
 	"dependencies": {
-		"@electron-forge/publisher-github": "^6.0.0-beta.52",
-		"adm-zip": "^0.4.16",
+		"@electron-forge/publisher-github": "^6.0.0-beta.54",
+		"adm-zip": "^0.5.2",
 		"async": "^3.2.0",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"bootstrap": "^3.3.7",
 		"command-line-args": "^5.1.1",
 		"electron-context-menu": "^0.15.0",
-		"electron-debug": "^3.0.0",
+		"electron-debug": "^3.2.0",
 		"electron-dl": "^2.0.0",
-		"electron-log": "^4.1.1",
+		"electron-log": "^4.3.1",
 		"electron-pdf-window": "^1.0.12",
 		"electron-squirrel-startup": "^1.0.0",
 		"electron-store": "^4.0.0",
 		"electron-unhandled": "^3.0.0",
-		"electron-updater": "^4.0.6",
+		"electron-updater": "^4.3.5",
 		"electron-util": "^0.12.0",
 		"electron-window-state": "^5.0.3",
 		"find": "^0.3.0",
 		"fs": "0.0.1-security",
-		"fs-extra": "^9.0.1",
+		"fs-extra": "^9.1.0",
 		"https": "^1.0.0",
 		"jquery": "^3.3.1",
 		"os": "^0.1.1",
 		"performance-now": "^2.1.0",
 		"popper.js": "^1.16.0",
-		"semver": "^7.3.2",
+		"rimraf": "^3.0.2",
+		"semver": "^7.3.4",
 		"sudo-prompt": "^9.0.0",
 		"tether": "^1.4.7",
 		"update-electron-app": "^1.5.0",
 		"uuid": "^7.0.3"
 	},
 	"devDependencies": {
-		"@electron-forge/cli": "^6.0.0-beta.52",
-		"@electron-forge/maker-deb": "^6.0.0-beta.52",
-		"@electron-forge/maker-rpm": "^6.0.0-beta.52",
-		"@electron-forge/maker-squirrel": "^6.0.0-beta.52",
-		"@electron-forge/maker-zip": "^6.0.0-beta.52",
+		"@electron-forge/cli": "^6.0.0-beta.54",
+		"@electron-forge/maker-deb": "^6.0.0-beta.54",
+		"@electron-forge/maker-rpm": "^6.0.0-beta.54",
+		"@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+		"@electron-forge/maker-zip": "^6.0.0-beta.54",
+		"cross-env": "^7.0.3",
 		"electron": "^6.0.7",
 		"electron-builder": "^21.2.0"
-	},
-	"build": {
-		"appId": "edu.psu.TA3",
-		"productName": "Transition Analysis 3",
-		"copyright": "Copyright ${author}",
-		"directories": {
-			"buildResources": "build",
-			"output": "dist"
-		},
-		"publish": [
-			{
-				"provider": "github",
-				"owner": "rer145",
-				"repo": "ta3"
-			}
-		],
-		"win": {
-			"target": [
-				"nsis",
-				"portable"
-			],
-			"icon": "build/icon.png",
-			"verifyUpdateCodeSignature": false,
-			"extraResources": [
-				{
-					"from": "./build/R-Portable/R-Portable-Win",
-					"to": "R-Portable"
-				},
-				{
-					"from": "./build/setup",
-					"to": "setup"
-				},
-				{
-					"from": "./build/analyze.bat",
-					"to": "analyze.bat"
-				}
-			]
-		},
-		"portable": {
-			"artifactName": "Transition Analysis 3 Portable.exe"
-		},
-		"mac": {
-			"category": "public.app-category.education",
-			"darkModeSupport": false,
-			"icon": "build/icon.icns",
-			"extraResources": [
-				{
-					"from": "./build/R-Portable/R-Portable-Mac",
-					"to": "R-Portable"
-				}
-			]
-		},
-		"dmg": {
-			"iconSize": 160,
-			"contents": [
-				{
-					"x": 180,
-					"y": 170
-				},
-				{
-					"x": 480,
-					"y": 170,
-					"type": "link",
-					"path": "/Applications"
-				}
-			]
-		}
 	}
 }
