@@ -11,7 +11,7 @@ const {
 	debugInfo
 } = require('electron-util');
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 const cla = require('./assets/js/cla');
 const log = require('./assets/js/logger');
@@ -173,25 +173,25 @@ ${debugInfo()}`;
 			});
 		}
 	},
-	{ type: 'separator' },
-	{
-		label: 'Check for App Updates',
-		click(menuItem, focusedWindow, event) {
-			log.log_debug(
-				"info",
-				{
-					"event_level": "info",
-					"event_category": "menu",
-					"event_action": "click",
-					"event_label": "help",
-					"event_value": "check-for-app-updates"
-				},
-				store.get("settings.opt_in_debug")
-			);
+	// { type: 'separator' },
+	// {
+	// 	label: 'Check for App Updates',
+	// 	click(menuItem, focusedWindow, event) {
+	// 		log.log_debug(
+	// 			"info",
+	// 			{
+	// 				"event_level": "info",
+	// 				"event_category": "menu",
+	// 				"event_action": "click",
+	// 				"event_label": "help",
+	// 				"event_value": "check-for-app-updates"
+	// 			},
+	// 			store.get("settings.opt_in_debug")
+	// 		);
 
-			updater.checkForUpdates(menuItem, focusedWindow, event);
-		}
-	}
+	// 		updater.checkForUpdates(menuItem, focusedWindow, event);
+	// 	}
+	// }
 	// ,
 	// {
 	// 	label: 'Check for Asset Updates',
@@ -713,6 +713,24 @@ const otherTemplate = [
 				},
 				accelerator: 'CmdOrCtrl+O'
 			},
+			// {
+			// 	label: 'Bulk Open',
+			// 	click() {
+			// 		log.log_debug(
+			// 			"info",
+			// 			{
+			// 				"event_level": "info",
+			// 				"event_category": "menu",
+			// 				"event_action": "click",
+			// 				"event_label": "file",
+			// 				"event_value": "bulk_open"
+			// 			},
+			// 			store.get("settings.opt_in_debug")
+			// 		);
+			// 		win.getFocusedWindow().webContents.send('bulk-open-case');
+			// 	},
+			// 	accelerator: 'Shift+CmdOrCtrl+O'
+			// },
 			{
 				label: 'Save',
 				click() {

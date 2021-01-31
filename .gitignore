@@ -1,4 +1,8 @@
 node_modules
 yarn.lock
 /dist
+/release
 .DS_Store
+/out
+/runtime
+packages.zip

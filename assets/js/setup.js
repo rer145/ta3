@@ -12,13 +12,11 @@ const async = require('async');
 const axios = require('axios').default;
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "..", "..", "runtime") });
 
 const now = require('performance-now');
 const exec = require('./exec');
 const log = require('./logger');
-
-let scripts_path = path.join(store.get("app.resources_path"), "setup");
 
 // returns if the installation is completed
 function check_installation(forceInstall) {
@@ -227,6 +225,7 @@ function install_rportable() {
 	return new Promise(function(resolve, reject) {
 		let t0 = now();
 
+		let scripts_path = path.join(store.get("app.resources_path"), "setup");
 		let batch_file = path.join(scripts_path, "install_rportable.bat");
 		console.log("Installing R-Portable:", batch_file);
 		start_progress("setup-r");
@@ -291,6 +290,7 @@ function install_packages() {
 	return new Promise(function(resolve, reject) {
 		let t0 = now();
 
+		let scripts_path = path.join(store.get("app.resources_path"), "setup");
 		let batch_file = path.join(scripts_path, "install_packages.bat");
 		console.log("Installing Packages:", batch_file);
 		start_progress("setup-packages");

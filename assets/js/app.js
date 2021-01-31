@@ -14,7 +14,7 @@ const {is} = require('electron-util');
 const os = require('os');
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "runtime") });
 
 var exec = require('./assets/js/exec');
 const setup = require('./assets/js/setup');
@@ -44,7 +44,40 @@ const appName = "Transition Analysis 3";
 $(document).ready(function() {
 	$("#current-version").text(store.get('version'));
 	$(".app-name").text(appName);
+
+	$(document).on('dragover', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$(document).on('dragenter', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	$(document).on('drop', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		let paths = [];
+		if (e.originalEvent && e.originalEvent.dataTransfer) {
+			for (var i = 0; i < e.originalEvent.dataTransfer.files.length; i++) {
+				paths.push(e.originalEvent.dataTransfer.files[i].path);
+			}
+		}
+
+		if (paths.length == 1)
+			open_case_from_path(paths[0]);
+		else
+			open_cases_from_paths(paths);
+	});
 });
+
+// document.addEventListener('drop', (e) => {
+// 	e.preventDefault();
+// 	e.stopPropagation();
+// 	console.log(e);
+// });
 
 function app_consent() {
 	log.log_debug(
@@ -73,6 +106,13 @@ function app_init() {
 
 	populate_settings();
 	wire_event_handlers();
+
+	//console.log(cla_args);
+	//console.log(process.argv);
+
+	if (cla_args.hasOwnProperty("case")) {
+		open_file_and_run(cla_args.case);
+	}
 }
 
 function load_database() {
@@ -1066,6 +1106,9 @@ function populate_advanced_mode(section) {
 
 					if (trait != undefined) {
 						var trait_col = $("<div></div>").addClass(col_width);
+						if (trait.hasOwnProperty("sub_heading")) {
+							trait_col.append($("<strong></strong>").addClass("center-block").html(trait.sub_heading));
+						}
 // 						<div class="btn-group" role="group" aria-label="...">
 //   <button type="button" class="btn btn-default">Left</button>
 //   <button type="button" class="btn btn-default">Middle</button>
@@ -1859,6 +1902,74 @@ function new_case() {
 	// check settings for which view to show
 }
 
+function open_file_and_run(filePath) {
+	open_case_from_path(filePath, function() {
+		if (cla_args.hasOwnProperty("analyze")) {
+			$('#main-tabs a[href="#results"]').tab('show');
+			$('#main-tabs a[href="#results"]').show();
+			run_analysis();
+		}
+	});
+}
+
+function open_case_from_path(filePath, callback) {
+	if (path.extname(filePath) != '.ta3') {
+		$("#generic-alert").removeClass()
+			.addClass("alert")
+			.addClass("alert-danger")
+			.html("<strong>Error</strong><br />This application can only open files with the .ta3 extension.")
+			.show()
+			.delay(6000)
+			.slideUp(200, function() { $(this).hide(); });
+	} else {
+		new_case();
+		fs.readFile(filePath, 'utf8', (err, data) => {
+			if (err) {
+				log.log_debug(
+					"error",
+					{
+						"event_level": "error",
+						"event_category": "exception",
+						"event_action": "open_case",
+						"event_label": "",
+						"event_value": JSON.stringify(err)
+					},
+					store.get("settings.opt_in_debug")
+				);
+
+				console.error(err);
+			}
+
+			var json = JSON.parse(data);
+
+			// TODO: do work
+			$("#case_number_input").val(json['properties']['case_number']);
+			$("#designation_input").val(json['properties']['designation']);
+			$("#recorder_input").val(json['properties']['recorder']);
+			$("#date_input").val(json['properties']['observation_date']);
+			$("#notes_input").val(json['properties']['notes']);
+			selections = json['traits'];
+
+			window.current_file = filePath;
+
+			//show_current_selections();
+			$('#main-tabs a[href="#selections"]').tab('show');
+			$('#main-tabs a[href="#selections"]').show();
+
+			update_file_status();
+
+			if (callback) {
+				callback();
+			}
+		});
+	}
+}
+
+function open_cases_from_paths(filePaths) {
+	if (filePaths.length > 0)
+		open_case_from_path(filePaths[0]);
+}
+
 function open_case() {
 	dialog.showOpenDialog({
 		properties: ['openFile'],
@@ -1870,44 +1981,26 @@ function open_case() {
 	}, function(files) {
 		if (files != undefined) {
 			if (files.length == 1) {
-				new_case();
+				//new_case();
 				var filePath = files[0];
+				open_case_from_path(filePath);
+			}
+		}
+	});
+}
 
-				fs.readFile(filePath, 'utf8', (err, data) => {
-					if (err) {
-						log.log_debug(
-							"error",
-							{
-								"event_level": "error",
-								"event_category": "exception",
-								"event_action": "open_case",
-								"event_label": "",
-								"event_value": JSON.stringify(err)
-							},
-							store.get("settings.opt_in_debug")
-						);
-
-						console.error(err);
-					}
-
-					var json = JSON.parse(data);
-
-					// TODO: do work
-					$("#case_number_input").val(json['properties']['case_number']);
-					$("#designation_input").val(json['properties']['designation']);
-					$("#recorder_input").val(json['properties']['recorder']);
-					$("#date_input").val(json['properties']['observation_date']);
-					$("#notes_input").val(json['properties']['notes']);
-					selections = json['traits'];
-
-					window.current_file = filePath;
-
-					//show_current_selections();
-					$('#main-tabs a[href="#selections"]').tab('show');
-					$('#main-tabs a[href="#selections"]').show();
-
-					update_file_status();
-				});
+function open_case_bulk() {
+	dialog.showOpenDialog({
+		properties: ['openFile', 'multiSelections'],
+		title: 'Open TA3 Case File(s)',
+		buttonLabel: 'Open TA3 File(s)',
+		filters: [
+			{name: appName, extensions: ['ta3']}
+		]
+	}, function(files) {
+		if (files != undefined) {
+			if (files.length > 0) {
+				open_cases_from_paths(files);
 			}
 		}
 	});
@@ -2045,6 +2138,9 @@ ipcRenderer.on('new-case', (event, arg) => {
 });
 ipcRenderer.on('open-case', (event, arg) => {
 	open_case();
+});
+ipcRenderer.on('bulk-open-case', (event, arg) => {
+	open_case_bulk();
 });
 ipcRenderer.on('save-case', (event, arg) => {
 	save_case(false);
@@ -2316,7 +2412,6 @@ function end_progress(id, code, msg) {
 
 ipcRenderer.on('application-ready', (event, args) => {
 	cla_args = args;
-	//console.log(cla_args);
 
 	wire_global_events();
 	wire_setup_events();

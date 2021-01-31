@@ -1,12 +1,13 @@
 const { dialog, ipcRenderer } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const path = require('path');
 
 const win = require('electron').BrowserWindow;
 const { ipcMain } = require("electron");
 
 const log = require('./logger');
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "..", "..", "runtime") });
 
 let updater;
 autoUpdater.autoDownload = false;

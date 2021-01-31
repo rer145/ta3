@@ -1,0 +1,27 @@
+appId: edu.psu.TA3
+productName: Transition Analysis 3
+npmRebuild: false
+fileAssociations:
+- ext: ta3
+  name: Transition Analysis 3
+  description: TA3 data file
+  mimeType: application/json
+  role: Editor
+  isPackage: false
+directories:
+  buildResources: build
+  output: release
+
+win:
+  target:
+  - nsis
+  artifactName: "${productName}.${ext}"
+  icon: "build/icon.png"
+  verifyUpdateCodeSignature: false
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  uninstallDisplayName: "Uninstall ${productName}"

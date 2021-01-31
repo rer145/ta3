@@ -2,9 +2,10 @@ const el = require('electron-log');
 const {is} = require('electron-util');
 const cla = require('./cla');
 const axios = require('axios').default;
+const path = require('path');
 
 const Store = require('electron-store');
-const store = new Store();
+const store = new Store({ cwd: path.join(__dirname, "..", "..", "runtime") });
 
 const opt_in_base_url = is.development ? "http://localhost:81/api/" : "https://ta3info.com/api/";
 
