@@ -48,7 +48,7 @@ const showResults = () => {
 // 	win.getFocusedWindow().webContents.send('verify-r-settings');
 // };
 
-const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${app.getVersion()}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("versions.analysis.analysis.version")}\nTA3BUM: ${store.get("versions.analysis.bum.version")}\nTA3OUM: ${store.get("versions.analysis.oum.version")}\nDatabase: ${store.get("versions.database")}`;
+const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${app.getVersion()}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("versions.analysis.analysis.version")}\nTA3BUM: ${store.get("versions.analysis.bum.version")}\nTA3OUM: ${store.get("versions.analysis.oum.version")}\nTA3 Case Scores: ${store.get("versions.analysis.case_scores.version")}\nDatabase: ${store.get("versions.database")}`;
 
 const helpSubmenu = [
 	{
@@ -193,24 +193,24 @@ ${debugInfo()}`;
 	// 	}
 	// }
 	// ,
-	// {
-	// 	label: 'Check for Asset Updates',
-	// 	click(menuItem, focusedWindow, event) {
-	// 		log.log_debug(
-	// 			"info",
-	// 			{
-	// 				"event_level": "info",
-	// 				"event_category": "menu",
-	// 				"event_action": "click",
-	// 				"event_label": "help",
-	// 				"event_value": "check-for-asset-updates"
-	// 			},
-	// 			store.get("settings.opt_in_debug")
-	// 		);
+	{
+		label: 'Check for Asset Updates',
+		click(menuItem, focusedWindow, event) {
+			log.log_debug(
+				"info",
+				{
+					"event_level": "info",
+					"event_category": "menu",
+					"event_action": "click",
+					"event_label": "help",
+					"event_value": "check-for-asset-updates"
+				},
+				store.get("settings.opt_in_debug")
+			);
 
-	// 		updater_assets.checkForUpdates();
-	// 	}
-	// }
+			updater_assets.checkForUpdates();
+		}
+	}
 ];
 
 //if (!is.macos) {
