@@ -2,7 +2,7 @@
 	"private": true,
 	"name": "ta3",
 	"productName": "Transition Analysis 3",
-	"version": "0.8.4",
+	"version": "0.8.5",
 	"description": "Transition Analysis 3 (TA3) Age Estimation",
 	"license": "",
 	"repository": "rer145/ta3",
