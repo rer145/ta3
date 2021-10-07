@@ -48,8 +48,6 @@ const showResults = () => {
 // 	win.getFocusedWindow().webContents.send('verify-r-settings');
 // };
 
-const aboutMenuText = `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${app.getVersion()}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("versions.analysis.analysis.version")}\nTA3BUM: ${store.get("versions.analysis.bum.version")}\nTA3OUM: ${store.get("versions.analysis.oum.version")}\nTA3 Case Scores: ${store.get("versions.analysis.case_scores.version")}\nDatabase: ${store.get("versions.database")}`;
-
 const helpSubmenu = [
 	{
 		label: 'Data Collection Form',
@@ -237,7 +235,7 @@ ${debugInfo()}`;
 		},
 		aboutMenuItem({
 			icon: path.join(__dirname, 'assets', 'img', 'icons', 'icon.png'),
-			text: aboutMenuText,
+			text: `Created by Ron Richardson and Stephen Ousley\n\nVersions:\nApp: ${app.getVersion()}\nElectron: ${store.get("system.electron_version")}\nR-Portable: ${store.get("system.r_portable_version")}\nR Code: ${store.get("versions.analysis.analysis.version")}\nTA3BUM: ${store.get("versions.analysis.bum.version")}\nTA3OUM: ${store.get("versions.analysis.oum.version")}\nTA3 Case Scores: ${store.get("versions.analysis.case_scores.version")}\nDatabase: ${store.get("versions.database")}`,
 			website: 'https://statsmachine.net/software/TA3/'
 		})
 	);
